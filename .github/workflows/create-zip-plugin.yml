@@ -1,0 +1,124 @@
+name: Update Version and Build Plugin
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - main
+      - main-just-testing
+
+jobs:
+  pre-check:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
+
+    steps:
+      - name: Check skip condition (avoid infinite loop triggering this action)
+        id: check
+        run: |
+          if [[ "${{ github.event.head_commit.message }}" == *"[skip version ci]"* ]]; then
+            echo "should_run=false" >> $GITHUB_OUTPUT
+            echo "Skipping creating zip file artifact workflow due to [skip version ci] in commit message"
+          else
+            echo "should_run=true" >> $GITHUB_OUTPUT
+            echo "Commit message doesn't contain [skip version ci], proceeding with workflow of creating zip file artifact"
+          fi
+
+  update-and-build:
+    needs: pre-check
+    if: needs.pre-check.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Chequear el código del repositorio
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Configurar Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # 3. Instalar dependencias
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build js bundles
+        run: npm run build
+
+      # 4. Ejecutar el script para actualizar la versión.
+      # Using [major update] or [minor update] in the commit message will affect the version update.
+      - name: Update plugin version
+        id: update_version
+        run: |
+          if [[ "${{ github.event.head_commit.message }}" == *"[major update]"* ]]; then
+            node bin/version-increment.js major --silent  > new_version.txt
+            echo "Updating MAJOR version in files"
+          elif [[ "${{ github.event.head_commit.message }}" == *"[minor update]"* ]]; then
+            node bin/version-increment.js minor --silent  > new_version.txt
+            echo "Updating MINOR version in files by default"
+            else
+            node bin/version-increment.js patch --silent  > new_version.txt
+            echo "Updating PATCH version in files"
+          fi
+
+          echo "VERSION=$(cat new_version.txt)" >> $GITHUB_ENV
+          rm new_version.txt
+
+      # 5. Hacer commit del cambio de versión
+      - name: Commit version update and artifact link
+        run: |
+          # Construimos el enlace al workflow run
+          ARTIFACT_LINK="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "- [skip version ci] Incrementar versión del plugin a ${{ env.VERSION }}
+
+          Plugin package details:
+          - Version: ${{ env.VERSION }}
+          - Build: ${{ github.run_number }}
+          - Artifact: plugin-${{ env.VERSION }}-zip
+          Download the plugin from: ${ARTIFACT_LINK}
+
+          Note: Navigate to the 'Artifacts' section of the workflow run to download the package.
+          " --no-verify
+          git push
+
+
+      # 6. Construir el plugin en dist/... (we skip compression because the artifact compresses it automatically)
+      - name: Build plugin
+        run: node bin/build-plugin.js ${{ env.VERSION }} --skip-compression
+
+        # Verificar que el archivo ZIP existe
+      - name: Verify plugin main file is there
+        run: |
+          MAIN_PLUGIN_FILE="dist/asim-gravity-form-map-field.php"
+          if [ ! -f "$MAIN_PLUGIN_FILE" ]; then
+            echo "Error: plugin file not found at dist/"
+            echo "Contents of dist directory:"
+            ls -la dist/
+            exit 1
+          fi
+          echo "Main plugin file found: $MAIN_PLUGIN_FILE"
+          echo "File size: $(ls -lh $MAIN_PLUGIN_FILE | awk '{print $5}')"
+
+      # 7. Subir el ZIP generado como artefacto
+      - name: Upload Plugin Directory for Distribution as an ZIP Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: asim-gravity-form-map-field
+          path: dist/
+          retention-days: 30
+
+      # Add a comment to the commit/PR with the download link
+      - name: Add artifact link
+        run: |
+          echo "Plugin package has been built and uploaded as an artifact."
+          echo "You can download it from: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
