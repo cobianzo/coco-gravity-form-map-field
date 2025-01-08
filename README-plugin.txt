@@ -1,6 +1,6 @@
 # Asim Gravity Form Map Field
 
-Stable tag: 1.16.1
+Stable tag: 1.16.2
 Tags: Gravity Forms, Form, Field, Google Maps
 Tested up to: 6.7
 License: GPLv2 or later
