@@ -24,9 +24,9 @@ define( 'DUMMY_DATA_GENERATOR', $is_local || ! $is_prod );
 
 
 // Autocargar archivos necesarios.
-require_once plugin_dir_path( __FILE__ ) . 'inc/class-addon.php';
+require_once plugin_dir_path( __FILE__ ) . 'inc/class-addon-asim.php';
 require_once plugin_dir_path( __FILE__ ) . 'inc/render.php';
-require_once plugin_dir_path( __FILE__ ) . 'inc/class-gf-field.php';
+require_once plugin_dir_path( __FILE__ ) . 'inc/class-gf-field-asimmap.php';
 
 // Inicializa el Addon.
 add_action( 'gform_loaded', function () {
@@ -37,5 +37,5 @@ add_action( 'gform_loaded', function () {
 
 // Función para acceder a la instancia del Addon.
 function asim_gravity_forms_map_addon() {
-    return Asim_Gravity_Forms_Map_Addon::get_instance();
+	return Asim_Gravity_Forms_Map_Addon::get_instance();
 }

@@ -16,6 +16,9 @@
 		"editor.formatOnSave": true
 	},
 	"files.autoSave": "off",
+	"files.exclude": {
+		"plugins/**/*": true
+	},
 	"[php]": {
 		"editor.formatOnSave": false,
 		"editor.trimAutoWhitespace": false,
