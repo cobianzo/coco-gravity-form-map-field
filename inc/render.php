@@ -1,43 +1,73 @@
 <?php
 
-// we use $form and $field_id, $value, $entry
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-$is_entry_detail = $this->is_entry_detail();
-$is_form_editor  = $this->is_form_editor();
+/**
+ * Renderiza el campo personalizado del mapa.
+ *
+ * todo
+ * @param int    $input_id El ID del input.
+ * @param string $value    El valor actual del campo.
+ * @return string          El HTML y JS del campo.
+ */
+function asim_render_map_field( $instance, $input_id, $value ) {
 
-$is_admin = $is_entry_detail || $is_form_editor;
+	// Salir si estamos en el administrador.
+	return '
+	<input type="text" '
+		. ' placeholder="lat,  lng"'
+		. ' 	name="input_' . esc_attr( $input_id ) . '"'
+		. ' 	id="input_' . esc_attr( $input_id ) . '"'
+		. ' 	value="' . esc_attr( $value ) . '" />';
 
-$lat = GFFormsModel::get_input( $this, $this->id . '_lat' );
-$lon = GFFormsModel::get_input( $this, $this->id . '_lon' );
+	if ( is_admin() ) {
+		return '';
+	}
 
-?>
-<div id="map_<?php echo esc_attr( $form['id'] ); ?>_<?php echo esc_attr( $field_id ); ?>"
-	style="width: 100%; height: 300px;"></div>
+	$latlng = explode( ',', $value );
 
-<fieldset>
+	[$lat, $lng] = [ -34.397, 150.644 ]; // default
+	if ( 2 === count( $latlng ) ) {
+		[$lat, $lng] = $latlng;
+	}
 
-	<legend class="gfield_label gform-field-label gfield_label_before_complex">Name<span class="gfield_required"><span class="gfield_required gfield_required_text">(Required)</span></span></legend>
 
-	<legend><?php _e( 'Geolocation', 'gf-google-maps' ); ?></legend>
-
-	<label for="lat_<?php echo esc_attr( $form['id'] ); ?>_<?php echo esc_attr( $field_id ); ?>">
-		<?php _e( 'Latitud', 'gf-google-maps' ); ?>
-	</label>
+	ob_start();
+	?>
+	<div id="map-container-<?php echo esc_attr( $instance->id ); ?>" style="height: 300px;"></div>
 
 	<input type="text"
-		id="lat_<?php echo esc_attr( $form['id'] ); ?>_<?php echo esc_attr( $field_id ); ?>"
-		name="lat_<?php echo esc_attr( $field_id ); ?>"
-		value="<?php echo esc_attr( $lat ); ?>"
-		readonly />
+		placeholder="lat,lng"
+		name="input_<?php echo esc_attr( $input_id ); ?>"
+		id="input_<?php echo esc_attr( $input_id ); ?>"
+		value="<?php echo esc_attr( $value ); ?>" />
 
-	<label for="lon_<?php echo esc_attr( $form['id'] ); ?>_<?php echo esc_attr( $field_id ); ?>">
-		<?php _e( 'Longitud', 'gf-google-maps' ); ?>
-	</label>
+	<script>
+		function initMap_<?php echo esc_js( $instance->id ); ?>() {
+			var map = new google.maps.Map(document.getElementById('map-container-<?php echo esc_js( $instance->id ); ?>'), {
+				center: {
+					lat: <?php echo esc_attr( $lat ); ?>,
+					lng: <?php echo esc_attr( $lng ); ?>
+				},
+				zoom: 8
+			});
 
-	<input type="text"
-		id="lon_<?php echo esc_attr( $form['id'] ); ?>_<?php echo esc_attr( $field_id ); ?>"
-		name="lon_<?php echo esc_attr( $field_id ); ?>"
-		value="<?php echo esc_attr( $lon ); ?>"
-		readonly />
+			map.addListener('click', function(e) {
+				document.getElementById('input_<?php echo esc_js( $input_id ); ?>').value = e.latLng.lat() + ',' + e.latLng.lng();
+			});
+		}
 
-</fieldset>
+
+		// Cargar Google Maps Script.
+		(function loadGoogleMapsAPI() {
+			var script = document.createElement('script');
+			script.src = 'https://maps.googleapis.com/maps/api/js?key=<?php echo esc_attr( $instance->google_maps_api_key ); ?>&callback=initMap_<?php echo esc_js( $instance->id ); ?>';
+			script.async = true;
+			document.head.appendChild(script);
+		})();
+	</script>
+	<?php
+	return ob_get_clean();
+}

@@ -1,158 +1,75 @@
 <?php
 
-namespace Asim;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-use GF_Field;
-use GFCommon;
-use GFAPI;
+class GF_Field_Asim_Map extends GF_Field {
 
-/**
- * Class GF_Field_RECAPTCHA
- *
- * @since 1.0
- *
- * @package Asim
- */
+	public $type = 'asim-map';
 
-class GF_Field_RECAPTCHA extends GF_Field {
-	/**
-	 * Recaptcha field type.
-	 *
-	 * @since 1.0
-	 * @var string
-	 */
-	public $type = 'recaptcha';
+	protected $google_maps_api_key;
 
-	/**
-	 * Prevent the field being saved to the entry.
-	 *
-	 * @since 1.1
-	 * @var bool
-	 */
-	public $displayOnly = true;
-
-	/**
-	 * Decoded field data.
-	 *
-	 * @since 1.0
-	 * @var object
-	 */
-	private $data;
-
-	/**
-	 * Return empty array to prevent the field from showing up in the form editor.
-	 *
-	 * @since 1.0
-	 * @return array
-	 */
-	public function get_form_editor_button() {
-		return array();
+	public function __construct() {
+		parent::__construct();
+		// TODO: grab this from settings.
+		$this->google_maps_api_key = 'AIzaSyBCxO-yk6_PshNJCZ-D8OIuZElDWto_jyY';
 	}
 
-	/**
-	 * The field markup.
-	 *
-	 * @since 1.0
-	 *
-	 * @param array      $form  The form array.
-	 * @param string     $value The field value.
-	 * @param array|null $entry The entry array.
-	 *
-	 * @return string
-	 */
+	public function get_form_editor_field_title() {
+		return __( 'Asim Google Maps', 'asim-gravity-forms-map-addon' );
+	}
+
+	// Agrega configuraciones en el editor de formulario.
+	public function get_form_editor_field_settings() {
+		return array(
+			'default_value_setting',
+			'label_setting',
+			'description_setting',
+		);
+	}
+
+	// Renderiza el campo en el frontend.
 	public function get_field_input( $form, $value = '', $entry = null ) {
-		$plugin_settings = gf_recaptcha()->get_plugin_settings_instance();
-		$site_key        = $plugin_settings->get_recaptcha_key( 'site_key_v3' );
-		$secret_key      = $plugin_settings->get_recaptcha_key( 'secret_key_v3' );
+		$field_id = $this->id;
+		$input_id = $form['id'] . '_' . $field_id;
 
-		if ( empty( $site_key ) || empty( $secret_key ) ) {
-			GFCommon::log_error( __METHOD__ . sprintf( '(): reCAPTCHA secret keys not saved in the reCAPTCHA Settings (%s). The reCAPTCHA field will always fail validation during form submission.', admin_url( 'admin.php' ) . '?page=gf_settings&subview=recaptcha' ) );
-		}
+		$form_id         = $form['id'];
+		$is_entry_detail = $this->is_entry_detail();
+		return 'CVADFFDA '. print_r( $this->is_form_editor(), 1 );
+		$is_form_editor  = $this->is_form_editor();
 
-		$this->formId = absint( rgar( $form, 'id' ) );
-		$name         = $this->get_input_name();
-		$tabindex     = GFCommon::$tab_index > 0 ? GFCommon::$tab_index++ : 0;
+		$id       = (int) $this->id;
+		$field_id = $is_entry_detail || $is_form_editor || $form_id == 0 ? "input_$id" : 'input_' . $form_id . "_$id";
 
-		return "<div class='gf_invisible ginput_recaptchav3' data-sitekey='" . esc_attr( $site_key ) . "' data-tabindex='{$tabindex}'>"
-				. '<input id="' . esc_attr( $name ) . '" class="gfield_recaptcha_response" type="hidden" name="' . esc_attr( $name ) . '" value=""/>'
-				. '</div>';
+		$disabled_text = $is_form_editor ? 'disabled="disabled"' : '';
+
+		$field_type         = $is_entry_detail || $is_form_editor ? 'text' : 'hidden';
+		$class_attribute    = $is_entry_detail || $is_form_editor ? '' : "class='gform_hidden'";
+		$required_attribute = $this->isRequired ? 'aria-required="true"' : '';
+		$invalid_attribute  = $this->failed_validation ? 'aria-invalid="true"' : 'aria-invalid="false"';
+
+		$input = sprintf( "<input name='input_%d' id='%s' type='$field_type' {$class_attribute} {$required_attribute} {$invalid_attribute} value='%s' %s/>", $id, $field_id, esc_attr( $value ), $disabled_text );
+
+		return sprintf( "<div class='ginput_container ginput_container_text'>%s</div>", $input );
+
+		// Renderiza un input para un mapa interactivo.
+		return asim_render_map_field( $this, $input_id, $value );
 	}
 
-	/**
-	 * Modify the validation result if the Recaptcha response has been altered.
-	 *
-	 * This is a callback to the gform_validation filter to allow us to validate the values in the hidden field.
-	 *
-	 * @since 1.0
-	 *
-	 * @see   GF_RECAPTCHA::init()
-	 *
-	 * @param array $validation_data The validation data.
-	 *
-	 * @return array
-	 */
-	public function validation_check( $validation_data ) {
-		$this->formId = absint( rgars( $validation_data, 'form/id' ) );
+	public function get_field_content( $value, $force_frontend_label, $form ) {
+		$form_id         = $form['id'];
+		$admin_buttons   = $this->get_admin_buttons();
+		$is_entry_detail = $this->is_entry_detail();
+		$is_form_editor  = $this->is_form_editor();
+		$is_admin        = $is_entry_detail || $is_form_editor;
+		$field_label     = $this->get_field_label( $force_frontend_label, $value );
+		$field_id        = $is_admin || $form_id == 0 ? "input_{$this->id}" : 'input_' . $form_id . "_{$this->id}";
+		$field_content   = ! $is_admin ? '{FIELD}' : $field_content = sprintf( "%s<label class='gfield_label gform-field-label' for='%s'>%s</label> NO THE FIELD <br/>{FIELD} <br/> the field endede", $admin_buttons, $field_id, esc_html( $field_label ) );
 
-		if ( $this->is_valid_field_data() ) {
-
-			// Set is_spam value.
-			$validation_data['is_spam'] = gf_recaptcha()->is_spam_submission( rgar( $validation_data, 'form' ) );
-
-			return $validation_data;
-		}
-
-		// Set is_valid to false and return the validation data.
-		return $this->invalidate( $validation_data );
-	}
-
-	/**
-	 * Validates that the data in the hidden input is a valid Recaptcha entry.
-	 *
-	 * @since 1.0
-	 *
-	 * @return bool
-	 */
-	private function is_valid_field_data() {
-		$data = rgpost( $this->get_input_name() );
-
-		if ( empty( $data ) ) {
-			gf_recaptcha()->log_debug( __METHOD__ . "(): Input {$this->get_input_name()} empty." );
-
-			return false;
-		}
-
-		return gf_recaptcha()->get_token_verifier()->verify_submission( $data );
-	}
-
-	/**
-	 * Set is_valid to false on the validation data.
-	 *
-	 * @since 1.0
-	 *
-	 * @param array $validation_data The validation data.
-	 *
-	 * @return mixed
-	 */
-	private function invalidate( $validation_data ) {
-		$validation_data['is_valid'] = false;
-
-		return $validation_data;
-	}
-
-	/**
-	 * Returns the value of the input name attribute.
-	 *
-	 * @since 1.1
-	 * @since 1.2 Added optional form_id parameter.
-	 *
-	 * @return string
-	 */
-	public function get_input_name( $form_id = null ) {
-		if ( $form_id ) {
-			$this->formId = absint( $form_id );
-		}
-
-		return 'input_' . md5( 'recaptchav3' . gf_recaptcha()->get_version() . $this->formId );
+		return 'TODELTETE FIELD CONTENTTT' . $field_content;
 	}
 }
+
+// Registrar el campo.
+GF_Fields::register( new GF_Field_Asim_Map() );
