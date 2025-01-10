@@ -11,7 +11,6 @@ class GF_Field_AsimMap extends GF_Field {
 
 	public $google_maps_api_key = '';
 
-
 	public function get_form_editor_field_title() {
 		return esc_attr__( 'Asim Map', 'gravityforms' );
 	}
@@ -56,7 +55,12 @@ class GF_Field_AsimMap extends GF_Field {
 	public function get_field_input( $form, $value = '', $entry = null ) {
 
 		$this->google_maps_api_key = 'AIzaSyBCxO-yk6_PshNJCZ-D8OIuZElDWto_jyY';
-		$input                     = asim_render_map_field( $this, $form, $value );
+
+		if ( ! wp_script_is( 'asim-map-js', 'enqueued' ) ) {
+			wp_enqueue_script( 'asim-map-js', dirname( plugin_dir_url( __FILE__ ) ) . '/build/asim-gravity-form-map-field.js', [], '1.0.0', false );
+		}
+
+		$input = asim_render_map_field( $this, $form, $value );
 
 		return sprintf( "<div class='ginput_container ginput_container_text'>%s</div>", $input );
 	}
@@ -72,10 +76,7 @@ class GF_Field_AsimMap extends GF_Field {
 		$is_admin        = $is_entry_detail || $is_form_editor;
 		$field_label     = $this->get_field_label( $force_frontend_label, $value );
 		$field_id        = $is_admin || 0 === $form_id ? "input_{$this->id}" : 'input_' . $form_id . "_{$this->id}";
-		$field_content   = ! $is_admin ?
-			'{FIELD}'
-			:
-			sprintf( "%s<label class='gfield_label gform-field-label' for='%s'>%s</label>{FIELD}", $admin_buttons, $field_id, esc_html( $field_label ) );
+		$field_content   = sprintf( "%s<label class='gfield_label gform-field-label' for='%s'>%s</label>{FIELD}", $admin_buttons, $field_id, esc_html( $field_label ) );
 
 		return $field_content;
 	}

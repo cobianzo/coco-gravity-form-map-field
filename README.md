@@ -3,8 +3,9 @@
 ## Git clone and rename repo
 
 clone the original repo: `https://github.com/cobianzo/wp-env-sidebar-related-article`
-> git remote rename origin upstream
-> git remote add origin git@github.com:cobianzo/asim-gravity-form-map-field.git
+rm -rf .git
+git init
+git remote add origin git@github.com:cobianzo/asim-gravity-form-map-field.git
 
 ## renaming
 
@@ -25,7 +26,8 @@ decide if we need the page to create dummy data.
 remove `screenshots` files
 `package.json`, remove packages you don't need.
 setup  `.wp-env.json`  
-setup husky
+setup husky with `npm run prepare`
+add files to ignore in linting: .stylelintignore, .eslintrc, 
 
 ## Start working (read the documentation in README.md)
 

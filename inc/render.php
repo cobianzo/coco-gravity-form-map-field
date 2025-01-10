@@ -7,11 +7,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Renderiza el campo personalizado del mapa.
+ * Renders a map field for a Gravity Form.
  *
- * todo
- * @param string $value    El valor actual del campo.
- * @return string          El HTML y JS del campo.
+ * This function outputs the HTML and JavaScript necessary to display a map field within a Gravity Form.
+ * It initializes a Google Map with specified coordinates and binds event listeners for interacting with the map.
+ * The map and input field are linked, allowing users to select a location on the map which updates the input field.
+ *
+ * @param object $instance An instance of the GF field class.
+ * @param array  $form     The GF form array containing form details.
+ * @param string $value    The initial value for the map field, typically a comma-separated latitude and longitude.
+ *
+ * @return string The rendered HTML and JavaScript for the map field.
  */
 function asim_render_map_field( $instance, $form, $value ) {
 
@@ -54,10 +60,12 @@ function asim_render_map_field( $instance, $form, $value ) {
 	}
 
 	?>
-	<div id="map-container-<?php echo esc_attr( $field_id ); ?>" style="height: 300px;"></div>
+	<div id="map-container-<?php echo esc_attr( $field_id ); ?>"
+		style="height: 300px; margin-bottom: 1rem;"></div>
 
 	<input type="<?php echo esc_attr( $field_type ); ?>"
-		placeholder="lat,lng"
+		readonly
+		placeholder="<?php esc_attr_e( 'Latitude, Longitude', 'asim-gravity-form-map-field' ); ?>"
 		name="<?php echo esc_attr( $name_id ); ?>"
 		id="<?php echo esc_attr( $input_id ); ?>"
 		value="<?php echo esc_attr( $value ); ?>"
@@ -72,94 +80,85 @@ function asim_render_map_field( $instance, $form, $value ) {
 		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 		?> />
 
+
+
 	<script>
-		let map;
-		let marker;
-		let inputElement;
-		function initMap_<?php echo esc_js( $field_id ); ?>() {
 
-			const inputElement = document.getElementById('<?php echo esc_js( $input_id ); ?>');
+		window.asimMaps = window.asimMaps || {};
 
-			const coordinatesInput = coordinatesFromInput();
-
-			const coordinates = coordinatesInput || {
-				lat: -34.397,
-				lng: 150.644
-			};
-
-			// Inicializar el mapa.
-			map = new google.maps.Map(document.getElementById('map-container-<?php echo esc_js( $field_id ); ?>'), {
-				center: coordinates,
-				disableDefaultUI: true, // Desactiva la interfaz predeterminada
-				zoomControl: true,      // Activa los controles de zoom
-				zoom: 8,
-			});
-
-			// Agregar marcador inicial si las coordenadas son válidas.
-			if (coordinatesInput) {
-				addMarker(coordinatesInput);
-			}
-
-			// Listener para agregar coordenadas al input y marcador al mapa.
-			map.addListener('click', function(e) {
-				const clickedCoordinates = e.latLng;
-				inputElement.value = `${clickedCoordinates.lat()},${clickedCoordinates.lng()}`;
-				addMarker(clickedCoordinates);
-			});
-		}
-
-		// Función para agregar un marcador al mapa en las coordenadas proporcionadas.
-		function addMarker(position) {
-			if (marker) {
-				marker.setMap(null); // Eliminar el marcador anterior.
-			}
-
-			marker = new google.maps.Marker({
-				position,
-				map,
-			});
-		}
-
-		// Función para centrar el mapa en las coordenadas del input.
-		function centerMapAtInputCoordinates() {
-			const coordinates = coordinatesFromInput();
-			if (coordinates) {
-				map.setCenter(coordinates);
-			} else {
-				alert('Por favor, introduce coordenadas válidas en el formato "lat,lng".');
-			}
-		}
-
-		// Función para extraer coordenadas del valor del input.
-		function coordinatesFromInput() {
-			const inputElement = document.getElementById('<?php echo esc_js( $input_id ); ?>');
-			const value = inputElement.value;
-			if (!value) return null;
-			const [lat, lng] = value.split(',').map(parseFloat);
-			if (!isNaN(lat) && !isNaN(lng)) {
-				return {
-					lat,
-					lng
+		asimMaps['<?php echo esc_js( $input_id ); ?>'] = {
+			map: null,
+			inputElement: null,
+			initMap: () => {
+				const input = document.getElementById('<?php echo esc_js( $input_id ); ?>');
+				asimMaps['<?php echo esc_js( $input_id ); ?>'].inputElement = input;
+				const coordinatesInput = window.coordinatesFromInput(input);
+				const coordinates = coordinatesInput || {
+					lat: -34.397,
+					lng: 150.644
 				};
+
+				// Inicializar el mapa.
+				const mapContainerEl = document.getElementById('map-container-<?php echo esc_js( $field_id ); ?>');
+				const map = new google.maps.Map(mapContainerEl, {
+					center: coordinates,
+					disableDefaultUI: true, // Desactiva la interfaz predeterminada
+					zoomControl: true,      // Activa los controles de zoom
+					zoom: 8,
+				});
+				asimMaps['<?php echo esc_js( $input_id ); ?>'].mapContainerEl = mapContainerEl
+				asimMaps['<?php echo esc_js( $input_id ); ?>'].map = map;
+
+				window.locationButton('<?php echo esc_js( $input_id ); ?>');
+
+				// Agregar marcador inicial si las coordenadas son válidas.
+				if (coordinatesInput) {
+					window.addMarker(coordinatesInput, map);
+					window.centerMapAtInputCoordinates(input, map);
+				}
+
+
+				// CLICK on the map > sets a market
+				asimMaps['<?php echo esc_js( $input_id ); ?>'].map.addListener('click', function(e) {
+					const clickedCoordinates = e.latLng;
+					const inputElement = document.getElementById('<?php echo esc_js( $input_id ); ?>');
+					inputElement.value = `${clickedCoordinates.lat()},${clickedCoordinates.lng()}`;
+					window.addMarker(clickedCoordinates, map);
+				});
 			}
-			return null;
 		}
 
-		(function() {
+		// ---------------------------------------------------------------
+		// Call to GoogleMapsAPI
+		window.loadGoogleMapsAPI = function() {
+			const script = document.createElement('script');
+			script.src = 'https://maps.googleapis.com/maps/api/js?key=<?php echo esc_js( $instance->google_maps_api_key ); ?>&callback=initAllMaps';
+			script.async = true;
+			document.head.appendChild(script);
+		}
 
+		// After GoogleMapsAPILoads
+		// Executed only once.
+		document.addEventListener("DOMContentLoaded", function() {
+			if ( window.googleMapsAPILoaded !== true ) {
 
-			// Cargar el script de Google Maps.
-			(function loadGoogleMapsAPI() {
-				const script = document.createElement('script');
-				script.src = 'https://maps.googleapis.com/maps/api/js?key=<?php echo esc_js( $instance->google_maps_api_key ); ?>&callback=initMap_<?php echo esc_js( $field_id ); ?>';
-				script.async = true;
-				document.head.appendChild(script);
-			})();
+				window.initAllMaps = function () {
+					setTimeout(function() {
+						Object.keys(asimMaps).forEach(function(key) {
+							asimMaps[key].initMap();
+						});
+					}, 500);
+				}
 
-			// Exponer las funciones globalmente (opcional, si necesitas llamarlas desde otro lugar).
-			window.centerMapAtInputCoordinates = centerMapAtInputCoordinates;
-		})();
+				loadGoogleMapsAPI();
+
+			} // end of the code exectued only once in the page.
+			window.googleMapsAPILoaded = true;
+		});
+
 	</script>
+
+
 	<?php
 	return ob_get_clean();
 }
