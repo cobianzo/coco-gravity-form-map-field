@@ -1,8 +1,9 @@
 <?php
 
-if ( ! class_exists( 'GFForms' ) ) {
-	die();
+if ( ! class_exists( 'GF_Field' ) ) {
+	return;
 }
+
 
 
 class GF_Field_AsimMap extends GF_Field {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Asim Gravity Form Map Field
+ * Plugin Name: Asim Gravity Forms Map Field
  * Description: A new field for Gravity Forms withe the coordinates of the Gravity Form
  * Version: 1.16.2
  * Author: @cobianzo
@@ -23,7 +23,10 @@ $is_prod  = 'production' === wp_get_environment_type();
 define( 'DUMMY_DATA_GENERATOR', $is_local || ! $is_prod );
 
 
+
+
 // Autocargar archivos necesarios.
+require_once plugin_dir_path( __FILE__ ) . 'inc/plugin-verifications.php';
 require_once plugin_dir_path( __FILE__ ) . 'inc/class-addon-asim.php';
 require_once plugin_dir_path( __FILE__ ) . 'inc/render.php';
 require_once plugin_dir_path( __FILE__ ) . 'inc/class-gf-field-asimmap.php';
