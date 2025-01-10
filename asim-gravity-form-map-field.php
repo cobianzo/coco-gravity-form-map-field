@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Asim Gravity Form Map Field
  * Description: A new field for Gravity Forms withe the coordinates of the Gravity Form
- * Version: 1.16.2
+ * Version: 1.16.3
  * Author: @cobianzo
  * Plugin URI: https://github.com/cobianzo/asim-gravity-form-map-field
  * Author URI: https://cobianzo.com
