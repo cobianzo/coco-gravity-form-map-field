@@ -17,6 +17,7 @@ const FILES = {
 	pluginPHP: path.join(__dirname, '../', 'asim-gravity-form-map-field.php'),
 	packageJSON: path.join(__dirname, '../', 'package.json'),
 	readmeTXT: path.join(__dirname, '../', 'README-plugin.txt'),
+	addonPHP: path.join(__dirname, '../inc/', 'class-addon-asim.php'),
 };
 
 /**
@@ -65,6 +66,7 @@ function updateVersion(incrementType = 'patch', silent = false) {
 		updateFileVersion(FILES.pluginPHP, currentVersion, newVersion, silent);
 		updateFileVersion(FILES.packageJSON, currentVersion, newVersion, silent);
 		updateFileVersion(FILES.readmeTXT, currentVersion, newVersion, silent);
+		updateFileVersion(FILES.addonPHP, currentVersion, newVersion, silent);
 
 		if (!silent) {
 			console.log('Version updated successfully in all files.');
