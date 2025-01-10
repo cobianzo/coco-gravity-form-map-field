@@ -28,7 +28,11 @@ The Asim Gravity Form Map Field is a WordPress plugin designed to add a new fiel
 
 ## Usage
 
-1. In the WordPress block editor, search for the "Aside Related Article" block.
+1. In a Gravity Forms form, look for the field Asim Map and include it.
+
+## Dependence
+
+Gravity Forms Plugin
 
 ## Frequently Asked Questions
 
@@ -49,5 +53,4 @@ None yet.
 ### 1.0.0
 - Initial release of the Asim Gravity Form Map Field.
 
-### 1.1.16
 

@@ -22,4 +22,20 @@ $is_local = str_contains( get_option( 'siteurl' ), 'localhost' );
 $is_prod  = 'production' === wp_get_environment_type();
 define( 'DUMMY_DATA_GENERATOR', $is_local || ! $is_prod );
 
-require_once plugin_dir_path( __FILE__ ) . 'inc/class-plugin-setup.php';
+
+// Autocargar archivos necesarios.
+require_once plugin_dir_path( __FILE__ ) . 'inc/class-addon-asim.php';
+require_once plugin_dir_path( __FILE__ ) . 'inc/render.php';
+require_once plugin_dir_path( __FILE__ ) . 'inc/class-gf-field-asimmap.php';
+
+// Inicializa el Addon.
+add_action( 'gform_loaded', function () {
+	if ( class_exists( 'GFForms' ) ) {
+		GFAddOn::register( 'Asim_Gravity_Forms_Map_Addon' );
+	}
+}, 5 );
+
+// Función para acceder a la instancia del Addon.
+function asim_gravity_forms_map_addon() {
+	return Asim_Gravity_Forms_Map_Addon::get_instance();
+}
