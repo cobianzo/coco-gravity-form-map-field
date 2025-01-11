@@ -1,8 +1,9 @@
 <?php
 
-if ( ! class_exists( 'GFForms' ) ) {
-	die();
+if ( ! class_exists( 'GF_Field' ) ) {
+	return;
 }
+
 
 
 class GF_Field_AsimMap extends GF_Field {
@@ -54,11 +55,13 @@ class GF_Field_AsimMap extends GF_Field {
 
 	public function get_field_input( $form, $value = '', $entry = null ) {
 
-		$this->google_maps_api_key = 'AIzaSyBCxO-yk6_PshNJCZ-D8OIuZElDWto_jyY';
-
 		if ( ! wp_script_is( 'asim-map-js', 'enqueued' ) ) {
-			wp_enqueue_script( 'asim-map-js', dirname( plugin_dir_url( __FILE__ ) ) . '/build/asim-gravity-form-map-field.js', [], '1.0.0', false );
+			$asset_file = include dirname( plugin_dir_path( __FILE__ ) ) . '/build/asim-gravity-form-map-field.asset.php';
+			wp_enqueue_script( 'asim-map-js', dirname( plugin_dir_url( __FILE__ ) ) . '/build/asim-gravity-form-map-field.js', $asset_file['dependencies'], $asset_file['version'], false );
 		}
+
+		$addon                     = Addon_Asim::get_instance();
+		$this->google_maps_api_key = $addon->get_plugin_setting( Addon_Asim::SETTING_GOOGLE_MAPS_API_KEY );
 
 		$input = asim_render_map_field( $this, $form, $value );
 

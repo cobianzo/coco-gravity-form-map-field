@@ -2,7 +2,7 @@ const { test, expect } = require('@wordpress/e2e-test-utils-playwright');
 const { createRelatedArticleWithTerms, openCategoriesPanelIfClosed } = require('./utils');
 import path from 'path';
 
-test.describe('Asim Gravity Form Map Field - E2E Tests', () => {
+test.describe('Asim Gravity Forms Map Field - E2E Tests', () => {
 	test.beforeEach(async ({ page, requestUtils }) => {
 		console.log('>>>>>>> START TEST - beforeEach');
 		// http://localhost:8890

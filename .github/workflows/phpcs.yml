@@ -1,14 +1,9 @@
 name: PHPCS check on Pull Request
 
 on:
-  push:
-    branches:
-      - main
-      - develop
   pull_request:
     branches:
       - main
-      - develop
 
 jobs:
   phpcs-lint:
