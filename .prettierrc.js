@@ -1,6 +1,6 @@
 module.exports = {
 	...require('@wordpress/prettier-config'),
-	printWidth: 120, // When format on save, this will realign long lines
+	printWidth: 40, // When format on save, this will realign long lines
 	overrides: [
 		{
 			files: '*.md', // Target only markdown files
