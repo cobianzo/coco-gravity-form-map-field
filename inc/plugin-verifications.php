@@ -1,6 +1,8 @@
 <?php
 
-add_action('init', function () {
+// Verifying that Gravity Forms is loaded
+add_action( 'init', function () {
+
 	if ( ! class_exists( 'GFAddOn' ) ) {
 		if ( is_admin() ) {
 			add_action('admin_notices', function () {
@@ -21,4 +23,4 @@ add_action('init', function () {
 		}
 		return;
 	}
-});
+} );

@@ -50,18 +50,13 @@ npm run browser-sync
 Recreate the README-plugin.txt, README.md
 Edit `build-plugin.js` to use the right files on the creation of the distribution plugin.
 
-# Summary
+# Summary of this development environment
 
 wp-env / wp-scripts (experimental) / phpunit / playwright / linting (phpcs, phpstan, eslint, stylelint) / browser-sync
 
-This plugin creates a block called **Aside Related Article**. When inserted, it shows a widget in one side of the text,
-floated to the left, with the preview of the related article. You can choose what related article you want to display,
-or you can let the system find the newsest on the category or tag that you choose (amont the cats and tags associated to
-the current post).
-
 ## Dependencies
 
-- package `@cobianzo/gutenberg-post-lookup-component`
+- Gravit Forms
 
 # Start to work:
 
@@ -105,7 +100,7 @@ or if you want to actually get inside the docker container and work locally, you
 You can install the demo sample page with:
 
 Maybe you'll need to run
-npx wp-env run cli -- wp plugin activate wordpress-importer
+npx wp-env run cli -- wp plugin activate gravity-forms
 npx wp-env run cli -- wp plugin activate asim-gravity-form-map-field
 
 from here you can create dummy data, see `tests/class-create-dummy-data.php`, or import it with `npx wp-env run cli -- wp import wp-content/plugins/asim-gravity-form-map-field/themeunittestdata.wordpress.xml --authors=create`
@@ -167,6 +162,8 @@ It's not really needed for this simple plugin, where there are no php functional
 
 `npm run test:php:watch`
 
+or if WP Local instead of wp-env: ❯ WP_PHPUNIT__TESTS_CONFIG=tests/wp-config.php composer run test
+
 # Playwright e2e tests
 
 - read `tests/readme-how-to-text.md`
@@ -186,7 +183,7 @@ in the `main` branch, but you can create
 
 `node .github/scripts/build-plugin.js`
 
-will create `dist/asim-gravity-form-map-field-1.5.0.zip` using the version from the comment in `asim-gravity-form-map-field.php`,
+will create `dist/asim-gravity-form-map-field.zip` using the version from the comment in `asim-gravity-form-map-field.php`,
 ready for distribution. (see more in ./bin/readme-bin.md)
 
 # Continous Integration/ Development
@@ -215,6 +212,8 @@ npx wp-env run cli wp plugin activate asim-gravity-form-map-field
 
 # TODO
 
+- Add types to php functions
+- Add namespaces
 - We need CI/CD for Playwright
 - Improve the github actions: use cache or artifacts to avoid repeating npm run build etc.
 - Move the artifact to an S3 bucket or a repo for the distribution.

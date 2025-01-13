@@ -67,7 +67,7 @@ But the watching mode is magic, it works ok over the wp-env test database.
 	- The PHPUnit WATCH MODE works very well. (I insist)
 	- Again: I call it in composer setting a env var IS_WATCHING, to use the bootstrap.php for the wp-env envionment.
 
-## PHPUnit in git action (Github)
+## PHPUnit in WP LOCAL or any regular WP installation (also in git actions for Github)
 
 	- in github actions, check .github/workflows/tests.yml
 	- There I install a full WordPress with WP CLI, place the plugin by

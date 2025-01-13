@@ -6,10 +6,12 @@
  */
 
 if ( 'tests-mysql' === getenv( 'WORDPRESS_DB_HOST' ) || ! empty( getenv( 'IS_WATCHING' ) ) ) {
+	echo 'in wp env actions';
 	require 'bootstrap-wp-env.php';
 	// we are in wp-env (local), we know it because the host is tests-mysql and the db is tests-wordpress
 } else {
 	// we are in github actions, in wp-content/plugins/asim-gravity-form-map-field/ folder of  wordpress installation
+	echo 'in github actions';
 	require 'bootstrap-git-action.php';
 }
 return;
