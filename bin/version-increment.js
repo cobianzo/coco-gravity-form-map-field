@@ -16,6 +16,7 @@ const semver = require('semver');
 const FILES = {
 	pluginPHP: path.join(__dirname, '../', 'asim-gravity-form-map-field.php'),
 	packageJSON: path.join(__dirname, '../', 'package.json'),
+	composerJSON: path.join(__dirname, '../', 'composer.json'),
 	readmeTXT: path.join(__dirname, '../', 'README-plugin.txt'),
 	addonPHP: path.join(__dirname, '../inc/', 'class-addon-asim.php'),
 };
@@ -65,6 +66,7 @@ function updateVersion(incrementType = 'patch', silent = false) {
 		// Update all files
 		updateFileVersion(FILES.pluginPHP, currentVersion, newVersion, silent);
 		updateFileVersion(FILES.packageJSON, currentVersion, newVersion, silent);
+		updateFileVersion(FILES.composerJSON, currentVersion, newVersion, silent);
 		updateFileVersion(FILES.readmeTXT, currentVersion, newVersion, silent);
 		updateFileVersion(FILES.addonPHP, currentVersion, newVersion, silent);
 
