@@ -21,7 +21,7 @@ if ( ! file_exists( getenv( 'WP_PHPUNIT__TESTS_CONFIG' ) ) ) {
 		. PHP_EOL . 'Try' . PHP_EOL .'WP_PHPUNIT__TESTS_CONFIG=tests/wp-config.php composer run test' . PHP_EOL;
 	exit;
 } else {
-	echo PHP_EOL . '✔️ Found ' . getenv('WP_PHPUNIT__TESTS_CONFIG') . PHP_EOL;
+	echo PHP_EOL . '✔️ Good. In bootstrap tests we Found ' . getenv('WP_PHPUNIT__TESTS_CONFIG') . PHP_EOL;
 }
 
 // wordpress for testing is installed with wp cli
@@ -53,6 +53,7 @@ if ( ! file_exists( "{$_wp_unit_vendor}/includes/functions.php" ) ) {
 
 // Give access to tests_add_filter() function.
 require_once $_wp_unit_vendor . '/includes/functions.php';
+echo PHP_EOL . '✔️ Found also ' . "{$_wp_unit_vendor}/includes/functions.php" . PHP_EOL;
 
 /**
  * Manually load the plugin being tested.

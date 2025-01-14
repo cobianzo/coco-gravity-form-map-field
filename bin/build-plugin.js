@@ -13,6 +13,24 @@ const archiver = require('archiver');
 const path = require('path');
 
 class PluginBuilder {
+	/**
+	 * @param {string} [version] - The version of the plugin to be built. If not provided,
+	 * the version will be determined by reading the package.json file.
+	 *
+	 * @description
+	 * Constructor for the PluginBuilder class.
+	 * This class is responsible for building the plugin distribution.
+	 * It will create a zip archive of the plugin with the given version.
+	 * The zip archive will contain the following files and directories:
+	 * - src: The source code of the plugin.
+	 * - assets: The plugin's assets (CSS, images, etc).
+	 * - inc: The plugin's PHP files.
+	 * - screenshots: The plugin's screenshots.
+	 * - build: The plugin's compiled files (JS, CSS, etc).
+	 * - {pluginSlug}.php: The plugin's PHP file.
+	 * - package.json: The plugin's package.json file.
+	 * - readme.txt: The plugin's readme file (renamed from README-plugin.txt).
+	 */
 	constructor(version = null) {
 		// Configuración básica del plugin
 		this.pluginSlug = 'asim-gravity-form-map-field';
