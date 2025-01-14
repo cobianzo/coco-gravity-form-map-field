@@ -14,7 +14,7 @@ if ( ! class_exists( 'GFAddOn' ) ) {
 
 class Addon_Asim extends \GFAddOn {
 
-	protected $_version                  = '3.0.0';
+	protected $_version                  = '3.0.1';
 	protected $_min_gravityforms_version = '2.5';
 	protected $_slug                     = 'asim-gravity-forms-map-addon';
 	protected $_path                     = 'asim-gravity-form-map-field/asim-gravity-form-map-field.php';
