@@ -50,6 +50,7 @@ class GF_Field_AsimMap extends GF_Field {
 			'label_setting',
 			'default_value_setting',
 			'rules_setting',
+			'map_type_setting',
 		);
 	}
 
@@ -60,8 +61,10 @@ class GF_Field_AsimMap extends GF_Field {
 			wp_enqueue_script( 'asim-map-js', dirname( plugin_dir_url( __FILE__ ) ) . '/build/asim-gravity-form-map-field.js', $asset_file['dependencies'], $asset_file['version'], false );
 		}
 
-		$addon                     = Addon_Asim::get_instance();
-		$this->google_maps_api_key = $this->google_maps_api_key || $addon->get_plugin_setting( Addon_Asim::SETTING_GOOGLE_MAPS_API_KEY );
+		$addon = Addon_Asim::get_instance();
+		if ( ! strlen( $this->google_maps_api_key ) ) {
+			$this->google_maps_api_key = $addon->get_plugin_setting( Addon_Asim::SETTING_GOOGLE_MAPS_API_KEY );
+		}
 
 		$input = asim_render_map_field( $this, $form, $value );
 
