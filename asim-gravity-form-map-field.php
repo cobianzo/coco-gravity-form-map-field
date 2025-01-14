@@ -51,6 +51,7 @@ class Addon_Asim_Bootstrap {
 		require_once plugin_dir_path( __FILE__ ) . 'inc/class-addon-asim.php';
 		require_once plugin_dir_path( __FILE__ ) . 'inc/render.php';
 		require_once plugin_dir_path( __FILE__ ) . 'inc/class-gf-field-asimmap.php';
+		require_once plugin_dir_path( __FILE__ ) . 'inc/class-hooks.php';
 		Addon_Asim::get_instance();
 	}
 }

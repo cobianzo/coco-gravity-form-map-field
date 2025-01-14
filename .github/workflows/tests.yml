@@ -3,7 +3,7 @@ name: PHPUnit Tests
 on:
   pull_request:
     branches:
-      - main
+      - main-not-yet # We can't test in github actions yet because we depend on gravityforms plugin
 
 jobs:
   test:

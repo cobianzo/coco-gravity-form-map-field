@@ -37,6 +37,9 @@ function asim_render_map_field( $instance, $form, $value ) {
 	$required_attribute = $instance->isRequired ? 'aria-required="true"' : '';
 	$invalid_attribute  = $instance->failed_validation ? 'aria-invalid="true"' : 'aria-invalid="false"';
 
+	// options of the field
+	$map_type = $instance->mapType ?? 'terrain'; // Default to Terrain (change to  satellite if you want)
+
 	// Exit if we are in the admin.
 	$latlng = explode( ',', $value );
 
@@ -102,7 +105,7 @@ function asim_render_map_field( $instance, $form, $value ) {
 					zoomControl: true,      // Activa los controles de zoom
 					mapTypeControl: true,
 					mapTypeIds: ['roadmap', 'terrain'],
-					mapTypeId: 'satellite',
+					mapTypeId: '<?php echo esc_attr( $map_type ); ?>',
 					mapTypeControlOptions: {
 						style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
 						position: google.maps.ControlPosition.TOP_RIGHT,
