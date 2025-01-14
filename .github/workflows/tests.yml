@@ -3,7 +3,7 @@ name: PHPUnit Tests
 on:
   pull_request:
     branches:
-      - main-not-in-use
+      - main
 
 jobs:
   test:
@@ -67,4 +67,4 @@ jobs:
     - name: Run PHPUnit with wp-config pointing to DB
       run: |
         cd wp-content/plugins/asim-gravity-form-map-field
-        WP_PHPUNIT__TESTS_CONFIG=tests/wp-config.php composer run test
+        WP_PHPUNIT__TESTS_CONFIG=tests/wp-config.php WP_DB_HOST=127.0.0.1 composer run test

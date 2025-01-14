@@ -40,7 +40,7 @@ function asim_render_map_field( $instance, $form, $value ) {
 	// Exit if we are in the admin.
 	$latlng = explode( ',', $value );
 
-	[$lat, $lng] = [ -34.397, 150.644 ]; // default
+	[$lat, $lng] = [ 0, 0 ]; // default
 	if ( 2 === count( $latlng ) ) {
 		[$lat, $lng] = $latlng;
 	}
@@ -55,7 +55,7 @@ function asim_render_map_field( $instance, $form, $value ) {
 	}
 
 	?>
-	<div id="map-container-<?php echo esc_attr( $field_id ); ?>"
+	<div id="map-container-<?php echo esc_attr( $field_id ); ?>" class="gform-field-asim-map"
 		style="height: 300px; margin-bottom: 1rem;"></div>
 
 	<input type="<?php echo esc_attr( $field_type ); ?>"

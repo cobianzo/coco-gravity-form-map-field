@@ -222,3 +222,19 @@ npx wp-env run cli wp plugin activate asim-gravity-form-map-field
 - Extend the tests for mobile devices and for other wordpress versions/themes
 - Localization (translation)
 - Add more options to the plugin: hide excerpt, allow editing the header and the read more ...
+
+Tests:
+===
+
+Map Field Tests:
+
+Verifica el registro correcto del campo
+Comprueba las propiedades del campo
+Valida la generación del HTML del input
+Tests de validación de coordenadas
+
+
+Render Tests:
+
+Verifica la función de renderizado
+Comprueba que los assets se cargan correctamente

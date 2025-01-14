@@ -8,31 +8,35 @@ class Test_Plugin_Activation extends WP_UnitTestCase {
 
 	public $plugin_file;
 
+	/**
+	 * Before a test is run, we need to set up the plugin:
+	 * - Call the parent setup first.
+	 * - Print a message to know when setup is happening.
+	 * - Set up the plugin file.
+	 * - Activate the plugin if it's not already activated.
+	 */
 	public function setUp(): void {
 		parent::setUp();
 
-		echo PHP_EOL . PHP_EOL . '🎬🏁 SETUP BEFORE TEST CASE' . PHP_EOL . '=================' . PHP_EOL ;
-		echo PHP_EOL . ' setUp ' . PHP_EOL . '____________' . PHP_EOL ;
+		Asim_TestCase_Helpers::setup( $this );
 
-		$this->plugin_file = 'asim-gravity-form-map-field/asim-gravity-form-map-field.php';
-
-				// Configurar una API key de prueba @TODO:
-				// update_option('gravityformsaddon_asim-gravity-forms-map-addon_settings',
-				//     ['google_maps_api_key' => $this->api_key]
-				// );
+		// Configurar una API key de prueba @TODO:
+		// update_option('gravityformsaddon_asim-gravity-forms-map-addon_settings',
+		//     ['google_maps_api_key' => $this->api_key]
+		// );
 
 		// if not running phpUnit in wp env, the plugin might not be activated by default
-			// if ( ! is_plugin_active( $this->plugin_file ) ) {
-			// 	echo PHP_EOL . '>>> ⚠️ 2) Needed activation of plugin' . PHP_EOL . '=========' . PHP_EOL ;
-			// 	activate_plugin( $this->plugin_file );
-			// }
-		}
+		// if ( ! is_plugin_active( $this->plugin_file ) ) {
+		// 	echo PHP_EOL . '>>> ⚠️ 2) Needed activation of plugin' . PHP_EOL . '=========' . PHP_EOL ;
+		// 	activate_plugin( $this->plugin_file );
+		// }
+	}
 
-		public function tearDown(): void {
-				// Limpiar después de cada test
-				parent::tearDown();
-				delete_option('gravityformsaddon_asim-gravity-forms-map-addon_settings');
-		}
+	public function tearDown(): void {
+			// Limpiar después de cada test
+			parent::tearDown();
+			delete_option('gravityformsaddon_asim-gravity-forms-map-addon_settings');
+	}
 
 	public function test_gravity_forms_dependency() {
 

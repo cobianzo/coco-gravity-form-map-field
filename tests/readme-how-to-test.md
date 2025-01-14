@@ -73,5 +73,8 @@ But the watching mode is magic, it works ok over the wp-env test database.
 	- There I install a full WordPress with WP CLI, place the plugin by
 cloning the repo, and run `WP_PHPUNIT__TESTS_CONFIG=tests/wp-config.php composer run test`, which uses
 the connection to the DB that we have just created
+
+When we run it in github actions, if we want to change the DB connection, we can use for example `WP_PHPUNIT__TESTS_CONFIG=tests/wp-config.php WP_DB_HOST=127.0.0.1 composer run test`
+
 	- We can simulate the same steps by working in local.
 	- wp-env apparently works better because in this git action case, I need to call `do_action('init')` for it to work
