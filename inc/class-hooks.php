@@ -5,7 +5,7 @@
  * @package Asim_Gravity_Form_Map_Field
  */
 
-namespace Asim;
+namespace Asim_Gravity_Form_Map_Field;
 
 /**
  * Class Hooks

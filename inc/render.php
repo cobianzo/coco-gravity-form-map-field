@@ -1,5 +1,7 @@
 <?php
 
+namespace Asim_Gravity_Forms_Map_Field;
+
 // phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -19,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return string The rendered HTML and JavaScript for the map field.
  */
-function asim_render_map_field( $instance, $form, $value ) {
+function asim_render_map_field( object $instance, array $form, string $value ): string {
 
 	$field_id = absint( $form['id'] );
 
@@ -114,8 +116,6 @@ function asim_render_map_field( $instance, $form, $value ) {
 				});
 				asimMaps['<?php echo esc_js( $input_id ); ?>'].mapContainerEl = mapContainerEl
 				asimMaps['<?php echo esc_js( $input_id ); ?>'].map = map;
-
-				window.locationButton('<?php echo esc_js( $input_id ); ?>');
 
 				// Agregar marcador inicial si las coordenadas son válidas.
 				if (coordinatesInput) {
