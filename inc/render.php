@@ -1,4 +1,5 @@
 <?php
+namespace Asim_Gravity_Form_Map_Field;
 
 // phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 

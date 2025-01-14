@@ -1,12 +1,12 @@
 <?php
 
+namespace Asim_Gravity_Form_Map_Field;
+
 if ( ! class_exists( 'GF_Field' ) ) {
 	return;
 }
 
-
-
-class GF_Field_AsimMap extends GF_Field {
+class GF_Field_AsimMap extends \GF_Field {
 
 	public $type = 'asim-map';
 
@@ -202,4 +202,4 @@ class GF_Field_AsimMap extends GF_Field {
 	}
 }
 
-GF_Fields::register( new GF_Field_AsimMap() );
+\GF_Fields::register( new GF_Field_AsimMap() );

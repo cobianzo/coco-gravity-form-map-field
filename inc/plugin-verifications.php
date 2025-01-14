@@ -1,4 +1,5 @@
 <?php
+namespace Asim_Gravity_Form_Map_Field;
 
 // Verifying that Gravity Forms is loaded
 add_action( 'init', function () {
