@@ -1,15 +1,13 @@
 <?php
+
+namespace Asim_Gravity_Form_Map_Field;
+
 /**
  * Hooks class.
  *
  * @package Asim_Gravity_Form_Map_Field
  */
 
-namespace Asim;
-
-/**
- * Class Hooks
- */
 class Hooks {
 
 	/**
