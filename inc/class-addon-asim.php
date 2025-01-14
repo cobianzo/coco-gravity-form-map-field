@@ -21,18 +21,7 @@ if ( ! class_exists( 'GFAddOn' ) ) {
  */
 class Addon_Asim extends \GFAddOn {
 
-	/**
-	 * The version of the plugin.
-	 *
-	 * @var string
-	 */
-	protected $_version = '2.0.3';
-
-	/**
-	 * The minimum version of Gravity Forms required.
-	 *
-	 * @var string
-	 */
+	protected $_version                  = '3.0.0';
 	protected $_min_gravityforms_version = '2.5';
 
 	/**

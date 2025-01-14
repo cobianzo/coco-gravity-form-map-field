@@ -1,9 +1,8 @@
 <?php // phpcs:ignore WordPress.Files.FileName.InvalidClassFileName
 /**
  * Plugin Name: Asim Gravity Forms Map Field
- * Plugin URI: https://github.com/cobianzo/asim-gravity-form-map-field
- * Description: A new field for Gravity Forms with the coordinates of the Gravity Form
- * Version: 2.0.3
+ * Description: A new field for Gravity Forms withe the coordinates of the Gravity Form
+ * Version: 3.0.0
  * Author: @cobianzo
  * Author URI: https://cobianzo.com
  * License: GPLv2 or later
