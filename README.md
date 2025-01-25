@@ -215,28 +215,11 @@ Edit `build-plugin.js` to use the right files on the creation of the distributio
 
 # TODO
 
-- Localization (translation)
-- Add more options to the plugin: hide lookup, etc
+- Add translations
+- Add more options to the field: hide lookup, hide location button ...
 - We need CI/CD for Playwright
 - Improve the github actions: use cache or artifacts to avoid repeating npm run build etc.
 - Move the artifact to an S3 bucket or a repo for the distribution.
 - Refactor to typescript
 - Transform most of the styles in the css into json styles, with variations.
 - Extend the tests for mobile devices and for other wordpress versions/themes
-
-
-Tests:
-===
-
-Map Field Tests:
-
-Verifica el registro correcto del campo
-Comprueba las propiedades del campo
-Valida la generación del HTML del input
-Tests de validación de coordenadas
-
-
-Render Tests:
-
-Verifica la función de renderizado
-Comprueba que los assets se cargan correctamente

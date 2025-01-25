@@ -10,9 +10,21 @@ class GF_Field_AsimMap extends \GF_Field {
 
 	public $type = 'asim-map';
 
+	/**
+	 * Google Maps API key
+	 *
+	 * @var string
+	 */
 	public $google_maps_api_key = '';
 
-	public function get_form_editor_field_title() {
+	/**
+	 * Returns the field's form editor title.
+	 *
+	 * @since 2.5
+	 *
+	 * @return string
+	 */
+	public function get_form_editor_field_title(): string {
 		return esc_attr__( 'Asim Map', 'asim-gravity-forms-map-addon' );
 	}
 
@@ -23,7 +35,7 @@ class GF_Field_AsimMap extends \GF_Field {
 	 *
 	 * @return string
 	 */
-	public function get_form_editor_field_description() {
+	public function get_form_editor_field_description(): string {
 		return esc_attr__( 'Stores information that should not be visible to the user but can be processed and saved with the user submission.', 'asim-gravity-forms-map-addon' );
 	}
 
@@ -36,25 +48,49 @@ class GF_Field_AsimMap extends \GF_Field {
 	 *
 	 * @return string
 	 */
-	public function get_form_editor_field_icon() {
+	public function get_form_editor_field_icon(): string {
 		return 'dashicons-location';
 	}
 
-	public function is_conditional_logic_supported() {
+	/**
+	 * Returns true if conditional logic is supported by the field.
+	 *
+	 * @since 2.5
+	 *
+	 * @return bool
+	 */
+	public function is_conditional_logic_supported(): bool {
 		return true;
 	}
 
-	public function get_form_editor_field_settings() {
+	/**
+	 * Returns the field's form editor settings.
+	 *
+	 * @since 2.5
+	 *
+	 * @return array
+	 */
+	public function get_form_editor_field_settings(): array {
 		return array(
 			'prepopulate_field_setting',
 			'label_setting',
 			'default_value_setting',
 			'rules_setting',
 			'map_type_setting',
+			'autocomplete_types_setting',
 		);
 	}
 
-	public function get_field_input( $form, $value = '', $entry = null ) {
+	/**
+	 * Returns the field's input html.
+	 *
+	 * @param array $form The form.
+	 * @param string $value The value of the field.
+	 * @param array $entry The entry.
+	 *
+	 * @return string
+	 */
+	public function get_field_input( $form, $value = '', $entry = null ): string {
 
 		if ( ! wp_script_is( 'asim-map-js', 'enqueued' ) ) {
 			$asset_file = include dirname( plugin_dir_path( __FILE__ ) ) . '/build/asim-gravity-form-map-field.asset.php';
@@ -74,7 +110,7 @@ class GF_Field_AsimMap extends \GF_Field {
 	/**
 	 * In the editor, wrap the field
 	 */
-	public function get_field_content( $value, $force_frontend_label, $form ) {
+	public function get_field_content( $value, $force_frontend_label, $form ): string {
 		$form_id         = $form['id'];
 		$admin_buttons   = $this->get_admin_buttons();
 		$is_entry_detail = $this->is_entry_detail();
@@ -96,7 +132,7 @@ class GF_Field_AsimMap extends \GF_Field {
 	 *
 	 * @return array
 	 */
-	public function get_filter_operators() {
+	public function get_filter_operators(): array {
 		$operators   = parent::get_filter_operators();
 		$operators[] = 'contains';
 
@@ -104,26 +140,27 @@ class GF_Field_AsimMap extends \GF_Field {
 	}
 
 	/**
-	 * Valida que una cadena represente coordenadas geográficas válidas.
-	 * El formato esperado es "latitud,longitud" donde:
-	 * - latitud debe estar entre -90 y 90
-	 * - longitud debe estar entre -180 y 180
+	 * Validates that a string represents valid geographic coordinates.
 	 *
-	 * @param string $value El valor a validar
-	 * @return bool True si son coordenadas válidas, false en caso contrario
+	 * The expected format is "latitude,longitude" where:
+	 * - latitude must be between -90 and 90
+	 * - longitude must be between -180 and 180
+	 *
+	 * @param string $value The value to validate
+	 * @return bool True if the value is valid coordinates, false otherwise
 	 */
-	public function validate_coordinates( $value ) {
-		// Si está vacío, es válido (el campo podría ser opcional)
+	public function validate_coordinates( string $value ): bool {
+		// If the value is empty, it is valid (the field might be optional)
 		if ( empty( $value ) ) {
 			return true;
 		}
 
-		// Verificar el formato básico (dos números separados por coma)
+		// Verify the basic format (two numbers separated by a comma)
 		if ( ! preg_match( '/^-?\d+\.?\d*,-?\d+\.?\d*$/', $value ) ) {
 			return false;
 		}
 
-		// Separar en latitud y longitud
+		// Split the coordinates
 		$coordinates = explode( ',', $value );
 
 		if ( count( $coordinates ) !== 2 ) {
@@ -133,7 +170,7 @@ class GF_Field_AsimMap extends \GF_Field {
 		$lat = (float) $coordinates[0];
 		$lng = (float) $coordinates[1];
 
-		// Validar rangos
+		// Validate the range
 		if ( $lat < -90 || $lat > 90 ) {
 			return false;
 		}
@@ -164,27 +201,27 @@ class GF_Field_AsimMap extends \GF_Field {
 	}
 
 	/**
-	 * Sanitiza las coordenadas para asegurar un formato consistente.
+	 * Sanitizes the coordinates to ensure a consistent format.
 	 *
-	 * @param string $value El valor a sanitizar
-	 * @return string Las coordenadas sanitizadas
+	 * @param string $value The value to sanitize
+	 * @return string The sanitized coordinates
 	 */
-	public function sanitize_coordinates( $value ) {
+	public function sanitize_coordinates( string $value ): string {
 
-		// Si no contiene una coma, no son coordenadas válidas
+		// If the value does not contain a comma, it is not valid coordinates
 		if ( false === strpos( $value, ',' ) ) {
 			return '';
 		}
 
-		// Eliminar espacios
+		// Remove spaces
 		$value = preg_replace( '/\s+/', '', $value );
 
-		// Si no son coordenadas válidas, devolver vacío
+		// If the value is not valid coordinates, return empty
 		if ( ! $this->validate_coordinates( $value ) ) {
-				return '';
+			return '';
 		}
 
-		// Separar y formatear con 6 decimales
+		// Split and format with 6 decimals
 		$coordinates = explode( ',', $value );
 		$lat         = (float) $coordinates[0];
 		$lng         = (float) $coordinates[1];
@@ -193,11 +230,11 @@ class GF_Field_AsimMap extends \GF_Field {
 	}
 
 
-	public function get_value_save_entry( $value, $form, $input_name, $lead_id, $lead ) {
+	public function get_value_save_entry( $value, $form, $input_name, $lead_id, $lead ): string {
 		return $this->sanitize_coordinates( $value );
 	}
 
-	public function get_value_entry_detail( $value, $currency = '', $use_text = false, $format = 'html', $media = 'screen' ) {
+	public function get_value_entry_detail( $value, $currency = '', $use_text = false, $format = 'html', $media = 'screen' ): string {
 		return $this->sanitize_coordinates( $value );
 	}
 }
