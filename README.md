@@ -158,9 +158,9 @@ npx wp-env run cli wp core install --url="http://localhost:8890" --title="Mi Sit
 npx wp-env run cli wp plugin activate asim-gravity-form-map-field
 ```
 
-# How we created this plugin from the boilerplate
+# Start a new plugin from this boilerplate
 
-Boilerplate: https://github.com/cobianzo/wp-env-sidebar-related-article
+Original boilerplate: https://github.com/cobianzo/wp-env-sidebar-related-article
 
 ## Git clone and rename repo
 

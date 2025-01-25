@@ -1,6 +1,6 @@
 <?php
 
-namespace Asim_Gravity_Forms_Map_Field;
+namespace Asim_Gravity_Form_Map_Field;
 
 if ( ! class_exists( 'GF_Field' ) ) {
 	return;
@@ -77,6 +77,7 @@ class GF_Field_AsimMap extends \GF_Field {
 			'default_value_setting',
 			'rules_setting',
 			'map_type_setting',
+			'autocomplete_types_setting',
 		);
 	}
 

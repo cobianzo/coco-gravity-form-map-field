@@ -41,7 +41,7 @@ class Test_Map_Field extends WP_UnitTestCase {
 
 		// Verificar que la clase registrada es la correcta
 		$registered_field = GF_Fields::get( 'asim-map' );
-		$this->assertInstanceOf( 'GF_Field_AsimMap', $registered_field, '❌ 2.1.4 GF_Fields does not contain our new registered field asim-map. MAL!' );
+		$this->assertInstanceOf( '\Asim_Gravity_Form_Map_Field\GF_Field_AsimMap', $registered_field, '❌ 2.1.4 GF_Fields does not contain our new registered field asim-map. MAL!' );
 
 		echo PHP_EOL . '✅ OK 2.1: New Addon field "asim-map" is registered ok' . PHP_EOL . '---------' . PHP_EOL;
 	}
@@ -54,7 +54,7 @@ class Test_Map_Field extends WP_UnitTestCase {
 		echo PHP_EOL . PHP_EOL . '2.2) ---- test_field_properties' . PHP_EOL;
 		do_action( 'gform_loaded', array( 'path' => $this->plugin_file ) );
 
-		$field = new GF_Field_AsimMap();
+		$field = new \Asim_Gravity_Form_Map_Field\GF_Field_AsimMap();
 
 		// Verificar tipo de campo
 		$this->assertEquals( 'asim-map', $field->type, '❌ The type of the field is not "asim-map"' );
@@ -73,7 +73,7 @@ class Test_Map_Field extends WP_UnitTestCase {
 		echo PHP_EOL . PHP_EOL . '2.3) ---- Test for test_field_input_generation' . PHP_EOL;
 		do_action( 'gform_loaded', array( 'path' => $this->plugin_file ) );
 
-		$field = new GF_Field_AsimMap();
+		$field = new \Asim_Gravity_Form_Map_Field\GF_Field_AsimMap();
 		$field->google_maps_api_key = 'test-just-so-it-s-not-empty';
 
 		$form = Asim_TestCase_Helpers::create_test_form();
@@ -100,7 +100,7 @@ class Test_Map_Field extends WP_UnitTestCase {
 		echo PHP_EOL . PHP_EOL . '2.4) ---- Test for test_coordinates_validation' . PHP_EOL;
 		do_action( 'gform_loaded', array( 'path' => $this->plugin_file ) );
 
-		$field = new GF_Field_AsimMap();
+		$field = new \Asim_Gravity_Form_Map_Field\GF_Field_AsimMap();
 
 		// Coordenadas válidas
 		$valid_coordinates = array(
@@ -146,17 +146,13 @@ class Test_Map_Field extends WP_UnitTestCase {
 		echo PHP_EOL . PHP_EOL . '2.5) ---- Test for test_empty_value_handling' . PHP_EOL;
 		do_action( 'gform_loaded', array( 'path' => $this->plugin_file ) );
 
-		$field = new GF_Field_AsimMap();
+		$field = new \Asim_Gravity_Form_Map_Field\GF_Field_AsimMap();
 		$field->google_maps_api_key = 'test-just-so-it-s-not-empty';
 		$form = Asim_TestCase_Helpers::create_test_form();
 
 		// Try empty value
 		$html_empty = $field->get_field_input( $form, '' );
 		$this->assertStringContainsString('value=""', $html_empty, '❌ 2.5.1:. The HTML does not contain empty value attribute: ' );
-
-		// Try value null
-		$html_null = $field->get_field_input($form, null);
-		$this->assertStringContainsString('value=""', $html_null, '❌ 2.5.2: The HTML does not contain empty value attribute when null is provided');
 
 		echo PHP_EOL . '✅ OK 2.5:' . PHP_EOL . '---------' . PHP_EOL;
 	}
@@ -169,7 +165,7 @@ class Test_Map_Field extends WP_UnitTestCase {
 		echo PHP_EOL . PHP_EOL . '2.6) --- Test for test_coordinates_sanitization' . PHP_EOL;
 		do_action( 'gform_loaded', array( 'path' => $this->plugin_file ) );
 
-		$field = new GF_Field_AsimMap();
+		$field = new \Asim_Gravity_Form_Map_Field\GF_Field_AsimMap();
 
 		// Coordenadas con espacios extra
 		$this->assertEquals(

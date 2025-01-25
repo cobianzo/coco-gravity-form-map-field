@@ -1,10 +1,8 @@
 <?php
 
-declare( strict_types=1 );
-
-namespace Asim_Gravity_Forms_Map_Field;
-
 // phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
+
+namespace Asim_Gravity_Form_Map_Field;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -14,14 +12,9 @@ if ( ! class_exists( 'GFAddOn' ) ) {
 	return;
 }
 
-/**
- * Class Addon_Asim
- *
- * @package Asim_Gravity_Forms_Map_Field
- */
 class Addon_Asim extends \GFAddOn {
 
-	protected $_version                  = '3.0.0';
+	protected $_version                  = '3.1.0';
 	protected $_min_gravityforms_version = '2.5';
 
 	/**

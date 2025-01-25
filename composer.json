@@ -1,17 +1,16 @@
 {
 	"name": "coco/asim-gravity-form-map-field",
-	"version": "3.0.0",
+	"version": "3.1.0",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
-	"description": "Experiments to add frontend interactivity to blocks",
+	"description": "I have developed an addon in WordPress for the plugin Gravity Forms. It adds a new field for Google Maps",
 	"homepage": "https://github.com/cobianzo/asim-gravity-form-map-field",
 	"keywords": [
+		"gravity forms",
 		"wordpress",
 		"wp",
-		"react",
 		"javascript",
-		"related-article",
-		"block"
+		"google-maps"
 	],
 	"config": {
 		"process-timeout": 0,

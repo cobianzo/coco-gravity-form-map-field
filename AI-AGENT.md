@@ -1,6 +1,6 @@
 # Use this description to put an AI AGENT into context
 
-I have developed an addon in WordPress for the plugin Gravity Forms.
+I have developed an addon in WordPress for the plugin Gravity Forms. It adds a new field for Google Maps
 This plugin checks that Gravity Forms is installed, first of all, and this is the structure.
 The addon creates a 
 - new Setting tab in the GF settings page /wp-admin/admin.php?page=gf_settings&subview=asim-gravity-forms-map-addon

@@ -1,8 +1,4 @@
-<?php
-
-namespace Asim_Gravity_Forms_Map_Field;
-
-// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+<?php // phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -40,7 +36,8 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 	$invalid_attribute  = $instance->failed_validation ? 'aria-invalid="true"' : 'aria-invalid="false"';
 
 	// options of the field
-	$map_type = $instance->mapType ?? 'terrain'; // Default to Terrain (change to  satellite if you want)
+	$map_type           = $instance->mapType ?? 'terrain'; // Default to Terrain (change to  satellite if you want)
+	$autocomplete_types = $instance->autocompleteTypes ?? ''; // Default to Terrain (change to  satellite if you want)
 
 	// Exit if we are in the admin.
 	$latlng = explode( ',', $value );
@@ -133,7 +130,12 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 				});
 
 				// Add the search input for the map
-				window.initPlacesAutocomplete(map, '<?php esc_attr_e( 'Search location', 'asim-gravity-form-map-field' ); ?>');
+				<?php
+				if ( ! empty( $autocomplete_types ) ) :
+					?>
+					const autocompleteTypes = [ '<?php echo esc_js( $autocomplete_types ); ?>' ];
+					window.initPlacesAutocomplete(map, '<?php esc_attr_e( 'Search location', 'asim-gravity-form-map-field' ); ?>', autocompleteTypes);
+				<?php endif; ?>
 			}
 		}
 

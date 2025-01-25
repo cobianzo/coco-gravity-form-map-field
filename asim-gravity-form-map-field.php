@@ -1,11 +1,13 @@
 <?php // phpcs:ignore WordPress.Files.FileName.InvalidClassFileName
 /**
  * Plugin Name: Asim Gravity Forms Map Field
- * Description: A new field for Gravity Forms withe the coordinates of the Gravity Form
- * Version: 3.0.0
+ * Description: A new field for Gravity Forms with the coordinates of the Gravity Form
+ * Version: 3.1.0
  * Author: @cobianzo
  * Author URI: https://cobianzo.com
  * License: GPLv2 or later
+ * Requires at least: 6.3
+ * Requires PHP: 8.0
  * Text Domain: asim-gravity-form-map-field
  * Requires at least: 6.2
  * Requires PHP: 8.2
@@ -13,17 +15,12 @@
  * @package asim-gravity-form-map-field
  */
 
-namespace Asim_Gravity_Forms_Map_Field;
+namespace Asim_Gravity_Form_Map_Field;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-// for playwright and PHPUnit test we have our own factory data generator
-$is_local = str_contains( get_option( 'siteurl' ), 'localhost' );
-$is_prod  = 'production' === wp_get_environment_type();
-define( 'DUMMY_DATA_GENERATOR', $is_local || ! $is_prod );
 
 // Show a notice if Gravity Forms is not loaded.
 add_action(
@@ -33,13 +30,7 @@ add_action(
 	}
 );
 
-add_action(
-	'gform_loaded',
-	function (): void {
-		( new Addon_Asim_Bootstrap() )->load();
-	},
-	5
-);
+add_action( 'gform_loaded', array( 'Asim_Gravity_Form_Map_Field\Addon_Asim_Bootstrap', 'load' ), 5 );
 
 class Addon_Asim_Bootstrap {
 
@@ -51,7 +42,7 @@ class Addon_Asim_Bootstrap {
 	 *
 	 * @since 1.1.0
 	 */
-	public function load(): void {
+	public static function load(): void {
 		if ( ! method_exists( '\GFForms', 'include_addon_framework' ) ) {
 			return;
 		}

@@ -1,46 +1,82 @@
 <?php
+
+namespace Asim_Gravity_Form_Map_Field;
+
 /**
  * Hooks class.
  *
  * @package Asim_Gravity_Form_Map_Field
  */
 
-namespace Asim_Gravity_Form_Map_Field;
-
-/**
- * Class Hooks
- */
 class Hooks {
+
 
 	/**
 	 * Initialize hooks.
 	 */
 	public static function init() {
 		add_action( 'gform_field_standard_settings', array( __CLASS__, 'field_sidebar_options' ), 10 );
+		add_filter( 'gform_tooltips', array( __CLASS__, 'tooltips' ), 10, 1 );
 	}
 
 	/**
-	 * Plugins loaded hook.
+	 * New options for the map field in the sidebar.
 	 */
 	public static function field_sidebar_options( $position ) {
 		// Add to the General panel in the sidebar
 		if ( 50 === $position ) :
 			?>
 			<li class="map_type_setting field_setting">
-					<label for="field_map_type" class="section_label">
-							<?php esc_html_e( 'Map Type', 'asim-gravity-forms-map-addon' ); ?>
-							<?php gform_tooltip( 'form_field_map_type' ); // we can add a tooltip if we want to ?>
-					</label>
-					<select id="field_map_type" onchange="SetFieldProperty('mapType', this.value);">
-							<option value=""><?php esc_html_e( 'Default', 'asim-gravity-forms-map-addon' ); ?></option>
-							<option value="satellite"><?php esc_html_e( 'Satellite', 'asim-gravity-forms-map-addon' ); ?></option>
-							<option value="terrain"><?php esc_html_e( 'Terrain', 'asim-gravity-forms-map-addon' ); ?></option>
-					</select>
+				<label for="field_map_type" class="section_label">
+					<?php esc_html_e( 'Map Type', 'asim-gravity-forms-map-addon' ); ?>
+					<?php
+					gform_tooltip( 'form_field_map_type' ); // we can add a tooltip if we want to
+					?>
+				</label>
+				<select id="field_map_type" onchange="SetFieldProperty('mapType', this.value);">
+					<option value=""><?php esc_html_e( 'Default', 'asim-gravity-forms-map-addon' ); ?></option>
+					<option value="satellite"><?php esc_html_e( 'Satellite', 'asim-gravity-forms-map-addon' ); ?></option>
+					<option value="terrain"><?php esc_html_e( 'Terrain', 'asim-gravity-forms-map-addon' ); ?></option>
+				</select>
 			</li>
+			<li class="map_type_setting field_setting">
+				<label for="field_autocomplete_types" class="section_label">
+					<?php esc_html_e( 'Autocomplete Types', 'asim-gravity-forms-map-addon' ); ?>
+					<?php
+					gform_tooltip( 'form_field_autocomplete_types' ); // we can add a tooltip if we want to
+					?>
+				</label>
+				<select id="field_autocomplete_types" onchange="SetFieldProperty('autocompleteTypes', this.value);">
+					<option value=""><?php esc_html_e( 'None', 'asim-gravity-forms-map-addon' ); ?></option>
+					<option value="(cities)"><?php esc_html_e( 'Cities', 'asim-gravity-forms-map-addon' ); ?></option>
+					<option value="geocode"><?php esc_html_e( 'Geocode', 'asim-gravity-forms-map-addon' ); ?></option>
+					<option value="address"><?php esc_html_e( 'Address', 'asim-gravity-forms-map-addon' ); ?></option>
+					<option value="(regions)"><?php esc_html_e( 'Regions', 'asim-gravity-forms-map-addon' ); ?></option>
+				</select>
+			</li>
+
+			<script>
+				// Set the default values to the inputs
+				jQuery(document).on('gform_load_field_settings', function(event, field, form) {
+					// Establecer el valor por defecto si no está definido
+					const defaultValueMapType = field['mapType'] || '';
+					// Asignar el valor al input en los ajustes
+					jQuery('#field_map_type').val(defaultValueMapType);
+
+					const defaultValueAutocompleteTypes = field['autocompleteTypes'] || '';
+					// Asignar el valor al input en los ajustes
+					jQuery('#field_autocomplete_types').val(defaultValueAutocompleteTypes);
+				});
+			</script>
 			<?php
 		endif;
 	}
-}
 
+	public static function tooltips( $tooltips ) {
+		$tooltips['form_field_map_type']           = esc_html__( 'More info at https://developers.google.com/maps/documentation/javascript/maptypes', 'asim-gravity-forms-map-addon' );
+		$tooltips['form_field_autocomplete_types'] = esc_html__( 'More info at https://developers.google.com/maps/documentation/javascript/supported_types', 'asim-gravity-forms-map-addon' );
+		return $tooltips;
+	}
+}
 
 Hooks::init();
