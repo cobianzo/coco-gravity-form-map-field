@@ -27,6 +27,7 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 
 	$is_entry_detail = $instance->is_entry_detail();
 	$is_form_editor  = $instance->is_form_editor();
+	$is_admin        = $is_form_editor || $is_entry_detail;
 
 	$disabled_text = $is_form_editor ? 'disabled="disabled"' : '';
 
@@ -37,21 +38,24 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 
 	// options of the field
 	$map_type           = $instance->mapType ?? 'terrain'; // Default to Terrain (change to  satellite if you want)
-	$autocomplete_types = $instance->autocompleteTypes ?? ''; // Default to Terrain (change to  satellite if you want)
+	$autocomplete_types = $instance->autocompleteTypes ?? '';
+	$interaction_type   = $instance->interactionType ?? 'marker';
 
-	// Exit if we are in the admin.
-	$latlng = explode( ',', $value );
-
-	[$lat, $lng] = [ 0, 0 ]; // default
-	if ( 2 === count( $latlng ) ) {
-		[$lat, $lng] = $latlng;
+	// there are two types of values, dingle coordinates or set of coordinates to defina a polygon
+	if ( 'marker' === $interaction_type ) {
+		$value = $instance->validate_coordinates( $value ) ? $value : '';
+	} else {
+		$value = $instance->validate_polygon( $value ) ? $value : '';
 	}
 
 	ob_start();
 
 	if ( empty( $instance->google_maps_api_key ) ) {
 		if ( current_user_can( 'manage_options' ) ) {
-			echo '<div class="notice notice-error"><p>The map field requires a Google Maps API key. <a href="' . esc_url( admin_url( 'admin.php?page=gf_settings&subview=asim-gravity-form-map-field' ) ) . '">Configure</a></p></div>';
+			echo '<div class=""><p>The map field requires a Google Maps API key.
+				<a style="text-decoration: underline;" href="'
+				. esc_url( admin_url( 'admin.php?page=gf_settings&subview=asim-gravity-forms-map-addon' ) )
+				. '">Configure</a></p></div>';
 		}
 		return ob_get_clean();
 	}
@@ -73,33 +77,34 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 		<?php echo $required_attribute; ?>
 		<?php echo $invalid_attribute; ?>
 		<?php echo $disabled_text; ?>
-		<?php
-		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
-		?> />
+		/>
 
 
 
 	<script>
-
 		window.asimMaps = window.asimMaps || {};
 		window.asimLocationIcon = <?php echo wp_json_encode( dirname( plugin_dir_url( __FILE__ ) ) . '/assets/location.svg' ); ?>;
+		window.asimClearPolygonIcon = <?php echo wp_json_encode( dirname( plugin_dir_url( __FILE__ ) ) . '/assets/clear-polygon.webp' ); ?>;
 
 		asimMaps['<?php echo esc_js( $input_id ); ?>'] = {
 			map: null,
 			inputElement: null,
+			polygonCoords: [],
+			polygon: null,
+			marker: null,
 			initMap: () => {
 				const input = document.getElementById('<?php echo esc_js( $input_id ); ?>');
 				asimMaps['<?php echo esc_js( $input_id ); ?>'].inputElement = input;
-				const coordinatesInput = window.coordinatesFromInput(input);
-				const coordinates = coordinatesInput || {
+				const coordinatesInput = window.coordinatesFromInput(input); // {lat, lng} or null
+				const coordinatesInitMap = coordinatesInput || {
 					lat: -34.397,
 					lng: 150.644
 				};
 
-				// Inicializar el mapa.
+				// Init the map calling google maps methods
 				const mapContainerEl = document.getElementById('map-container-<?php echo esc_js( $field_id ); ?>');
 				const map = new window.google.maps.Map(mapContainerEl, {
-					center: coordinates,
+					center: coordinatesInitMap,
 					disableDefaultUI: true, // Desactiva la interfaz predeterminada
 					zoomControl: true,      // Activa los controles de zoom
 					mapTypeControl: true,
@@ -111,23 +116,33 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 					},
 					zoom: 8,
 				});
-				asimMaps['<?php echo esc_js( $input_id ); ?>'].mapContainerEl = mapContainerEl
+				asimMaps['<?php echo esc_js( $input_id ); ?>'].mapContainerEl = mapContainerEl;
 				asimMaps['<?php echo esc_js( $input_id ); ?>'].map = map;
+				window.gotoLocationButton('<?php echo esc_js( $input_id ); ?>');
 
-				// Agregar marcador inicial si las coordenadas son válidas.
-				if (coordinatesInput) {
-					window.addMarker(coordinatesInput, map);
-					window.centerMapAtInputCoordinates(input, map);
-				}
+				<?php
+				if ( 'marker' === $interaction_type ) : ?>
+					// Add initial marker if the coordinates are valid.
+					if (coordinatesInput) {
+						window.addMarker('<?php echo esc_js( $input_id ); ?>', coordinatesInput);
+						window.centerMapAtInputCoordinates(input, map);
+					}
+					// CLICK on the map > sets a market
+					asimMaps['<?php echo esc_js( $input_id ); ?>'].map.addListener('click', function(e) {
+						const clickedCoordinates = e.latLng;
+						const inputElement = document.getElementById('<?php echo esc_js( $input_id ); ?>');
+						inputElement.value = `${clickedCoordinates.lat()},${clickedCoordinates.lng()}`;
+						window.addMarker('<?php echo esc_js( $input_id ); ?>', clickedCoordinates);
+					});
+				<?php endif; ?>
 
-
-				// CLICK on the map > sets a market
-				asimMaps['<?php echo esc_js( $input_id ); ?>'].map.addListener('click', function(e) {
-					const clickedCoordinates = e.latLng;
-					const inputElement = document.getElementById('<?php echo esc_js( $input_id ); ?>');
-					inputElement.value = `${clickedCoordinates.lat()},${clickedCoordinates.lng()}`;
-					window.addMarker(clickedCoordinates, map);
-				});
+				<?php if ( 'polygon' === $interaction_type ) :
+					// @TODO: validate input value to polygon or remove the input value
+					// add default polygon if input value is valid polygon
+					// add interacion of creaging a polygon
+					?>
+					window.initPolygonSetup('<?php echo esc_js( $input_id ); ?>');
+				<?php endif; ?>
 
 				// Add the search input for the map
 				<?php
@@ -145,7 +160,8 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 			const script = document.createElement('script');
 			script.src = 'https://maps.googleapis.com/maps/api/js?key=<?php
 				echo esc_js( $instance->google_maps_api_key );
-			?>&libraries=places&loading=async&callback=initAllMaps';
+				echo ( ! empty( $autocomplete_types ) ) ? '&libraries=places' : '';
+			?>&loading=async&callback=initAllMaps';
 			script.async = true;
 			script.loading = 'async';
 			document.head.appendChild(script);

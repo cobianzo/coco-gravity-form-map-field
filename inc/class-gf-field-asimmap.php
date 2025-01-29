@@ -182,6 +182,11 @@ class GF_Field_AsimMap extends \GF_Field {
 		return true;
 	}
 
+	// there are two types of values, dingle coordinates or set of coordinates to defina a polygon
+	public function validate_polygon( string $value ): bool {
+		return true; // @TODO.
+	}
+
 	/**
 	 * Validates the provided value as geographic coordinates.
 	 *
