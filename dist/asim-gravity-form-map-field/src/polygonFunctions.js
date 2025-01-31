@@ -1,29 +1,20 @@
 window.initPolygonSetup = function (inputName) {
+	console.log('>>>>> 1.START');
 	// create the button that deletes any started polygon
 	window.clearPolygonButton(inputName);
 
+	console.log('>>>>> 2.btn created, Creagin poly');
 	// crates the Google Maps polygon object
 	window.createPolygonMap(inputName);
 
 	// CLICK on the map >creates a new vertex for the polygon
 	window.asimMaps[inputName].map.addListener('click', function (e) {
+		console.log('>>>>> CLCICK');
 		const clickedCoordinates = e.latLng;
 		window.addVertexPolygonMap(inputName, clickedCoordinates);
 	});
 
-	const path = window.asimMaps[inputName].polygon;
-	// Listener para detectar cuando se agrega un nuevo vértice
-	google.maps.event.addListener(path, 'insert_at', function (index) {
-		console.log('Nuevo vértice añadido en la posición:', index);
-		console.log('Coordenadas:', path.getAt(index).toUrlValue());
-	});
-
-	// Opcional: Detectar cambios en vértices existentes
-	google.maps.event.addListener(path, 'set_at', function (index) {
-		console.log('Vértice movido en la posición:', index);
-		console.log('Nuevas coordenadas:', path.getAt(index).toUrlValue());
-	});
-
+	console.log('>>>>> 3.paiting pol');
 	// if there is a value in the input, we paint the polygon on page load.
 	window.paintPolygonFromInput(inputName);
 };
@@ -141,7 +132,7 @@ window.clearPolygon = function (inputName) {
 };
 
 window.paintPolygonFromInput = function (inputName) {
-	const value = document.getElementById(inputName).value;
+	const value =  document.getElementById(inputName).value;
 	if ('' === value) {
 		return;
 	}
