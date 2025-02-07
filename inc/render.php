@@ -126,7 +126,8 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 
 
 				<?php
-				if ( 'marker' === $interaction_type ) : ?>
+				if ( 'marker' === $interaction_type ) :
+				?>
 					// Add initial marker if the coordinates are valid.
 					if (coordinatesInput) {
 						window.addMarker('<?php echo esc_js( $input_id ); ?>', coordinatesInput, asimVars.asimMarkerIcon);
@@ -141,7 +142,11 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 					});
 				<?php endif; ?>
 
-				<?php if ( 'polygon' === $interaction_type ) :
+				<?php
+				if ( 'polygon' === $interaction_type ) :
+				?>
+
+					<?php
 					// @TODO: validate input value to polygon or remove the input value
 					// add default polygon if input value is valid polygon
 					// add interacion of creaging a polygon
@@ -165,7 +170,6 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 			const script = document.createElement('script');
 			script.src = 'https://maps.googleapis.com/maps/api/js?key=<?php
 				echo esc_js( $instance->google_maps_api_key );
-				// echo ( ! empty( $autocomplete_types ) ) ? '&libraries=places' : '';
 			?>&loading=async&callback=initAllMaps';
 			if (asimVars.placesAPILoaded) {
 				script.src += '&libraries=places';

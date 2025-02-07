@@ -181,7 +181,6 @@ class GF_Field_AsimMap extends \GF_Field {
 
 		return true;
 	}
-
 }
 
 \GF_Fields::register( new GF_Field_AsimMap() );
