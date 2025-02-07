@@ -5,7 +5,9 @@
 	],
 	"ignorePatterns": [
 		"build/**/*",
+		"dist/**/*",
 		"bin/**/*",
+		"plugins/**/*",
 		"node_modules/**/*",
 		"vendor/**/*",
 		"webpack.config.js",

@@ -71,6 +71,5 @@
 		"stylelint-config-standard-scss": "^14.0.0",
 		"semver": "^7.6.3"
 	},
-	"dependencies": {
-	}
+	"dependencies": {}
 }

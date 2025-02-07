@@ -217,6 +217,7 @@ Edit `build-plugin.js` to use the right files on the creation of the distributio
 
 - Add translations
 - Add more options to the field: hide lookup, hide location button ...
+	- Important: add an option for initial position of the map on page load
 - We need CI/CD for Playwright
 - Improve the github actions: use cache or artifacts to avoid repeating npm run build etc.
 - Move the artifact to an S3 bucket or a repo for the distribution.

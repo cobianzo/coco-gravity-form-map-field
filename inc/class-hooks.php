@@ -25,6 +25,8 @@ class Hooks {
 	public static function field_sidebar_options( $position ) {
 		// Add to the General panel in the sidebar
 		if ( 50 === $position ) :
+
+			// Option map type (satellite/terrain)
 			?>
 			<li class="map_type_setting field_setting">
 				<label for="field_map_type" class="section_label">
@@ -39,12 +41,11 @@ class Hooks {
 					<option value="terrain"><?php esc_html_e( 'Terrain', 'asim-gravity-forms-map-addon' ); ?></option>
 				</select>
 			</li>
-			<li class="map_type_setting field_setting">
+			<!-- Option input lookup autocomplete type: cities/address etc -->
+			<li class="autocomplete_types_setting field_setting">
 				<label for="field_autocomplete_types" class="section_label">
-					<?php esc_html_e( 'Autocomplete Types', 'asim-gravity-forms-map-addon' ); ?>
-					<?php
-					gform_tooltip( 'form_field_autocomplete_types' ); // we can add a tooltip if we want to
-					?>
+					<?php esc_html_e( 'Autocomplete Type', 'asim-gravity-forms-map-addon' ); ?>
+					<?php gform_tooltip( 'form_field_autocomplete_types' ); ?>
 				</label>
 				<select id="field_autocomplete_types" onchange="SetFieldProperty('autocompleteTypes', this.value);">
 					<option value=""><?php esc_html_e( 'None', 'asim-gravity-forms-map-addon' ); ?></option>
@@ -54,18 +55,30 @@ class Hooks {
 					<option value="(regions)"><?php esc_html_e( 'Regions', 'asim-gravity-forms-map-addon' ); ?></option>
 				</select>
 			</li>
+			<!-- Option Map Interaction: Marker/Polygon -->
+			<li class="interaction_type_setting">
+				<label for="field_interaction_type" class="section_label">
+					<?php esc_html_e( 'Interaction Type', 'asim-gravity-forms-map-addon' ); ?>
+					<?php gform_tooltip( 'form_field_interaction_type' ); ?>
+				</label>
+				<select id="field_interaction_type" onchange="SetFieldProperty('interactionType', this.value);">
+					<option value="marker"><?php esc_html_e( 'Marker', 'asim-gravity-forms-map-addon' ); ?></option>
+					<option value="polygon"><?php esc_html_e( 'Polygon', 'asim-gravity-forms-map-addon' ); ?></option>
+				</select>
+			</li>
 
 			<script>
-				// Set the default values to the inputs
+				// Set the default values to the inputs when page loads (page of edit form /admin.php?page=gf_edit_forms&id=x)
 				jQuery(document).on('gform_load_field_settings', function(event, field, form) {
-					// Establecer el valor por defecto si no está definido
+
 					const defaultValueMapType = field['mapType'] || '';
-					// Asignar el valor al input en los ajustes
 					jQuery('#field_map_type').val(defaultValueMapType);
 
 					const defaultValueAutocompleteTypes = field['autocompleteTypes'] || '';
-					// Asignar el valor al input en los ajustes
 					jQuery('#field_autocomplete_types').val(defaultValueAutocompleteTypes);
+
+					const defaultValueIntereactionType = field['interactionType'] || '';
+					jQuery('#field_interaction_type').val(defaultValueIntereactionType);
 				});
 			</script>
 			<?php

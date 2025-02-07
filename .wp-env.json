@@ -1,10 +1,6 @@
 {
 	"core": null,
-	"plugins": [
-		"./plugins/gravityforms",
-		"./plugins/gravityformsgeolocation",
-		"."
-	],
+	"plugins": ["./plugins/gravityforms", "./plugins/gravityformsgeolocation", "."],
 	"config": {
 		"ALTERNATE_WP_CRON": true,
 		"PERMALINK_STRUCTURE": "/%postname%/",

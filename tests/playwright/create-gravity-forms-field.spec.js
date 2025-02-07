@@ -43,7 +43,11 @@ test.describe('Asim Gravity Forms Map Field - E2E Tests', () => {
 	// ------------------------ THE TEST
 	// ------------------------ @TODO: it takes 30 secs, its too long. Optimize it.
 
-	test('Add same category to two existing posts and insert block in the second', async ({ admin, editor, page }) => {
+	test('Add same category to two existing posts and insert block in the second', async ({
+		admin,
+		editor,
+		page,
+	}) => {
 		const CAT_NAME = 'Politics'; // the category must exist, I created with class-create-dummy-data.php
 		console.log('>>>>>>> Start Single test for cat ', CAT_NAME);
 

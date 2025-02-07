@@ -38,7 +38,7 @@ class PluginBuilder {
 		this.distDir = 'dist';
 
 		// Lista de archivos y directorios a incluir
-		this.directories = ['src', 'inc', 'screenshots', 'build'];
+		this.directories = ['assets', 'src', 'inc', 'build'];
 
 		this.files = [`${this.pluginSlug}.php`, `package.json`];
 		this.files = this.files.map((file) => ({
@@ -106,7 +106,7 @@ class PluginBuilder {
 
 	// Crea el archivo zip
 	async createZip() {
-		const zipFileName = `${this.distDir}/${this.pluginSlug}${this.version ? `-${this.version}` : ''}.zip`;
+		const zipFileName = `${this.distDir}/${this.pluginSlug}.zip`;
 		const output = fsSync.createWriteStream(zipFileName);
 		const archive = archiver('zip', { zlib: { level: 9 } });
 
