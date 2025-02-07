@@ -9,11 +9,11 @@ Contributors: cobianzo
 Requires at least: 6.3
 Requires PHP: 8.0
 
-A new field for Gravity forms, with a map by Google Maps and Latitude an d Longitude
+A new field for Gravity forms, with a map by Google Maps saving the coordenates of a point or an area.
 
 ## Description
 
-The Asim Gravity Forms Map Field is a WordPress plugin designed to add a new field for Gravity forms, with a map by Google Maps and Latitude an d Longitude
+The Asim Gravity Forms Map Field is a WordPress plugin designed to add a new field for Gravity forms, with a map by Google Maps. The user can interact with the map by selecting a point in it (setting up a marker) or crating an area (polygon). The values of the coordenates will be saved in an input field.
 
 ## Features
 

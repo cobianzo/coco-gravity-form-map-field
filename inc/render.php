@@ -42,11 +42,6 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 	$interaction_type   = $instance->interactionType ?? 'marker';
 
 	// there are two types of values, dingle coordinates or set of coordinates to defina a polygon
-	if ( 'marker' === $interaction_type ) {
-		$value = $instance->validate_coordinates( $value ) ? $value : '';
-	} else {
-		$value = $instance->validate_polygon( $value ) ? $value : '';
-	}
 
 	ob_start();
 
@@ -82,9 +77,20 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 
 
 	<script>
+		window.asimVars = window.asimVars || null;
+		if ( null === window.asimVars ) {
+			window.asimVars = {};
+			asimVars.asimLocationIcon = <?php echo wp_json_encode( dirname( plugin_dir_url( __FILE__ ) ) . '/assets/location.svg' ); ?>;
+			asimVars.asimClearPolygonIcon = <?php echo wp_json_encode( dirname( plugin_dir_url( __FILE__ ) ) . '/assets/clear-polygon.webp' ); ?>;
+			asimVars.asimMarkerIcon = <?php echo wp_json_encode( dirname( plugin_dir_url( __FILE__ ) ) . '/assets/asim-marker.png' ); ?>;
+			asimVars.placesAPILoaded = false;
+		}
+		<?php
+		// we need to know, in case there are more than 1 asim maps field , if any of them uses places autocomplete.
+		echo ( ! empty( $autocomplete_types ) ) ? 'asimVars.placesAPILoaded = true;' : '';
+		?>
+
 		window.asimMaps = window.asimMaps || {};
-		window.asimLocationIcon = <?php echo wp_json_encode( dirname( plugin_dir_url( __FILE__ ) ) . '/assets/location.svg' ); ?>;
-		window.asimClearPolygonIcon = <?php echo wp_json_encode( dirname( plugin_dir_url( __FILE__ ) ) . '/assets/clear-polygon.webp' ); ?>;
 
 		asimMaps['<?php echo esc_js( $input_id ); ?>'] = {
 			map: null,
@@ -115,15 +121,15 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 					},
 					zoom: coordinatesInput ? 6 : 1,
 				});
-				asimMaps['<?php echo esc_js( $input_id ); ?>'].mapContainerEl = mapContainerEl;
 				asimMaps['<?php echo esc_js( $input_id ); ?>'].map = map;
 				window.gotoLocationButton('<?php echo esc_js( $input_id ); ?>');
+
 
 				<?php
 				if ( 'marker' === $interaction_type ) : ?>
 					// Add initial marker if the coordinates are valid.
 					if (coordinatesInput) {
-						window.addMarker('<?php echo esc_js( $input_id ); ?>', coordinatesInput);
+						window.addMarker('<?php echo esc_js( $input_id ); ?>', coordinatesInput, asimVars.asimMarkerIcon);
 						window.centerMapAtInputCoordinates(input, map);
 					}
 					// CLICK on the map > sets a market
@@ -131,7 +137,7 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 						const clickedCoordinates = e.latLng;
 						const inputElement = document.getElementById('<?php echo esc_js( $input_id ); ?>');
 						inputElement.value = `${clickedCoordinates.lat()},${clickedCoordinates.lng()}`;
-						window.addMarker('<?php echo esc_js( $input_id ); ?>', clickedCoordinates);
+						window.addMarker('<?php echo esc_js( $input_id ); ?>', clickedCoordinates, asimVars.asimMarkerIcon);
 					});
 				<?php endif; ?>
 
@@ -159,11 +165,21 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 			const script = document.createElement('script');
 			script.src = 'https://maps.googleapis.com/maps/api/js?key=<?php
 				echo esc_js( $instance->google_maps_api_key );
-				echo ( ! empty( $autocomplete_types ) ) ? '&libraries=places' : '';
+				// echo ( ! empty( $autocomplete_types ) ) ? '&libraries=places' : '';
 			?>&loading=async&callback=initAllMaps';
+			if (asimVars.placesAPILoaded) {
+				script.src += '&libraries=places';
+			}
 			script.async = true;
 			script.loading = 'async';
 			document.head.appendChild(script);
+		}
+
+		// starting point to build every map
+		window.initAllMaps = window.initAllMaps || function() {
+			Object.keys(asimMaps).forEach(function(key) {
+				asimMaps[key].initMap();
+			});
 		}
 
 		// After GoogleMapsAPILoads
@@ -171,19 +187,14 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 		document.addEventListener("DOMContentLoaded", function() {
 			if ( window.googleMapsAPILoaded !== true ) {
 
-				window.initAllMaps = function () {
-					setTimeout(function() {
-						Object.keys(asimMaps).forEach(function(key) {
-							asimMaps[key].initMap();
-						});
-					}, 500);
-				}
-
-				loadGoogleMapsAPI();
+				setTimeout(function() {
+					loadGoogleMapsAPI();
+				}, 500);
 
 			} // end of the code exectued only once in the page.
 			window.googleMapsAPILoaded = true;
 		});
+
 
 	</script>
 

@@ -12,13 +12,13 @@
  */
 window.gotoLocationButton = function (inputName) {
 	const mapSetup = window.asimMaps[inputName];
-
+	const asimVars = window.asimVars || {};
 	// Create a control to center the map on the user's current location
 	const centerControlDiv = document.createElement('div');
 	const centerControlButton = document.createElement('button');
 	centerControlButton.innerHTML =
 		'<img style="filter:invert(1);width:24px;" width="24" height="24" src="' +
-		window.asimLocationIcon +
+		asimVars.asimLocationIcon +
 		'}" />';
 	centerControlButton.classList.add('custom-map-control-button');
 	centerControlDiv.appendChild(centerControlButton);

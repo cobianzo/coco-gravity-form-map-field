@@ -182,66 +182,6 @@ class GF_Field_AsimMap extends \GF_Field {
 		return true;
 	}
 
-	// there are two types of values, dingle coordinates or set of coordinates to defina a polygon
-	public function validate_polygon( string $value ): bool {
-		return true; // @TODO.
-	}
-
-	/**
-	 * Validates the provided value as geographic coordinates.
-	 *
-	 * If the value does not represent valid coordinates, sets the validation
-	 * state to failed and provides an appropriate validation message.
-	 *
-	 * @param string $value The value to validate as coordinates.
-	 * @param array  $form  The form data associated with the validation.
-	 *
-	 * @return void
-	 */
-	public function validate( $value, $form ) {
-		if ( ! $this->validate_coordinates( $value ) ) {
-			$this->failed_validation  = true;
-			$this->validation_message = __( 'For some reason the coordinates don\'t seem to be valid.', 'asim-gravity-form-map-field' );
-		}
-	}
-
-	/**
-	 * Sanitizes the coordinates to ensure a consistent format.
-	 *
-	 * @param string $value The value to sanitize
-	 * @return string The sanitized coordinates
-	 */
-	public function sanitize_coordinates( string $value ): string {
-
-		// If the value does not contain a comma, it is not valid coordinates
-		if ( false === strpos( $value, ',' ) ) {
-			return '';
-		}
-
-		// Remove spaces
-		$value = preg_replace( '/\s+/', '', $value );
-
-		// If the value is not valid coordinates, return empty
-		if ( ! $this->validate_coordinates( $value ) ) {
-			return '';
-		}
-
-		// Split and format with 6 decimals
-		$coordinates = explode( ',', $value );
-		$lat         = (float) $coordinates[0];
-		$lng         = (float) $coordinates[1];
-
-		return sprintf( '%.6f,%.6f', $lat, $lng );
-	}
-
-
-	public function get_value_save_entry( $value, $form, $input_name, $lead_id, $lead ): string {
-		return $this->sanitize_coordinates( $value );
-	}
-
-	public function get_value_entry_detail( $value, $currency = '', $use_text = false, $format = 'html', $media = 'screen' ): string {
-		return $this->sanitize_coordinates( $value );
-	}
 }
 
 \GF_Fields::register( new GF_Field_AsimMap() );

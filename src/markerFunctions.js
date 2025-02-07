@@ -8,7 +8,9 @@
  * @return {Object} The marker added to the map. {google.maps.Marker}
  */
 window.addMarker = (inputName, position, markerIcon = 'marker_yellow') => {
-	const icon = 'http://maps.google.com/mapfiles/ms/icons/' + markerIcon + '.png';
+	const icon = markerIcon.includes('http')
+		? markerIcon
+		: `https://maps.google.com/mapfiles/ms/icons/${markerIcon}.png`;
 	const mapSetup = window.asimMaps[inputName];
 	if (mapSetup.marker) {
 		mapSetup.marker.setMap(null); // Remove the previous marker.
@@ -17,7 +19,10 @@ window.addMarker = (inputName, position, markerIcon = 'marker_yellow') => {
 	return (mapSetup.marker = new window.google.maps.Marker({
 		position,
 		map: mapSetup.map,
-		icon,
+		icon: {
+			url: icon,
+			scaledSize: new window.google.maps.Size(25, 30), // Tamaño de 50x50 píxeles
+		},
 	}));
 };
 

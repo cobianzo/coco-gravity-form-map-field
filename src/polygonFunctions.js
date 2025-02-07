@@ -11,7 +11,6 @@ window.initPolygonSetup = function (inputName) {
 		const inputElement = document.getElementById(inputName);
 		inputElement.value += ' ' + clickedCoordinates;
 		inputElement.value = inputElement.value.trim();
-		console.log('>>>> TODEL ', clickedCoordinates);
 
 		window.paintPolygonFromInput(inputName);
 	});
@@ -30,9 +29,10 @@ window.initPolygonSetup = function (inputName) {
  */
 window.createClearPolygonButton = function (inputName) {
 	const mapSetup = window.asimMaps[inputName];
+	const asimVars = window.asimVars || {};
 	const clearPolygonButtonEl = document.createElement('button');
 	clearPolygonButtonEl.innerHTML =
-		'<img style="width:24px;" width="24" height="24" src="' + window.asimClearPolygonIcon + '}" />';
+		'<img style="width:24px;" width="24" height="24" src="' + asimVars.asimClearPolygonIcon + '}" />';
 	const id = `asim-clear-polygon-button-${inputName}`;
 	clearPolygonButtonEl.id = id;
 	clearPolygonButtonEl.classList.add('custom-map-control-button');
@@ -83,7 +83,6 @@ window.createPolygonArea = function (inputName) {
 	mapSetup.map.getDiv().addEventListener('mouseup', function () {
 		setTimeout(() => window.polygonCoordsToInput(inputName), 500);
 	});
-
 };
 
 /**
