@@ -69,7 +69,7 @@ window.createPolygonMap = function (inputName) {
 	const mapSetup = window.asimMaps[inputName];
 
 	mapSetup.polygon = new window.google.maps.Polygon({
-		paths: mapSetup.polygonCoords,
+		// paths: ...,
 		strokeColor: '#FF0000',
 		strokeOpacity: 0.8,
 		strokeWeight: 2,
@@ -132,7 +132,7 @@ window.clearPolygon = function (inputName) {
 };
 
 window.paintPolygonFromInput = function (inputName) {
-	const value =  document.getElementById(inputName).value;
+	const value = document.getElementById(inputName).value;
 	if ('' === value) {
 		return;
 	}

@@ -5,6 +5,7 @@
 	],
 	"ignorePatterns": [
 		"build/**/*",
+		"dist/**/*",
 		"bin/**/*",
 		"node_modules/**/*",
 		"vendor/**/*",

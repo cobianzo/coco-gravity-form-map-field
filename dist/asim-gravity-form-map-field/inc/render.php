@@ -89,7 +89,6 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 		asimMaps['<?php echo esc_js( $input_id ); ?>'] = {
 			map: null,
 			inputElement: null,
-			polygonCoords: [],
 			polygon: null,
 			marker: null,
 			initMap: () => {

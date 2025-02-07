@@ -1,4 +1,3 @@
-
 /**
  * Adds a marker to the map. If the map already has a marker, it is removed.
  *
@@ -9,17 +8,17 @@
  * @return {Object} The marker added to the map. {google.maps.Marker}
  */
 window.addMarker = (inputName, position, markerIcon = 'marker_yellow') => {
-	const icon = "http://maps.google.com/mapfiles/ms/icons/" + markerIcon + ".png"
+	const icon = 'http://maps.google.com/mapfiles/ms/icons/' + markerIcon + '.png';
 	const mapSetup = window.asimMaps[inputName];
 	if (mapSetup.marker) {
 		mapSetup.marker.setMap(null); // Remove the previous marker.
 	}
 
-	return mapSetup.marker = new window.google.maps.Marker({
+	return (mapSetup.marker = new window.google.maps.Marker({
 		position,
 		map: mapSetup.map,
-		icon
-	});
+		icon,
+	}));
 };
 
 window.removeMarker = (inputName) => {
@@ -28,4 +27,3 @@ window.removeMarker = (inputName) => {
 		mapSetup.marker.setMap(null); // Remove the previous marker.
 	}
 };
-

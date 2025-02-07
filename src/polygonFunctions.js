@@ -1,27 +1,19 @@
 window.initPolygonSetup = function (inputName) {
 	// create the button that deletes any started polygon
-	window.clearPolygonButton(inputName);
+	window.createClearPolygonButton(inputName);
 
 	// crates the Google Maps polygon object
-	window.createPolygonMap(inputName);
+	window.createPolygonArea(inputName);
 
 	// CLICK on the map >creates a new vertex for the polygon
 	window.asimMaps[inputName].map.addListener('click', function (e) {
-		const clickedCoordinates = e.latLng;
-		window.addVertexPolygonMap(inputName, clickedCoordinates);
-	});
+		const clickedCoordinates = `${e.latLng.lat()},${e.latLng.lng()}`;
+		const inputElement = document.getElementById(inputName);
+		inputElement.value += ' ' + clickedCoordinates;
+		inputElement.value = inputElement.value.trim();
+		console.log('>>>> TODEL ', clickedCoordinates);
 
-	const path = window.asimMaps[inputName].polygon;
-	// Listener para detectar cuando se agrega un nuevo vértice
-	google.maps.event.addListener(path, 'insert_at', function (index) {
-		console.log('Nuevo vértice añadido en la posición:', index);
-		console.log('Coordenadas:', path.getAt(index).toUrlValue());
-	});
-
-	// Opcional: Detectar cambios en vértices existentes
-	google.maps.event.addListener(path, 'set_at', function (index) {
-		console.log('Vértice movido en la posición:', index);
-		console.log('Nuevas coordenadas:', path.getAt(index).toUrlValue());
+		window.paintPolygonFromInput(inputName);
 	});
 
 	// if there is a value in the input, we paint the polygon on page load.
@@ -36,25 +28,25 @@ window.initPolygonSetup = function (inputName) {
  *
  * @since 3.0.0
  */
-window.clearPolygonButton = function (inputName) {
+window.createClearPolygonButton = function (inputName) {
 	const mapSetup = window.asimMaps[inputName];
 	const clearPolygonButtonEl = document.createElement('button');
 	clearPolygonButtonEl.innerHTML =
 		'<img style="width:24px;" width="24" height="24" src="' + window.asimClearPolygonIcon + '}" />';
-	clearPolygonButtonEl.id = `asim-clear-polygon-button-${inputName}`;
+	const id = `asim-clear-polygon-button-${inputName}`;
+	clearPolygonButtonEl.id = id;
 	clearPolygonButtonEl.classList.add('custom-map-control-button');
 	clearPolygonButtonEl.title = 'Click to clear the area';
 	clearPolygonButtonEl.style.margin = '0 0 5px';
-	clearPolygonButtonEl.style.background = 'transparent';
-	clearPolygonButtonEl.style.aspectRatio = '1';
 	clearPolygonButtonEl.style.aspectRatio = '1 / 1';
 	clearPolygonButtonEl.style.padding = '2px';
 	clearPolygonButtonEl.style.border = '3px solid white';
-	clearPolygonButtonEl.style.background = 'rgba(255, 0, 0, 0.3)';
+	clearPolygonButtonEl.style.background = 'white';
 	clearPolygonButtonEl.style.borderRadius = '50%';
 	clearPolygonButtonEl.style.boxShadow = '3px 3px 10px black';
 
-	clearPolygonButtonEl.style.display = 'none';
+	const inputValue = document.getElementById(inputName).value;
+	clearPolygonButtonEl.style.display = inputValue.trim().length ? 'block' : 'none';
 
 	clearPolygonButtonEl.addEventListener('click', (e) => {
 		e.preventDefault();
@@ -74,46 +66,24 @@ window.clearPolygonButton = function (inputName) {
  *
  * @since 3.0.0
  */
-window.createPolygonMap = function (inputName) {
+window.createPolygonArea = function (inputName) {
 	const mapSetup = window.asimMaps[inputName];
 
-	mapSetup.polygon = new window.google.maps.Polygon({
-		paths: mapSetup.polygonCoords,
+	mapSetup.polygonArea = new window.google.maps.Polygon({
+		// paths: mapSetup.polygonCoords,
 		strokeColor: '#FF0000',
 		strokeOpacity: 0.8,
 		strokeWeight: 2,
 		fillColor: '#FF0000',
 		fillOpacity: 0.35,
 		map: mapSetup.map,
+		editable: true,
 	});
-	mapSetup.polygon.setOptions({ editable: true });
-};
 
-/**
- * Adds a new vertex to the polygon map.
- *
- * @param {string} inputName
- * @param {Object} clickedCoordinates
- *
- * @return {void}
- */
-window.addVertexPolygonMap = function (inputName, clickedCoordinates) {
-	const mapSetup = window.asimMaps[inputName];
-	const inputElement = document.getElementById(inputName);
-	mapSetup.polygonCoords.push(clickedCoordinates);
-	mapSetup.polygon.setPath(mapSetup.polygonCoords);
-	const coordinatesArray = mapSetup.polygonCoords.map((coord) => `${coord.lat()},${coord.lng()}`);
-	inputElement.value = coordinatesArray.join(' ');
+	mapSetup.map.getDiv().addEventListener('mouseup', function () {
+		setTimeout(() => window.polygonCoordsToInput(inputName), 500);
+	});
 
-	// if the vertex is the first one, add a marker to shown the user that he did smthng
-	if (1 === coordinatesArray.length) {
-		const marker = window.addMarker(inputName, clickedCoordinates, 'red-pushpin');
-		marker.addListener('click', () => window.clearPolygon(inputName));
-		marker.setCursor('not-allowed');
-		const clearPoligonBtn = document.getElementById(`asim-clear-polygon-button-${inputName}`);
-		clearPoligonBtn.style.display = 'block';
-		mapSetup.map.setOptions({ draggableCursor: 'copy' });
-	}
 };
 
 /**
@@ -127,8 +97,7 @@ window.clearPolygon = function (inputName) {
 	const mapSetup = window.asimMaps[inputName];
 	const inputElement = document.getElementById(inputName);
 
-	mapSetup.polygonCoords = [];
-	mapSetup.polygon.setPaths([]);
+	mapSetup.polygonArea.setPaths([]);
 	inputElement.value = '';
 
 	// remove also de marker
@@ -146,7 +115,7 @@ window.paintPolygonFromInput = function (inputName) {
 		return;
 	}
 	const mapSetup = window.asimMaps[inputName];
-	const { polygon } = mapSetup;
+	const { polygonArea } = mapSetup;
 
 	const coordinatesArray = value.split(' ');
 	const newPolygonCoords = coordinatesArray.map((coord) => {
@@ -154,6 +123,22 @@ window.paintPolygonFromInput = function (inputName) {
 		return new window.google.maps.LatLng({ lat: parseFloat(lat), lng: parseFloat(lng) });
 	});
 
-	mapSetup.polygonCoords = newPolygonCoords;
-	polygon.setPath(newPolygonCoords);
+	polygonArea.setPath(newPolygonCoords);
+
+	const clearPoligonBtn = document.getElementById(`asim-clear-polygon-button-${inputName}`);
+	if (clearPoligonBtn) clearPoligonBtn.style.display = coordinatesArray.length ? 'block' : 'none';
+};
+
+// Función para extraer las coordenadas del polígono en el formato deseado
+window.polygonCoordsToInput = function (inputName) {
+	const mapSetup = window.asimMaps[inputName];
+	const path = mapSetup.polygonArea.getPath();
+	if (!path) return;
+	const coordenadas = [];
+	path.forEach((latlng) => {
+		coordenadas.push(latlng.lat() + ',' + latlng.lng());
+	});
+
+	const inputElement = document.getElementById(inputName);
+	inputElement.value = coordenadas.join(' ').trim();
 };

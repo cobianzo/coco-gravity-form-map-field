@@ -89,7 +89,6 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 		asimMaps['<?php echo esc_js( $input_id ); ?>'] = {
 			map: null,
 			inputElement: null,
-			polygonCoords: [],
 			polygon: null,
 			marker: null,
 			initMap: () => {
@@ -97,8 +96,8 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 				asimMaps['<?php echo esc_js( $input_id ); ?>'].inputElement = input;
 				const coordinatesInput = window.coordinatesFromInput(input); // {lat, lng} or null
 				const coordinatesInitMap = coordinatesInput || {
-					lat: -34.397,
-					lng: 150.644
+					lat: 41.77444381030458,
+					lng: 9.697649902343759
 				};
 
 				// Init the map calling google maps methods
@@ -114,7 +113,7 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 						style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
 						position: google.maps.ControlPosition.TOP_RIGHT,
 					},
-					zoom: 8,
+					zoom: coordinatesInput ? 6 : 1,
 				});
 				asimMaps['<?php echo esc_js( $input_id ); ?>'].mapContainerEl = mapContainerEl;
 				asimMaps['<?php echo esc_js( $input_id ); ?>'].map = map;

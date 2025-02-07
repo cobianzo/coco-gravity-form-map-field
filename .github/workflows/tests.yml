@@ -1,70 +1,69 @@
 name: PHPUnit Tests
 
 on:
-  pull_request:
-    branches:
-      - main-not-yet # We can't test in github actions yet because we depend on gravityforms plugin
+    pull_request:
+        branches:
+            - main-not-yet # We can't test in github actions yet because we depend on gravityforms plugin
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+    test:
+        runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: wp_wordpress_test
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping --silent"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
+        services:
+            mysql:
+                image: mysql:5.7
+                env:
+                    MYSQL_ROOT_PASSWORD: password
+                    MYSQL_DATABASE: wp_wordpress_test
+                ports:
+                    - 3306:3306
+                options: >-
+                    --health-cmd="mysqladmin ping --silent"
+                    --health-interval=10s
+                    --health-timeout=5s
+                    --health-retries=3
 
-    steps:
+        steps:
+            - name: Set up PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: 8.2
+                  extensions: mysqli
 
-    - name: Set up PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: 8.2
-        extensions: mysqli
+            - name: Install WP-CLI
+              run: |
+                  curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+                  chmod +x wp-cli.phar
+                  sudo mv wp-cli.phar /usr/local/bin/wp
 
-    - name: Install WP-CLI
-      run: |
-        curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-        chmod +x wp-cli.phar
-        sudo mv wp-cli.phar /usr/local/bin/wp
+            - name: Set up WordPress at the root
+              run: |
+                  wp core download --allow-root
+                  wp config create --dbname=wp_wordpress_test --dbuser=root --dbpass=password --dbhost=127.0.0.1 --allow-root
+                  echo "DROP DATABASE IF EXISTS wp_wordpress_test;" | mysql -u root --password=password --host=127.0.0.1
+                  wp db create --allow-root
+                  wp core install --url="http://localhost" --title="CI Test" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com" --allow-root
 
-    - name: Set up WordPress at the root
-      run: |
-        wp core download --allow-root
-        wp config create --dbname=wp_wordpress_test --dbuser=root --dbpass=password --dbhost=127.0.0.1 --allow-root
-        echo "DROP DATABASE IF EXISTS wp_wordpress_test;" | mysql -u root --password=password --host=127.0.0.1
-        wp db create --allow-root
-        wp core install --url="http://localhost" --title="CI Test" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com" --allow-root
+            - name: Check out repository
+              uses: actions/checkout@v3
+              with:
+                  path: wp-content/plugins/asim-gravity-form-map-field
 
-    - name: Check out repository
-      uses: actions/checkout@v3
-      with:
-        path: wp-content/plugins/asim-gravity-form-map-field
+            - name: Build bundles of the plugin
+              run: |
+                  cd wp-content/plugins/asim-gravity-form-map-field
+                  npm install
+                  npm run build
 
-    - name: Build bundles of the plugin
-      run: |
-        cd wp-content/plugins/asim-gravity-form-map-field
-        npm install
-        npm run build
+            - name: Activate Plugin (not needed)
+              run: wp plugin activate asim-gravity-form-map-field --allow-root
 
-    - name: Activate Plugin (not needed)
-      run: wp plugin activate asim-gravity-form-map-field --allow-root
+            - name: composer install
+              run: |
+                  cd wp-content/plugins/asim-gravity-form-map-field
+                  composer install
 
-    - name: composer install
-      run: |
-        cd wp-content/plugins/asim-gravity-form-map-field
-        composer install
-
-    - name: Run PHPUnit with wp-config pointing to DB
-      run: |
-        cd wp-content/plugins/asim-gravity-form-map-field
-        WP_PHPUNIT__TESTS_CONFIG=tests/wp-config.php WP_DB_HOST=127.0.0.1 composer run test
+            - name: Run PHPUnit with wp-config pointing to DB
+              run: |
+                  cd wp-content/plugins/asim-gravity-form-map-field
+                  WP_PHPUNIT__TESTS_CONFIG=tests/wp-config.php WP_DB_HOST=127.0.0.1 composer run test

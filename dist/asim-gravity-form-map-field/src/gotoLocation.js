@@ -1,4 +1,3 @@
-
 /**
  * Adds a custom "Location" button to a Google Map that centers the map
  * on the user's current geolocation when clicked. The button is styled

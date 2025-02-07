@@ -18,9 +18,9 @@ window.coordinatesFromInput = (input) => {
 	if (!value) return null;
 
 	// check if type of value is a polygon like "34.3,144.43 33.1 143.1 35.5 155.3"
-	if ( value.includes(' ') ) {
+	if (value.includes(' ')) {
 		const vertexes = value.split(' ');
-		value = vertexes[0];  // we return the first vertex as the valid coordinates (we could make an average too)
+		value = vertexes[0]; // we return the first vertex as the valid coordinates (we could make an average too)
 	}
 
 	const [lat, lng] = value.split(',').map(parseFloat);
