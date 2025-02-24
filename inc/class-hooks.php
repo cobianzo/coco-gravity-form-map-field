@@ -3,7 +3,8 @@
 namespace Asim_Gravity_Form_Map_Field;
 
 /**
- * Hooks class.
+ * Hooks class. Notmally Gravity Form hooks that tweak the behaviour of
+ * our field
  *
  * @package Asim_Gravity_Form_Map_Field
  */
@@ -17,6 +18,7 @@ class Hooks {
 	public static function init() {
 		add_action( 'gform_field_standard_settings', array( __CLASS__, 'field_sidebar_options' ), 10 );
 		add_filter( 'gform_tooltips', array( __CLASS__, 'tooltips' ), 10, 1 );
+		add_filter( 'gform_entry_field_value',   array( __CLASS__, 'show_link_map_field_admin' ), 10, 2 );
 	}
 
 	/**
@@ -89,6 +91,68 @@ class Hooks {
 		$tooltips['form_field_map_type']           = esc_html__( 'More info at https://developers.google.com/maps/documentation/javascript/maptypes', 'asim-gravity-forms-map-addon' );
 		$tooltips['form_field_autocomplete_types'] = esc_html__( 'More info at https://developers.google.com/maps/documentation/javascript/supported_types', 'asim-gravity-forms-map-addon' );
 		return $tooltips;
+	}
+
+	/**
+	 * In the admin, show a link to the map image.
+	 * This function doesnt affect the list of values in the table of entries, but it modifies the
+	 * output when clicking on a single entry (wp-admin/admin.php?page=gf_entries&view=entry&id=3&lid=8)
+	 *
+	 * @since 3.1.2
+	 *
+	 * @param string $value The value of the field.
+	 * @param object $field The field.
+	 *
+	 * @return string The HTML to show the link to the map image.
+	 */
+	public static function show_link_map_field_admin( $value, $field ) : string {
+		if ( $field->inputType === 'asim-map' ) {
+
+			$addon  = Addon_Asim::get_instance();
+			$apiKey = $addon->get_plugin_setting( Addon_Asim::SETTING_GOOGLE_MAPS_API_KEY );
+			$value  = trim( $value );
+			if ( 'polygon' === GF_Field_AsimMap::entry_is_marker_or_polygon( $value ) ) {
+				// Coordenadas del polígono (debe ser una serie de puntos)
+
+				$polygonCoords   = explode( ' ', $value );
+				$polygonCoords[] = $polygonCoords[0]; // close the polygon
+
+				// Convertir las coordenadas en una cadena para la URL
+				$polygonPath = implode( '|', $polygonCoords );
+
+				// Definir el color del polígono (en formato hex sin # y opacidad)
+				$polygonColor = 'ff0000ff'; // Rojo con opacidad FF
+
+				// Construir la URL de la imagen
+				$map_img_url = "https://maps.googleapis.com/maps/api/staticmap?" .
+									"size=600x400&" . // Tamaño de la imagen
+									"maptype=roadmap&" . // Tipo de mapa (roadmap, satellite, hybrid, terrain)
+									"path=color:0x$polygonColor|weight:3|$polygonPath&" . // Polígono con color y grosor
+									"key=$apiKey";
+
+				// Mostrar la imagen en HTML
+				return "<img src='$map_img_url' />";
+			} elseif ( 'marker' === GF_Field_AsimMap::entry_is_marker_or_polygon( $value ) ) {
+
+				$map_img_url = "https://maps.googleapis.com/maps/api/staticmap?" .
+          "center={$value}&" . // Centrar el mapa en el marcador
+          "zoom=14&" . // Nivel de zoom (ajústalo según necesites)
+          "size=600x400&" . // Tamaño del mapa en píxeles
+          "maptype=roadmap&" . // Tipo de mapa (roadmap, satellite, hybrid, terrain)
+          "markers=color:red|label:A|{$value}&" . // Marcador rojo con la etiqueta 'A'
+          "key={$apiKey}";
+
+				$gmaps_link = "https://www.google.com/maps?q={$value}";
+
+				return sprintf(
+					'<img src="%s" /><br><a href="%s" target="_blank">%s</a>',
+					$map_img_url,
+					$gmaps_link,
+					esc_html__( 'View on Google Maps', 'asim-gravity-forms-map-addon' )
+				);
+			}
+		}
+		return $value;
 	}
 }
 

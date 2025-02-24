@@ -14,7 +14,7 @@ if ( ! class_exists( 'GFAddOn' ) ) {
 
 class Addon_Asim extends \GFAddOn {
 
-	protected $_version                  = '3.1.1';
+	protected $_version                  = '3.1.2';
 	protected $_min_gravityforms_version = '2.5';
 
 	/**

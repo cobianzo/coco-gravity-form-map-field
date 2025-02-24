@@ -149,7 +149,7 @@ class GF_Field_AsimMap extends \GF_Field {
 	 * @param string $value The value to validate
 	 * @return bool True if the value is valid coordinates, false otherwise
 	 */
-	public function validate_coordinates( string $value ): bool {
+	public static function validate_coordinates( string $value ): bool {
 		// If the value is empty, it is valid (the field might be optional)
 		if ( empty( $value ) ) {
 			return true;
@@ -181,6 +181,33 @@ class GF_Field_AsimMap extends \GF_Field {
 
 		return true;
 	}
+
+	/**
+	 * Check if an entry is a marker or a polygon
+	 *
+	 * An entry is a marker if it contains a single valid coordinate.
+	 * An entry is a polygon if it contains multiple valid coordinates separated by spaces.
+	 *
+	 * @param string $entry_value The value of the entry
+	 * @return string|bool One of 'marker' or 'polygon' if the entry is valid, false otherwise
+	 */
+	static public function entry_is_marker_or_polygon( string $entry_value ) : string | bool {
+
+		$entry_value = trim( $entry_value );
+		$coordinates = explode( ' ', $entry_value );
+		if ( count( $coordinates ) === 1 ) {
+			return self::validate_coordinates( $entry_value ) ? 'marker' : false;
+		} else {
+			$return = true;
+			foreach ( $coordinates as $coordinate ) {
+				$return = $return && self::validate_coordinates( $coordinate );
+			}
+			return $return ? 'polygon' : false;
+		}
+
+		return true;
+	}
+
 }
 
 \GF_Fields::register( new GF_Field_AsimMap() );
