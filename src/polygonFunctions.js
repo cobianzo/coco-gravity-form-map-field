@@ -6,7 +6,7 @@ window.initPolygonSetup = function (inputName) {
 	window.createPolygonArea(inputName);
 
 	// CLICK on the map >creates a new vertex for the polygon
-	window.asimMaps[inputName].map.addListener('click', function (e) {
+	window.cocoMaps[inputName].map.addListener('click', function (e) {
 		const clickedCoordinates = `${e.latLng.lat()},${e.latLng.lng()}`;
 		const inputElement = document.getElementById(inputName);
 		inputElement.value += ' ' + clickedCoordinates;
@@ -28,12 +28,12 @@ window.initPolygonSetup = function (inputName) {
  * @since 3.0.0
  */
 window.createClearPolygonButton = function (inputName) {
-	const mapSetup = window.asimMaps[inputName];
-	const asimVars = window.asimVars || {};
+	const mapSetup = window.cocoMaps[inputName];
+	const cocoVars = window.cocoVars || {};
 	const clearPolygonButtonEl = document.createElement('button');
 	clearPolygonButtonEl.innerHTML =
-		'<img style="width:24px;" width="24" height="24" src="' + asimVars.asimClearPolygonIcon + '}" />';
-	const id = `asim-clear-polygon-button-${inputName}`;
+		'<img style="width:24px;" width="24" height="24" src="' + cocoVars.cocoClearPolygonIcon + '}" />';
+	const id = `coco-clear-polygon-button-${inputName}`;
 	clearPolygonButtonEl.id = id;
 	clearPolygonButtonEl.classList.add('custom-map-control-button');
 	clearPolygonButtonEl.title = 'Click to clear the area';
@@ -67,7 +67,7 @@ window.createClearPolygonButton = function (inputName) {
  * @since 3.0.0
  */
 window.createPolygonArea = function (inputName) {
-	const mapSetup = window.asimMaps[inputName];
+	const mapSetup = window.cocoMaps[inputName];
 
 	mapSetup.polygonArea = new window.google.maps.Polygon({
 		// paths: mapSetup.polygonCoords,
@@ -93,7 +93,7 @@ window.createPolygonArea = function (inputName) {
  * @return {void}
  */
 window.clearPolygon = function (inputName) {
-	const mapSetup = window.asimMaps[inputName];
+	const mapSetup = window.cocoMaps[inputName];
 	const inputElement = document.getElementById(inputName);
 
 	mapSetup.polygonArea.setPaths([]);
@@ -104,7 +104,7 @@ window.clearPolygon = function (inputName) {
 
 	mapSetup.map.setOptions({ draggableCursor: 'crosshair' });
 
-	const clearPoligonBtn = document.getElementById(`asim-clear-polygon-button-${inputName}`);
+	const clearPoligonBtn = document.getElementById(`coco-clear-polygon-button-${inputName}`);
 	clearPoligonBtn.style.display = 'none';
 };
 
@@ -113,7 +113,7 @@ window.paintPolygonFromInput = function (inputName) {
 	if ('' === value) {
 		return;
 	}
-	const mapSetup = window.asimMaps[inputName];
+	const mapSetup = window.cocoMaps[inputName];
 	const { polygonArea } = mapSetup;
 
 	const coordinatesArray = value.split(' ');
@@ -124,13 +124,13 @@ window.paintPolygonFromInput = function (inputName) {
 
 	polygonArea.setPath(newPolygonCoords);
 
-	const clearPoligonBtn = document.getElementById(`asim-clear-polygon-button-${inputName}`);
+	const clearPoligonBtn = document.getElementById(`coco-clear-polygon-button-${inputName}`);
 	if (clearPoligonBtn) clearPoligonBtn.style.display = coordinatesArray.length ? 'block' : 'none';
 };
 
 // Función para extraer las coordenadas del polígono en el formato deseado
 window.polygonCoordsToInput = function (inputName) {
-	const mapSetup = window.asimMaps[inputName];
+	const mapSetup = window.cocoMaps[inputName];
 	const path = mapSetup.polygonArea.getPath();
 	if (!path) return;
 	const coordenadas = [];

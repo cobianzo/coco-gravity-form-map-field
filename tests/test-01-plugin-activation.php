@@ -18,10 +18,10 @@ class Test_Plugin_Activation extends WP_UnitTestCase {
 	public function setUp(): void {
 		parent::setUp();
 
-		Asim_TestCase_Helpers::setup( $this );
+		Coco_TestCase_Helpers::setup( $this );
 
 		// Configurar una API key de prueba @TODO:
-		// update_option('gravityformsaddon_asim-gravity-forms-map-addon_settings',
+		// update_option('gravityformsaddon_coco-gravity-forms-map-addon_settings',
 		//     ['google_maps_api_key' => $this->api_key]
 		// );
 
@@ -35,7 +35,7 @@ class Test_Plugin_Activation extends WP_UnitTestCase {
 	public function tearDown(): void {
 			// Limpiar después de cada test
 			parent::tearDown();
-			delete_option('gravityformsaddon_asim-gravity-forms-map-addon_settings');
+			delete_option('gravityformsaddon_coco-gravity-forms-map-addon_settings');
 	}
 
 	public function test_gravity_forms_dependency() {
@@ -62,9 +62,9 @@ class Test_Plugin_Activation extends WP_UnitTestCase {
 
 		// Verifica que la salida contiene el HTML esperado
 		$this->assertStringContainsString('<div class="notice notice-warning">', $output, '❌ 1.1.4 not notice container ');
-		$this->assertStringContainsString('<strong>Asim Gravity Forms Map Field:</strong>', $output, '❌ 1.1.4 ');
+		$this->assertStringContainsString('<strong>Coco Gravity Forms Map Field:</strong>', $output, '❌ 1.1.4 ');
 
-		echo PHP_EOL . PHP_EOL . '✅ OK 1.1.4 Good; the notice saying "Asim Gravity Forms Map Field: This plugin requires Gravity Forms to ... " is happening.' . PHP_EOL;
+		echo PHP_EOL . PHP_EOL . '✅ OK 1.1.4 Good; the notice saying "Coco Gravity Forms Map Field: This plugin requires Gravity Forms to ... " is happening.' . PHP_EOL;
 		echo PHP_EOL . $output;
 	}
 

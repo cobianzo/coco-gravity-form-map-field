@@ -1,5 +1,5 @@
 <?php
-namespace Asim_Gravity_Form_Map_Field;
+namespace Coco_Gravity_Form_Map_Field;
 
 // Verifying that Gravity Forms is loaded
 add_action( 'init', function () {
@@ -10,11 +10,11 @@ add_action( 'init', function () {
 				?>
 				<div class="notice notice-warning">
 					<p>
-						<strong>Asim Gravity Forms Map Field:</strong>
+						<strong>Coco Gravity Forms Map Field:</strong>
 						<?php
 						esc_html_e(
 							'This plugin requires Gravity Forms to be active. Please activate it to see the plugin in action.',
-							'asim-gravity-form-map-field'
+							'coco-gravity-form-map-field'
 						);
 						?>
 					</p>

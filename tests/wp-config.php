@@ -13,7 +13,7 @@
 
 /* Path to the WordPress codebase you'd like to test. Add a forward slash in the end. */
 /* when running this we are in the folder of the plugin, so we need to go down to
-   the root of the wp installation  (in wp-content/plugins/asim-gravity-form-map-field) */
+   the root of the wp installation  (in wp-content/plugins/coco-gravity-form-map-field) */
 define('ABSPATH', dirname( dirname( dirname( dirname( dirname( __FILE__) ) ) ) ) . '/' );
 
 

@@ -14,11 +14,11 @@ const semver = require('semver');
 
 // Paths to your files
 const FILES = {
-	pluginPHP: path.join(__dirname, '../', 'asim-gravity-form-map-field.php'),
+	pluginPHP: path.join(__dirname, '../', 'coco-gravity-form-map-field.php'),
 	packageJSON: path.join(__dirname, '../', 'package.json'),
 	composerJSON: path.join(__dirname, '../', 'composer.json'),
 	readmeTXT: path.join(__dirname, '../', 'README-plugin.txt'),
-	addonPHP: path.join(__dirname, '../inc/', 'class-addon-asim.php'),
+	addonPHP: path.join(__dirname, '../inc/', 'class-addon-coco.php'),
 };
 
 /**

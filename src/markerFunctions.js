@@ -11,7 +11,7 @@ window.addMarker = (inputName, position, markerIcon = 'marker_yellow') => {
 	const icon = markerIcon.includes('http')
 		? markerIcon
 		: `https://maps.google.com/mapfiles/ms/icons/${markerIcon}.png`;
-	const mapSetup = window.asimMaps[inputName];
+	const mapSetup = window.cocoMaps[inputName];
 	if (mapSetup.marker) {
 		mapSetup.marker.setMap(null); // Remove the previous marker.
 	}
@@ -27,7 +27,7 @@ window.addMarker = (inputName, position, markerIcon = 'marker_yellow') => {
 };
 
 window.removeMarker = (inputName) => {
-	const mapSetup = window.asimMaps[inputName];
+	const mapSetup = window.cocoMaps[inputName];
 	if (mapSetup.marker) {
 		mapSetup.marker.setMap(null); // Remove the previous marker.
 	}

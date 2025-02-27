@@ -1,14 +1,14 @@
 <?php
 
-namespace Asim_Gravity_Form_Map_Field;
+namespace Coco_Gravity_Form_Map_Field;
 
 if ( ! class_exists( 'GF_Field' ) ) {
 	return;
 }
 
-class GF_Field_AsimMap extends \GF_Field {
+class GF_Field_CocoMap extends \GF_Field {
 
-	public $type = 'asim-map';
+	public $type = 'coco-map';
 
 	/**
 	 * Google Maps API key
@@ -25,7 +25,7 @@ class GF_Field_AsimMap extends \GF_Field {
 	 * @return string
 	 */
 	public function get_form_editor_field_title(): string {
-		return esc_attr__( 'Asim Map', 'asim-gravity-forms-map-addon' );
+		return esc_attr__( 'Coco Map', 'coco-gravity-forms-map-addon' );
 	}
 
 	/**
@@ -36,7 +36,7 @@ class GF_Field_AsimMap extends \GF_Field {
 	 * @return string
 	 */
 	public function get_form_editor_field_description(): string {
-		return esc_attr__( 'Stores information that should not be visible to the user but can be processed and saved with the user submission.', 'asim-gravity-forms-map-addon' );
+		return esc_attr__( 'Stores information that should not be visible to the user but can be processed and saved with the user submission.', 'coco-gravity-forms-map-addon' );
 	}
 
 	/**
@@ -92,17 +92,17 @@ class GF_Field_AsimMap extends \GF_Field {
 	 */
 	public function get_field_input( $form, $value = '', $entry = null ): string {
 
-		if ( ! wp_script_is( 'asim-map-js', 'enqueued' ) ) {
-			$asset_file = include dirname( plugin_dir_path( __FILE__ ) ) . '/build/asim-gravity-form-map-field.asset.php';
-			wp_enqueue_script( 'asim-map-js', dirname( plugin_dir_url( __FILE__ ) ) . '/build/asim-gravity-form-map-field.js', $asset_file['dependencies'], $asset_file['version'], false );
+		if ( ! wp_script_is( 'coco-map-js', 'enqueued' ) ) {
+			$asset_file = include dirname( plugin_dir_path( __FILE__ ) ) . '/build/coco-gravity-form-map-field.asset.php';
+			wp_enqueue_script( 'coco-map-js', dirname( plugin_dir_url( __FILE__ ) ) . '/build/coco-gravity-form-map-field.js', $asset_file['dependencies'], $asset_file['version'], false );
 		}
 
-		$addon = Addon_Asim::get_instance();
+		$addon = Addon_Coco::get_instance();
 		if ( ! strlen( $this->google_maps_api_key ) ) {
-			$this->google_maps_api_key = $addon->get_plugin_setting( Addon_Asim::SETTING_GOOGLE_MAPS_API_KEY );
+			$this->google_maps_api_key = $addon->get_plugin_setting( Addon_Coco::SETTING_GOOGLE_MAPS_API_KEY );
 		}
 
-		$input = asim_render_map_field( $this, $form, $value );
+		$input = coco_render_map_field( $this, $form, $value );
 
 		return sprintf( "<div class='ginput_container ginput_container_text'>%s</div>", $input );
 	}
@@ -210,4 +210,4 @@ class GF_Field_AsimMap extends \GF_Field {
 
 }
 
-\GF_Fields::register( new GF_Field_AsimMap() );
+\GF_Fields::register( new GF_Field_CocoMap() );

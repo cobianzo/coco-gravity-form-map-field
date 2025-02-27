@@ -26,7 +26,7 @@ module.exports = [
 	{
 		...defaultConfig[0],
 		entry: {
-			'asim-gravity-form-map-field': './src/asim-gravity-form-map-field.js',
+			'coco-gravity-form-map-field': './src/coco-gravity-form-map-field.js',
 		},
 		// entry: viewCssEntries,
 	},

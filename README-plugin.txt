@@ -1,4 +1,4 @@
-# Asim Gravity Forms Map Field
+# Coco Gravity Forms Map Field
 
 Stable tag: 3.1.2
 Tags: Gravity Forms, Form, Field, Google Maps
@@ -13,7 +13,7 @@ A new field for Gravity forms, with a map by Google Maps saving the coordenates 
 
 ## Description
 
-The Asim Gravity Forms Map Field is a WordPress plugin designed to add a new field for Gravity forms, with a map by Google Maps. The user can interact with the map by selecting a point in it (setting up a marker) or crating an area (polygon). The values of the coordenates will be saved in an input field.
+The Coco Gravity Forms Map Field is a WordPress plugin designed to add a new field for Gravity forms, with a map by Google Maps. The user can interact with the map by selecting a point in it (setting up a marker) or crating an area (polygon). The values of the coordenates will be saved in an input field.
 
 ## Features
 
@@ -24,11 +24,11 @@ The Asim Gravity Forms Map Field is a WordPress plugin designed to add a new fie
 1. Download the plugin zip file.
 2. Upload the zip file to your WordPress site via the Plugins > Add New > Upload Plugin menu.
 3. Activate the plugin through the 'Plugins' menu in WordPress.
-4. Add the Asim Gravity Forms Map Field to your posts or pages using the block editor.
+4. Add the Coco Gravity Forms Map Field to your posts or pages using the block editor.
 
 ## Usage
 
-1. In a Gravity Forms form, look for the field Asim Map and include it.
+1. In a Gravity Forms form, look for the field Coco Map and include it.
 
 ## Dependence
 
@@ -51,6 +51,6 @@ None yet.
 ## Changelog
 
 ### 1.0.0
-- Initial release of the Asim Gravity Forms Map Field.
+- Initial release of the Coco Gravity Forms Map Field.
 
 

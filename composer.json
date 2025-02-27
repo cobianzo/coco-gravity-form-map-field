@@ -1,10 +1,10 @@
 {
-	"name": "coco/asim-gravity-form-map-field",
+	"name": "coco/coco-gravity-form-map-field",
 	"version": "3.1.2",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
 	"description": "I have developed an addon in WordPress for the plugin Gravity Forms. It adds a new field for Google Maps",
-	"homepage": "https://github.com/cobianzo/asim-gravity-form-map-field",
+	"homepage": "https://github.com/cobianzo/coco-gravity-form-map-field",
 	"keywords": [
 		"gravity forms",
 		"wordpress",

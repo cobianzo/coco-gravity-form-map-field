@@ -8,7 +8,7 @@ class Test_Map_Field extends WP_UnitTestCase {
 	public function setUp(): void {
 		parent::setUp();
 
-		Asim_TestCase_Helpers::setup( $this );
+		Coco_TestCase_Helpers::setup( $this );
 
 		echo '2) ---- Activating plugins' . PHP_EOL;
 		activate_plugin( 'gravityforms/gravityforms.php' );
@@ -37,13 +37,13 @@ class Test_Map_Field extends WP_UnitTestCase {
 		// Activar el addon
 		do_action( 'gform_loaded', array( 'path' => $this->plugin_file ) );
 		$field_types = GF_Fields::get_all();
-		$this->assertArrayHasKey( 'asim-map', $field_types, '❌ 2.1.3 GF_Fields. MAL!' );
+		$this->assertArrayHasKey( 'coco-map', $field_types, '❌ 2.1.3 GF_Fields. MAL!' );
 
 		// Verificar que la clase registrada es la correcta
-		$registered_field = GF_Fields::get( 'asim-map' );
-		$this->assertInstanceOf( '\Asim_Gravity_Form_Map_Field\GF_Field_AsimMap', $registered_field, '❌ 2.1.4 GF_Fields does not contain our new registered field asim-map. MAL!' );
+		$registered_field = GF_Fields::get( 'coco-map' );
+		$this->assertInstanceOf( '\Coco_Gravity_Form_Map_Field\GF_Field_CocoMap', $registered_field, '❌ 2.1.4 GF_Fields does not contain our new registered field coco-map. MAL!' );
 
-		echo PHP_EOL . '✅ OK 2.1: New Addon field "asim-map" is registered ok' . PHP_EOL . '---------' . PHP_EOL;
+		echo PHP_EOL . '✅ OK 2.1: New Addon field "coco-map" is registered ok' . PHP_EOL . '---------' . PHP_EOL;
 	}
 
 	/**
@@ -54,13 +54,13 @@ class Test_Map_Field extends WP_UnitTestCase {
 		echo PHP_EOL . PHP_EOL . '2.2) ---- test_field_properties' . PHP_EOL;
 		do_action( 'gform_loaded', array( 'path' => $this->plugin_file ) );
 
-		$field = new \Asim_Gravity_Form_Map_Field\GF_Field_AsimMap();
+		$field = new \Coco_Gravity_Form_Map_Field\GF_Field_CocoMap();
 
 		// Verificar tipo de campo
-		$this->assertEquals( 'asim-map', $field->type, '❌ The type of the field is not "asim-map"' );
+		$this->assertEquals( 'coco-map', $field->type, '❌ The type of the field is not "coco-map"' );
 
 		// Verificar el título del campo en el editor
-		$this->assertEquals( esc_attr__( 'Asim Map', 'asim-gravity-forms-map-addon' ), $field->get_form_editor_field_title(), '❌ The title of the field in the form editor is not "Map"' );
+		$this->assertEquals( esc_attr__( 'Coco Map', 'coco-gravity-forms-map-addon' ), $field->get_form_editor_field_title(), '❌ The title of the field in the form editor is not "Map"' );
 
 		echo PHP_EOL . '✅ OK 2.2: Field properties are correct' . PHP_EOL . '---------' . PHP_EOL;
 	}
@@ -73,11 +73,11 @@ class Test_Map_Field extends WP_UnitTestCase {
 		echo PHP_EOL . PHP_EOL . '2.3) ---- Test for test_field_input_generation' . PHP_EOL;
 		do_action( 'gform_loaded', array( 'path' => $this->plugin_file ) );
 
-		$field = new \Asim_Gravity_Form_Map_Field\GF_Field_AsimMap();
+		$field = new \Coco_Gravity_Form_Map_Field\GF_Field_CocoMap();
 		$field->google_maps_api_key = 'test-just-so-it-s-not-empty';
 
-		$form = Asim_TestCase_Helpers::create_test_form();
-		$value = Asim_TestCase_Helpers::get_valid_coordinates();
+		$form = Coco_TestCase_Helpers::create_test_form();
+		$value = Coco_TestCase_Helpers::get_valid_coordinates();
 
 		// Generate the HTML
 		$html = $field->get_field_input($form, $value);
@@ -85,7 +85,7 @@ class Test_Map_Field extends WP_UnitTestCase {
 		// Verificar que contiene los elementos necesarios
 		$this->assertStringContainsString( 'type="text"', $html, '❌  2.3.1: The HTML does not contain the correct type attribute: ' );
 		$this->assertStringContainsString( 'readonly', $html, '❌  2.3.2: The HTML does not contain the readonly attribute: ' );
-		$this->assertStringContainsString( 'class="gform-field-asim-map"', $html, '❌  2.3.3: The HTML does not contain the correct class: ' );
+		$this->assertStringContainsString( 'class="gform-field-coco-map"', $html, '❌  2.3.3: The HTML does not contain the correct class: ' );
 		$this->assertStringContainsString( $value, $html, '❌  2.3.4: The HTML does not contain the value: ' );
 		$this->assertStringContainsString( 'map-container', $html, '❌  2.3.5: The HTML does not contain the map container element: ' );
 
@@ -100,7 +100,7 @@ class Test_Map_Field extends WP_UnitTestCase {
 		echo PHP_EOL . PHP_EOL . '2.4) ---- Test for test_coordinates_validation' . PHP_EOL;
 		do_action( 'gform_loaded', array( 'path' => $this->plugin_file ) );
 
-		$field = new \Asim_Gravity_Form_Map_Field\GF_Field_AsimMap();
+		$field = new \Coco_Gravity_Form_Map_Field\GF_Field_CocoMap();
 
 		// Coordenadas válidas
 		$valid_coordinates = array(
@@ -146,9 +146,9 @@ class Test_Map_Field extends WP_UnitTestCase {
 		echo PHP_EOL . PHP_EOL . '2.5) ---- Test for test_empty_value_handling' . PHP_EOL;
 		do_action( 'gform_loaded', array( 'path' => $this->plugin_file ) );
 
-		$field = new \Asim_Gravity_Form_Map_Field\GF_Field_AsimMap();
+		$field = new \Coco_Gravity_Form_Map_Field\GF_Field_CocoMap();
 		$field->google_maps_api_key = 'test-just-so-it-s-not-empty';
-		$form = Asim_TestCase_Helpers::create_test_form();
+		$form = Coco_TestCase_Helpers::create_test_form();
 
 		// Try empty value
 		$html_empty = $field->get_field_input( $form, '' );
@@ -165,7 +165,7 @@ class Test_Map_Field extends WP_UnitTestCase {
 		echo PHP_EOL . PHP_EOL . '2.6) --- Test for test_coordinates_sanitization' . PHP_EOL;
 		do_action( 'gform_loaded', array( 'path' => $this->plugin_file ) );
 
-		$field = new \Asim_Gravity_Form_Map_Field\GF_Field_AsimMap();
+		$field = new \Coco_Gravity_Form_Map_Field\GF_Field_CocoMap();
 
 		// Coordenadas con espacios extra
 		$this->assertEquals(

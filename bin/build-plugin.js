@@ -33,7 +33,7 @@ class PluginBuilder {
 	 */
 	constructor(version = null) {
 		// Configuración básica del plugin
-		this.pluginSlug = 'asim-gravity-form-map-field';
+		this.pluginSlug = 'coco-gravity-form-map-field';
 		this.version = version;
 		this.distDir = 'dist';
 
@@ -209,7 +209,7 @@ async function main() {
 	//  const version = process.argv[2] && !process.argv[2].startsWith('--') ? process.argv[2] : null;
 
 	const { extractVersion } = require('./version-helpers');
-	const version = extractVersion(path.join(__dirname, '../', 'asim-gravity-form-map-field.php'));
+	const version = extractVersion(path.join(__dirname, '../', 'coco-gravity-form-map-field.php'));
 
 	const skipCompression = [process.argv[2], process.argv[3]].includes('--skip-compression');
 

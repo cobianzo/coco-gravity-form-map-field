@@ -49,9 +49,9 @@ You can install the demo sample page with:
 
 Maybe you'll need to run
 npx wp-env run cli -- wp plugin activate gravity-forms
-npx wp-env run cli -- wp plugin activate asim-gravity-form-map-field
+npx wp-env run cli -- wp plugin activate coco-gravity-form-map-field
 
-from here you can create dummy data, see `tests/class-create-dummy-data.php`, or import it with `npx wp-env run cli -- wp import wp-content/plugins/asim-gravity-form-map-field/themeunittestdata.wordpress.xml --authors=create`
+from here you can create dummy data, see `tests/class-create-dummy-data.php`, or import it with `npx wp-env run cli -- wp import wp-content/plugins/coco-gravity-form-map-field/themeunittestdata.wordpress.xml --authors=create`
 
 ## Developing
 
@@ -131,7 +131,7 @@ in the `main` branch, but you can create
 
 `node .github/scripts/build-plugin.js`
 
-will create `dist/asim-gravity-form-map-field.zip` using the version from the comment in `asim-gravity-form-map-field.php`,
+will create `dist/coco-gravity-form-map-field.zip` using the version from the comment in `coco-gravity-form-map-field.php`,
 ready for distribution. (see more in ./bin/readme-bin.md)
 
 # Continous Integration/ Development
@@ -148,14 +148,14 @@ We can increase a minor and major version update by including in the merge commi
 # Troubles
 
 - sometimes the enviroment of wp-env gets crazy and tries to find the assets of the block in :
-http://localhost:8890/wp-content/themes/default/var/www/html/wp-content/plugins/asim-gravity-form-map-field/build/blocks/aside-related-article/style-index.css?ver=1.0
+http://localhost:8890/wp-content/themes/default/var/www/html/wp-content/plugins/coco-gravity-form-map-field/build/blocks/aside-related-article/style-index.css?ver=1.0
 	- I still don't know why it happens and how to fix it. I restart docker and push the env up again to fix it.
 
 - Sometimes when creating the wp-env, the DB is not initialized. You can use wp cli to help
 ```
 npx wp-env run cli wp db reset --yes
 npx wp-env run cli wp core install --url="http://localhost:8890" --title="Mi Sitio WP" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com"
-npx wp-env run cli wp plugin activate asim-gravity-form-map-field
+npx wp-env run cli wp plugin activate coco-gravity-form-map-field
 ```
 
 # Start a new plugin from this boilerplate
@@ -167,15 +167,15 @@ Original boilerplate: https://github.com/cobianzo/wp-env-sidebar-related-article
 clone the original repo: `https://github.com/cobianzo/wp-env-sidebar-related-article`
 rm -rf .git
 git init
-git remote add origin git@github.com:cobianzo/asim-gravity-form-map-field.git
+git remote add origin git@github.com:cobianzo/coco-gravity-form-map-field.git
 
 ## renaming
 
-rename initial file to your plugin's: `asim-gravity-form-map-field`
-replace all occurrences of the plugin's slug into `asim-gravity-form-map-field`
+rename initial file to your plugin's: `coco-gravity-form-map-field`
+replace all occurrences of the plugin's slug into `coco-gravity-form-map-field`
 replace plugin name in the original php name.
 rename references to the repo `https://github.com/cobianzo/wp-env-sidebar-related-article`
-change description and other fields in `asim-gravity-form-map-field.php`
+change description and other fields in `coco-gravity-form-map-field.php`
 
 ## tests renaming
 

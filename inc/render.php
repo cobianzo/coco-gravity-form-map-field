@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return string The rendered HTML and JavaScript for the map field.
  */
-function asim_render_map_field( object $instance, array $form, string $value ): string {
+function coco_render_map_field( object $instance, array $form, string $value ): string {
 
 	$field_id = absint( $form['id'] );
 
@@ -32,7 +32,7 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 	$disabled_text = $is_form_editor ? 'disabled="disabled"' : '';
 
 	$field_type         = 'text';
-	$class_attribute    = $is_entry_detail || $is_form_editor ? '' : "class='gform_asim_map'";
+	$class_attribute    = $is_entry_detail || $is_form_editor ? '' : "class='gform_coco_map'";
 	$required_attribute = $instance->isRequired ? 'aria-required="true"' : '';
 	$invalid_attribute  = $instance->failed_validation ? 'aria-invalid="true"' : 'aria-invalid="false"';
 
@@ -49,19 +49,19 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 		if ( current_user_can( 'manage_options' ) ) {
 			echo '<div class=""><p>The map field requires a Google Maps API key.
 				<a style="text-decoration: underline;" href="'
-				. esc_url( admin_url( 'admin.php?page=gf_settings&subview=asim-gravity-forms-map-addon' ) )
+				. esc_url( admin_url( 'admin.php?page=gf_settings&subview=coco-gravity-forms-map-addon' ) )
 				. '">Configure</a></p></div>';
 		}
 		return ob_get_clean();
 	}
 
 	?>
-	<div id="map-container-<?php echo esc_attr( $field_id ); ?>" class="gform-field-asim-map"
+	<div id="map-container-<?php echo esc_attr( $field_id ); ?>" class="gform-field-coco-map"
 		style="height: 300px; margin-bottom: 1rem;"></div>
 
 	<input type="<?php echo esc_attr( $field_type ); ?>"
 		readonly
-		placeholder="<?php esc_attr_e( 'Latitude, Longitude', 'asim-gravity-form-map-field' ); ?>"
+		placeholder="<?php esc_attr_e( 'Latitude, Longitude', 'coco-gravity-form-map-field' ); ?>"
 		name="<?php echo esc_attr( $name_id ); ?>"
 		id="<?php echo esc_attr( $input_id ); ?>"
 		value="<?php echo esc_attr( $value ); ?>"
@@ -77,29 +77,29 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 
 
 	<script>
-		window.asimVars = window.asimVars || null;
-		if ( null === window.asimVars ) {
-			window.asimVars = {};
-			asimVars.asimLocationIcon = <?php echo wp_json_encode( dirname( plugin_dir_url( __FILE__ ) ) . '/assets/location.svg' ); ?>;
-			asimVars.asimClearPolygonIcon = <?php echo wp_json_encode( dirname( plugin_dir_url( __FILE__ ) ) . '/assets/clear-polygon.webp' ); ?>;
-			asimVars.asimMarkerIcon = <?php echo wp_json_encode( dirname( plugin_dir_url( __FILE__ ) ) . '/assets/asim-marker.png' ); ?>;
-			asimVars.placesAPILoaded = false;
+		window.cocoVars = window.cocoVars || null;
+		if ( null === window.cocoVars ) {
+			window.cocoVars = {};
+			cocoVars.cocoLocationIcon = <?php echo wp_json_encode( dirname( plugin_dir_url( __FILE__ ) ) . '/assets/location.svg' ); ?>;
+			cocoVars.cocoClearPolygonIcon = <?php echo wp_json_encode( dirname( plugin_dir_url( __FILE__ ) ) . '/assets/clear-polygon.webp' ); ?>;
+			cocoVars.cocoMarkerIcon = <?php echo wp_json_encode( dirname( plugin_dir_url( __FILE__ ) ) . '/assets/coco-marker.png' ); ?>;
+			cocoVars.placesAPILoaded = false;
 		}
 		<?php
-		// we need to know, in case there are more than 1 asim maps field , if any of them uses places autocomplete.
-		echo ( ! empty( $autocomplete_types ) ) ? 'asimVars.placesAPILoaded = true;' : '';
+		// we need to know, in case there are more than 1 coco maps field , if any of them uses places autocomplete.
+		echo ( ! empty( $autocomplete_types ) ) ? 'cocoVars.placesAPILoaded = true;' : '';
 		?>
 
-		window.asimMaps = window.asimMaps || {};
+		window.cocoMaps = window.cocoMaps || {};
 
-		asimMaps['<?php echo esc_js( $input_id ); ?>'] = {
+		cocoMaps['<?php echo esc_js( $input_id ); ?>'] = {
 			map: null,
 			inputElement: null,
 			polygon: null,
 			marker: null,
 			initMap: () => {
 				const input = document.getElementById('<?php echo esc_js( $input_id ); ?>');
-				asimMaps['<?php echo esc_js( $input_id ); ?>'].inputElement = input;
+				cocoMaps['<?php echo esc_js( $input_id ); ?>'].inputElement = input;
 				const coordinatesInput = window.coordinatesFromInput(input); // {lat, lng} or null
 				const coordinatesInitMap = coordinatesInput || {
 					lat: 41.77444381030458,
@@ -121,7 +121,7 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 					},
 					zoom: coordinatesInput ? 6 : 1,
 				});
-				asimMaps['<?php echo esc_js( $input_id ); ?>'].map = map;
+				cocoMaps['<?php echo esc_js( $input_id ); ?>'].map = map;
 				window.gotoLocationButton('<?php echo esc_js( $input_id ); ?>');
 
 
@@ -130,15 +130,15 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 				?>
 					// Add initial marker if the coordinates are valid.
 					if (coordinatesInput) {
-						window.addMarker('<?php echo esc_js( $input_id ); ?>', coordinatesInput, asimVars.asimMarkerIcon);
+						window.addMarker('<?php echo esc_js( $input_id ); ?>', coordinatesInput, cocoVars.cocoMarkerIcon);
 						window.centerMapAtInputCoordinates(input, map);
 					}
 					// CLICK on the map > sets a market
-					asimMaps['<?php echo esc_js( $input_id ); ?>'].map.addListener('click', function(e) {
+					cocoMaps['<?php echo esc_js( $input_id ); ?>'].map.addListener('click', function(e) {
 						const clickedCoordinates = e.latLng;
 						const inputElement = document.getElementById('<?php echo esc_js( $input_id ); ?>');
 						inputElement.value = `${clickedCoordinates.lat()},${clickedCoordinates.lng()}`;
-						window.addMarker('<?php echo esc_js( $input_id ); ?>', clickedCoordinates, asimVars.asimMarkerIcon);
+						window.addMarker('<?php echo esc_js( $input_id ); ?>', clickedCoordinates, cocoVars.cocoMarkerIcon);
 					});
 				<?php endif; ?>
 
@@ -159,7 +159,7 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 				if ( ! empty( $autocomplete_types ) ) :
 					?>
 					const autocompleteTypes = [ '<?php echo esc_js( $autocomplete_types ); ?>' ];
-					window.initPlacesAutocomplete(map, '<?php esc_attr_e( 'Search location', 'asim-gravity-form-map-field' ); ?>', autocompleteTypes);
+					window.initPlacesAutocomplete(map, '<?php esc_attr_e( 'Search location', 'coco-gravity-form-map-field' ); ?>', autocompleteTypes);
 				<?php endif; ?>
 			}
 		}
@@ -171,7 +171,7 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 			script.src = 'https://maps.googleapis.com/maps/api/js?key=<?php
 				echo esc_js( $instance->google_maps_api_key );
 			?>&loading=async&callback=initAllMaps';
-			if (asimVars.placesAPILoaded) {
+			if (cocoVars.placesAPILoaded) {
 				script.src += '&libraries=places';
 			}
 			script.async = true;
@@ -181,8 +181,8 @@ function asim_render_map_field( object $instance, array $form, string $value ): 
 
 		// starting point to build every map
 		window.initAllMaps = window.initAllMaps || function() {
-			Object.keys(asimMaps).forEach(function(key) {
-				asimMaps[key].initMap();
+			Object.keys(cocoMaps).forEach(function(key) {
+				cocoMaps[key].initMap();
 			});
 		}
 

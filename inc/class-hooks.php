@@ -1,12 +1,12 @@
 <?php
 
-namespace Asim_Gravity_Form_Map_Field;
+namespace Coco_Gravity_Form_Map_Field;
 
 /**
  * Hooks class. Notmally Gravity Form hooks that tweak the behaviour of
  * our field
  *
- * @package Asim_Gravity_Form_Map_Field
+ * @package Coco_Gravity_Form_Map_Field
  */
 
 class Hooks {
@@ -32,40 +32,40 @@ class Hooks {
 			?>
 			<li class="map_type_setting field_setting">
 				<label for="field_map_type" class="section_label">
-					<?php esc_html_e( 'Map Type', 'asim-gravity-forms-map-addon' ); ?>
+					<?php esc_html_e( 'Map Type', 'coco-gravity-forms-map-addon' ); ?>
 					<?php
 					gform_tooltip( 'form_field_map_type' ); // we can add a tooltip if we want to
 					?>
 				</label>
 				<select id="field_map_type" onchange="SetFieldProperty('mapType', this.value);">
-					<option value=""><?php esc_html_e( 'Default', 'asim-gravity-forms-map-addon' ); ?></option>
-					<option value="satellite"><?php esc_html_e( 'Satellite', 'asim-gravity-forms-map-addon' ); ?></option>
-					<option value="terrain"><?php esc_html_e( 'Terrain', 'asim-gravity-forms-map-addon' ); ?></option>
+					<option value=""><?php esc_html_e( 'Default', 'coco-gravity-forms-map-addon' ); ?></option>
+					<option value="satellite"><?php esc_html_e( 'Satellite', 'coco-gravity-forms-map-addon' ); ?></option>
+					<option value="terrain"><?php esc_html_e( 'Terrain', 'coco-gravity-forms-map-addon' ); ?></option>
 				</select>
 			</li>
 			<!-- Option input lookup autocomplete type: cities/address etc -->
 			<li class="autocomplete_types_setting field_setting">
 				<label for="field_autocomplete_types" class="section_label">
-					<?php esc_html_e( 'Autocomplete Type', 'asim-gravity-forms-map-addon' ); ?>
+					<?php esc_html_e( 'Autocomplete Type', 'coco-gravity-forms-map-addon' ); ?>
 					<?php gform_tooltip( 'form_field_autocomplete_types' ); ?>
 				</label>
 				<select id="field_autocomplete_types" onchange="SetFieldProperty('autocompleteTypes', this.value);">
-					<option value=""><?php esc_html_e( 'None', 'asim-gravity-forms-map-addon' ); ?></option>
-					<option value="(cities)"><?php esc_html_e( 'Cities', 'asim-gravity-forms-map-addon' ); ?></option>
-					<option value="geocode"><?php esc_html_e( 'Geocode', 'asim-gravity-forms-map-addon' ); ?></option>
-					<option value="address"><?php esc_html_e( 'Address', 'asim-gravity-forms-map-addon' ); ?></option>
-					<option value="(regions)"><?php esc_html_e( 'Regions', 'asim-gravity-forms-map-addon' ); ?></option>
+					<option value=""><?php esc_html_e( 'None', 'coco-gravity-forms-map-addon' ); ?></option>
+					<option value="(cities)"><?php esc_html_e( 'Cities', 'coco-gravity-forms-map-addon' ); ?></option>
+					<option value="geocode"><?php esc_html_e( 'Geocode', 'coco-gravity-forms-map-addon' ); ?></option>
+					<option value="address"><?php esc_html_e( 'Address', 'coco-gravity-forms-map-addon' ); ?></option>
+					<option value="(regions)"><?php esc_html_e( 'Regions', 'coco-gravity-forms-map-addon' ); ?></option>
 				</select>
 			</li>
 			<!-- Option Map Interaction: Marker/Polygon -->
 			<li class="interaction_type_setting">
 				<label for="field_interaction_type" class="section_label">
-					<?php esc_html_e( 'Interaction Type', 'asim-gravity-forms-map-addon' ); ?>
+					<?php esc_html_e( 'Interaction Type', 'coco-gravity-forms-map-addon' ); ?>
 					<?php gform_tooltip( 'form_field_interaction_type' ); ?>
 				</label>
 				<select id="field_interaction_type" onchange="SetFieldProperty('interactionType', this.value);">
-					<option value="marker"><?php esc_html_e( 'Marker', 'asim-gravity-forms-map-addon' ); ?></option>
-					<option value="polygon"><?php esc_html_e( 'Polygon', 'asim-gravity-forms-map-addon' ); ?></option>
+					<option value="marker"><?php esc_html_e( 'Marker', 'coco-gravity-forms-map-addon' ); ?></option>
+					<option value="polygon"><?php esc_html_e( 'Polygon', 'coco-gravity-forms-map-addon' ); ?></option>
 				</select>
 			</li>
 
@@ -88,8 +88,8 @@ class Hooks {
 	}
 
 	public static function tooltips( $tooltips ) {
-		$tooltips['form_field_map_type']           = esc_html__( 'More info at https://developers.google.com/maps/documentation/javascript/maptypes', 'asim-gravity-forms-map-addon' );
-		$tooltips['form_field_autocomplete_types'] = esc_html__( 'More info at https://developers.google.com/maps/documentation/javascript/supported_types', 'asim-gravity-forms-map-addon' );
+		$tooltips['form_field_map_type']           = esc_html__( 'More info at https://developers.google.com/maps/documentation/javascript/maptypes', 'coco-gravity-forms-map-addon' );
+		$tooltips['form_field_autocomplete_types'] = esc_html__( 'More info at https://developers.google.com/maps/documentation/javascript/supported_types', 'coco-gravity-forms-map-addon' );
 		return $tooltips;
 	}
 
@@ -106,12 +106,12 @@ class Hooks {
 	 * @return string The HTML to show the link to the map image.
 	 */
 	public static function show_link_map_field_admin( $value, $field ) : string {
-		if ( $field->inputType === 'asim-map' ) {
+		if ( $field->inputType === 'coco-map' ) {
 
-			$addon  = Addon_Asim::get_instance();
-			$apiKey = $addon->get_plugin_setting( Addon_Asim::SETTING_GOOGLE_MAPS_API_KEY );
+			$addon  = Addon_Coco::get_instance();
+			$apiKey = $addon->get_plugin_setting( Addon_Coco::SETTING_GOOGLE_MAPS_API_KEY );
 			$value  = trim( $value );
-			if ( 'polygon' === GF_Field_AsimMap::entry_is_marker_or_polygon( $value ) ) {
+			if ( 'polygon' === GF_Field_CocoMap::entry_is_marker_or_polygon( $value ) ) {
 				// Coordenadas del polígono (debe ser una serie de puntos)
 
 				$polygonCoords   = explode( ' ', $value );
@@ -132,7 +132,7 @@ class Hooks {
 
 				// Mostrar la imagen en HTML
 				return "<img src='$map_img_url' />";
-			} elseif ( 'marker' === GF_Field_AsimMap::entry_is_marker_or_polygon( $value ) ) {
+			} elseif ( 'marker' === GF_Field_CocoMap::entry_is_marker_or_polygon( $value ) ) {
 
 				$map_img_url = "https://maps.googleapis.com/maps/api/staticmap?" .
           "center={$value}&" . // Centrar el mapa en el marcador
@@ -148,7 +148,7 @@ class Hooks {
 					'<img src="%s" /><br><a href="%s" target="_blank">%s</a>',
 					$map_img_url,
 					$gmaps_link,
-					esc_html__( 'View on Google Maps', 'asim-gravity-forms-map-addon' )
+					esc_html__( 'View on Google Maps', 'coco-gravity-forms-map-addon' )
 				);
 			}
 		}
