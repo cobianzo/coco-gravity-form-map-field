@@ -108,6 +108,16 @@ window.clearPolygon = function (inputName) {
 	clearPoligonBtn.style.display = 'none';
 };
 
+// Helper
+window.convertCoordinatesIntoGMapCoordinates = function (coordinatesAsString) {
+	const coordinatesArray = coordinatesAsString.split(' ');
+	const newPolygonCoords = coordinatesArray.map((coord) => {
+		const [lat, lng] = coord.split(',');
+		return new window.google.maps.LatLng({ lat: parseFloat(lat), lng: parseFloat(lng) });
+	});
+	return newPolygonCoords;
+};
+
 window.paintPolygonFromInput = function (inputName) {
 	const value = document.getElementById(inputName).value;
 	if ('' === value) {
@@ -117,10 +127,7 @@ window.paintPolygonFromInput = function (inputName) {
 	const { polygonArea } = mapSetup;
 
 	const coordinatesArray = value.split(' ');
-	const newPolygonCoords = coordinatesArray.map((coord) => {
-		const [lat, lng] = coord.split(',');
-		return new window.google.maps.LatLng({ lat: parseFloat(lat), lng: parseFloat(lng) });
-	});
+	const newPolygonCoords = window.convertCoordinatesIntoGMapCoordinates(value);
 
 	polygonArea.setPath(newPolygonCoords);
 
@@ -140,4 +147,26 @@ window.polygonCoordsToInput = function (inputName) {
 
 	const inputElement = document.getElementById(inputName);
 	inputElement.value = coordenadas.join(' ').trim();
+};
+
+/**
+ * Paints a polygon in the map. We use it to show the profile of the selected roof. @BOOK:ROOF
+ * @param {Object} gMap                - El mapa de Google.
+ * @param {string} coordinatesAsString - Las coordenadas del pol gono en formato de string.
+ *
+ * @since 3.0.0
+ */
+window.paintAPoygonInMap = function (gMap, coordinatesAsString) {
+	const newPolygonCoords = window.convertCoordinatesIntoGMapCoordinates(coordinatesAsString);
+	// Crear el polígono
+	const buildingPolygon = new window.google.maps.Polygon({
+		paths: newPolygonCoords,
+		strokeColor: '#FFAA00',
+		strokeOpacity: 0.8,
+		strokeWeight: 2,
+		fillColor: '#FF0000',
+		fillOpacity: 0.35,
+	});
+
+	buildingPolygon.setMap(gMap);
 };

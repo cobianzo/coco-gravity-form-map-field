@@ -19,7 +19,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function coco_render_map_field( object $instance, array $form, string $value ): string {
 
-	$field_id = absint( $form['id'] );
 
 	$input_id = sprintf( 'input_%d_%d', $form['id'], $instance->id );
 	$name_id  = sprintf( 'input_%d', $instance->id );
@@ -31,6 +30,7 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 
 	$disabled_text = $is_form_editor ? 'disabled="disabled"' : '';
 
+	// attributes of the input associated to the value that we'll save in the db
 	$field_type         = 'text';
 	$class_attribute    = $is_entry_detail || $is_form_editor ? '' : "class='gform_coco_map'";
 	$required_attribute = $instance->isRequired ? 'aria-required="true"' : '';
@@ -40,6 +40,12 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 	$map_type           = $instance->mapType ?? 'terrain'; // Default to Terrain (change to  satellite if you want)
 	$autocomplete_types = $instance->autocompleteTypes ?? '';
 	$interaction_type   = $instance->interactionType ?? 'marker';
+
+
+	// We can, with hooks, setup the default value of the map (coords and zoom) if we want to:
+	$default_zoom    = apply_filters( 'coco_gravity_form_map_field_default_zoom', null, $form );
+	$default_lat     = apply_filters( 'coco_gravity_form_map_field_default_lat', null, $form );
+	$default_lng     = apply_filters( 'coco_gravity_form_map_field_default_lng', null, $form );
 
 	// there are two types of values, dingle coordinates or set of coordinates to defina a polygon
 
@@ -55,7 +61,15 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 		return ob_get_clean();
 	}
 
+
+	// start the html elements:
+
+	// a fil
+	do_action( 'coco_gravity_form_map_field_previous_to_field', $instance, $form, $value );
+
 	?>
+
+
 	<div id="map-container-<?php echo esc_attr( $field_id ); ?>" class="gform-field-coco-map"
 		style="height: 300px; margin-bottom: 1rem;"></div>
 
@@ -74,7 +88,11 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 		<?php echo $disabled_text; ?>
 		/>
 
-
+		<?php
+		echo '<pre>';
+		print_r($instance);
+		echo '</pre>';
+		?>
 
 	<script>
 		window.cocoVars = window.cocoVars || null;
@@ -102,8 +120,8 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 				cocoMaps['<?php echo esc_js( $input_id ); ?>'].inputElement = input;
 				const coordinatesInput = window.coordinatesFromInput(input); // {lat, lng} or null
 				const coordinatesInitMap = coordinatesInput || {
-					lat: 41.77444381030458,
-					lng: 9.697649902343759
+					lat: <?php echo $default_lat ?? 41.77444381030458; ?>,
+					lng: <?php echo $default_lng ?? 9.697649902343759; ?>
 				};
 
 				// Init the map calling google maps methods
@@ -119,11 +137,17 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 						style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
 						position: google.maps.ControlPosition.TOP_RIGHT,
 					},
-					zoom: coordinatesInput ? 6 : 1,
+					zoom: <?php
+						echo $default_zoom ?? ' coordinatesInput ? 6 : 1 ';
+					?>,
 				});
 				cocoMaps['<?php echo esc_js( $input_id ); ?>'].map = map;
 				window.gotoLocationButton('<?php echo esc_js( $input_id ); ?>');
 
+				<?php
+				// BOOK:ROOF
+				do_action( 'coco_gravity_form_script_after_map_created', $instance, $form, $value );
+				?>
 
 				<?php
 				if ( 'marker' === $interaction_type ) :
@@ -198,7 +222,6 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 			} // end of the code exectued only once in the page.
 			window.googleMapsAPILoaded = true;
 		});
-
 
 	</script>
 
