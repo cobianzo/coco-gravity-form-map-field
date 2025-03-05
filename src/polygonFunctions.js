@@ -37,7 +37,7 @@ window.createClearPolygonButton = function (inputName) {
 	clearPolygonButtonEl.id = id;
 	clearPolygonButtonEl.classList.add('custom-map-control-button');
 	clearPolygonButtonEl.title = 'Click to clear the area';
-	clearPolygonButtonEl.style.margin = '0 0 5px';
+	clearPolygonButtonEl.style.margin = '0 0 10px';
 	clearPolygonButtonEl.style.aspectRatio = '1 / 1';
 	clearPolygonButtonEl.style.padding = '2px';
 	clearPolygonButtonEl.style.border = '3px solid white';
@@ -153,20 +153,23 @@ window.polygonCoordsToInput = function (inputName) {
  * Paints a polygon in the map. We use it to show the profile of the selected roof. @BOOK:ROOF
  * @param {Object} gMap                - El mapa de Google.
  * @param {string} coordinatesAsString - Las coordenadas del pol gono en formato de string.
- *
+ * @param {Object} extraparams
  * @since 3.0.0
  */
-window.paintAPoygonInMap = function (gMap, coordinatesAsString) {
+window.paintAPoygonInMap = function (gMap, coordinatesAsString, extraparams = {}) {
 	const newPolygonCoords = window.convertCoordinatesIntoGMapCoordinates(coordinatesAsString);
 	// Crear el polígono
-	const buildingPolygon = new window.google.maps.Polygon({
+	const params = {
 		paths: newPolygonCoords,
 		strokeColor: '#FFAA00',
 		strokeOpacity: 0.8,
 		strokeWeight: 2,
 		fillColor: '#FF0000',
 		fillOpacity: 0.35,
-	});
+		clickable: false, // Evita que capture eventos
+		...extraparams,
+	};
+	const buildingPolygon = new window.google.maps.Polygon(params);
 
 	buildingPolygon.setMap(gMap);
 };

@@ -8,22 +8,14 @@
  * @return {Object} The marker added to the map. {google.maps.Marker}
  */
 window.addMarker = (inputName, position, markerIcon = 'marker_yellow') => {
-	const icon = markerIcon.includes('http')
-		? markerIcon
-		: `https://maps.google.com/mapfiles/ms/icons/${markerIcon}.png`;
 	const mapSetup = window.cocoMaps[inputName];
 	if (mapSetup.marker) {
 		mapSetup.marker.setMap(null); // Remove the previous marker.
 	}
-
-	return (mapSetup.marker = new window.google.maps.Marker({
-		position,
-		map: mapSetup.map,
-		icon: {
-			url: icon,
-			scaledSize: new window.google.maps.Size(25, 30), // Tamaño de 50x50 píxeles
-		},
-	}));
+	mapSetup.marker = window.paintAMarker(mapSetup.map, position, markerIcon, {
+		scaledSize: new window.google.maps.Size(25, 30),
+	});
+	return mapSetup.marker;
 };
 
 window.removeMarker = (inputName) => {
@@ -31,4 +23,20 @@ window.removeMarker = (inputName) => {
 	if (mapSetup.marker) {
 		mapSetup.marker.setMap(null); // Remove the previous marker.
 	}
+};
+
+window.paintAMarker = function (map, position, markerIcon, extraOptions = {}) {
+	const icon = markerIcon.includes('http')
+		? markerIcon
+		: `https://maps.google.com/mapfiles/ms/icons/${markerIcon}.png`;
+
+	const marker = new window.google.maps.Marker({
+		position, // {lat, lng}
+		map,
+		icon: {
+			url: icon,
+			...extraOptions,
+		},
+	});
+	return marker;
 };

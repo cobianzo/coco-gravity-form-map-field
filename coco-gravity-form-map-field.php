@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Coco Gravity Forms Map Field
  * Description: A new field for Gravity Forms with an interactive map where you can save a marker position or a polygon drawn by the user.
- * Version: 3.1.3
+ * Version: 4.0.0
  * Author: @cobianzo
  * Author URI: https://cobianzo.com
  * License: GPLv2 or later

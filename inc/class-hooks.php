@@ -16,21 +16,22 @@ class Hooks {
 	 * Initialize hooks.
 	 */
 	public static function init() {
-		add_action( 'gform_field_standard_settings', array( __CLASS__, 'field_sidebar_options' ), 10 );
+		add_action( 'gform_field_standard_settings', array( __CLASS__, 'field_sidebar_options' ), 10, 2 );
 		add_filter( 'gform_tooltips', array( __CLASS__, 'tooltips' ), 10, 1 );
 		add_filter( 'gform_entry_field_value',   array( __CLASS__, 'show_link_map_field_admin' ), 10, 2 );
 	}
 
 	/**
 	 * New options for the map field in the sidebar.
+	 * TODO: Apparentyl the Interaction type field appears also in the other fields. FIX it
 	 */
-	public static function field_sidebar_options( $position ) {
-		// Add to the General panel in the sidebar
+	public static function field_sidebar_options( $position, $form ) {
 		if ( 50 === $position ) :
-
 			// Option map type (satellite/terrain)
+			// Note that we use display:none, so it's not shown initially. And we only show it
+			// for our coco-map field, not any other gform field.
 			?>
-			<li class="map_type_setting field_setting">
+			<li class="map_type_setting field_setting coco-field-option" style="display:none">
 				<label for="field_map_type" class="section_label">
 					<?php esc_html_e( 'Map Type', 'coco-gravity-forms-map-addon' ); ?>
 					<?php
@@ -44,7 +45,7 @@ class Hooks {
 				</select>
 			</li>
 			<!-- Option input lookup autocomplete type: cities/address etc -->
-			<li class="autocomplete_types_setting field_setting">
+			<li class="autocomplete_types_setting field_setting coco-field-option" style="display:none">
 				<label for="field_autocomplete_types" class="section_label">
 					<?php esc_html_e( 'Autocomplete Type', 'coco-gravity-forms-map-addon' ); ?>
 					<?php gform_tooltip( 'form_field_autocomplete_types' ); ?>
@@ -58,7 +59,7 @@ class Hooks {
 				</select>
 			</li>
 			<!-- Option Map Interaction: Marker/Polygon -->
-			<li class="interaction_type_setting">
+			<li class="interaction_type_setting coco-field-option" style="display:none">
 				<label for="field_interaction_type" class="section_label">
 					<?php esc_html_e( 'Interaction Type', 'coco-gravity-forms-map-addon' ); ?>
 					<?php gform_tooltip( 'form_field_interaction_type' ); ?>
@@ -73,14 +74,24 @@ class Hooks {
 				// Set the default values to the inputs when page loads (page of edit form /admin.php?page=gf_edit_forms&id=x)
 				jQuery(document).on('gform_load_field_settings', function(event, field, form) {
 
-					const defaultValueMapType = field['mapType'] || '';
-					jQuery('#field_map_type').val(defaultValueMapType);
+					if (field.type === 'coco-map') {
 
-					const defaultValueAutocompleteTypes = field['autocompleteTypes'] || '';
-					jQuery('#field_autocomplete_types').val(defaultValueAutocompleteTypes);
+						jQuery('.coco-field-option').show();
 
-					const defaultValueIntereactionType = field['interactionType'] || '';
-					jQuery('#field_interaction_type').val(defaultValueIntereactionType);
+						// loads the saved value
+						const defaultValueMapType = field['mapType'] || '';
+						jQuery('#field_map_type').val(defaultValueMapType);
+
+						const defaultValueAutocompleteTypes = field['autocompleteTypes'] || '';
+						jQuery('#field_autocomplete_types').val(defaultValueAutocompleteTypes);
+
+						const defaultValueIntereactionType = field['interactionType'] || '';
+						jQuery('#field_interaction_type').val(defaultValueIntereactionType);
+
+					} else {
+						jQuery('.coco-field-option').hide();
+					}
+
 				});
 			</script>
 			<?php

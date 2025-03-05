@@ -88,12 +88,6 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 		<?php echo $disabled_text; ?>
 		/>
 
-		<?php
-		echo '<pre>';
-		print_r($instance);
-		echo '</pre>';
-		?>
-
 	<script>
 		window.cocoVars = window.cocoVars || null;
 		if ( null === window.cocoVars ) {
@@ -113,7 +107,7 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 		cocoMaps['<?php echo esc_js( $input_id ); ?>'] = {
 			map: null,
 			inputElement: null,
-			polygon: null,
+			polygonArea: null,
 			marker: null,
 			initMap: () => {
 				const input = document.getElementById('<?php echo esc_js( $input_id ); ?>');
@@ -135,19 +129,22 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 					mapTypeId: '<?php echo esc_attr( $map_type ); ?>',
 					mapTypeControlOptions: {
 						style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-						position: google.maps.ControlPosition.TOP_RIGHT,
+						position: google.maps.ControlPosition.BOTTOM_LEFT,
 					},
 					zoom: <?php
 						echo $default_zoom ?? ' coordinatesInput ? 6 : 1 ';
 					?>,
 				});
+				map.setTilt(0); // deactivate the view at 45º when zoom is big and view is satellite.
 				cocoMaps['<?php echo esc_js( $input_id ); ?>'].map = map;
 				window.gotoLocationButton('<?php echo esc_js( $input_id ); ?>');
 
 				<?php
+				// Now the hooks, one in php and just in case one in js (with a custom event)
 				// BOOK:ROOF
 				do_action( 'coco_gravity_form_script_after_map_created', $instance, $form, $value );
 				?>
+				document.dispatchEvent(new CustomEvent("solarMapReady", { detail: cocoMaps['<?php echo esc_js( $input_id ); ?>'] }));
 
 				<?php
 				if ( 'marker' === $interaction_type ) :
