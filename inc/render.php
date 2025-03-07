@@ -88,6 +88,15 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 		<?php echo $disabled_text; ?>
 		/>
 
+
+	<?php
+	// We don't continue if we are in a paginated form and this field is not shown in the current page
+	$current_page = GFFormDisplay::get_current_page($form['id']);
+	if ( $instance->pageNumber !== $current_page ) {
+		return ob_get_clean();
+	}
+	?>
+
 	<script>
 		window.cocoVars = window.cocoVars || null;
 		if ( null === window.cocoVars ) {
@@ -139,12 +148,23 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 				cocoMaps['<?php echo esc_js( $input_id ); ?>'].map = map;
 				window.gotoLocationButton('<?php echo esc_js( $input_id ); ?>');
 
+				// Hook in JS to exectute code after the map is ready
+				let tries = 0;
+				const maxTries = 10;
+				function checkIfMapIsReady(callback) {
+					if (map.getBounds()) callback();
+					else if (tries++ < maxTries) setTimeout(() => checkIfMapIsReady(callback), 500);
+					else console.error('Map did not render in time', '<?php echo esc_js( $input_id ); ?>');
+				}
+				checkIfMapIsReady(() => {
+					console.log('Map <?php echo esc_js( $input_id ); ?> is ready');
+					document.dispatchEvent(new CustomEvent("solarMapReady", { detail: cocoMaps['<?php echo esc_js( $input_id ); ?>'] }));
+				});
 				<?php
 				// Now the hooks, one in php and just in case one in js (with a custom event)
 				// BOOK:ROOF
 				do_action( 'coco_gravity_form_script_after_map_created', $instance, $form, $value );
 				?>
-				document.dispatchEvent(new CustomEvent("solarMapReady", { detail: cocoMaps['<?php echo esc_js( $input_id ); ?>'] }));
 
 				<?php
 				if ( 'marker' === $interaction_type ) :
@@ -193,7 +213,7 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 				echo esc_js( $instance->google_maps_api_key );
 			?>&loading=async&callback=initAllMaps';
 			if (cocoVars.placesAPILoaded) {
-				script.src += '&libraries=places';
+				script.src += '&libraries=places,drawing'; // TODO:?
 			}
 			script.async = true;
 			script.loading = 'async';

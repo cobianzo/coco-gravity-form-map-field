@@ -67,6 +67,7 @@ class Hooks {
 				<select id="field_interaction_type" onchange="SetFieldProperty('interactionType', this.value);">
 					<option value="marker"><?php esc_html_e( 'Marker', 'coco-gravity-forms-map-addon' ); ?></option>
 					<option value="polygon"><?php esc_html_e( 'Polygon', 'coco-gravity-forms-map-addon' ); ?></option>
+					<?php do_action( 'coco_gf_map_field_interaction_type_extra_options', $form ); ?>
 				</select>
 			</li>
 

@@ -78,6 +78,7 @@ class GF_Field_CocoMap extends \GF_Field {
 			'rules_setting',
 			'map_type_setting',
 			'autocomplete_types_setting',
+			'interaction_type_setting',
 		);
 	}
 
@@ -140,49 +141,6 @@ class GF_Field_CocoMap extends \GF_Field {
 	}
 
 	/**
-	 * Validates that a string represents valid geographic coordinates.
-	 *
-	 * The expected format is "latitude,longitude" where:
-	 * - latitude must be between -90 and 90
-	 * - longitude must be between -180 and 180
-	 *
-	 * @param string $value The value to validate
-	 * @return bool True if the value is valid coordinates, false otherwise
-	 */
-	public static function validate_coordinates( string $value ): bool {
-		// If the value is empty, it is valid (the field might be optional)
-		if ( empty( $value ) ) {
-			return true;
-		}
-
-		// Verify the basic format (two numbers separated by a comma)
-		if ( ! preg_match( '/^-?\d+\.?\d*,-?\d+\.?\d*$/', $value ) ) {
-			return false;
-		}
-
-		// Split the coordinates
-		$coordinates = explode( ',', $value );
-
-		if ( count( $coordinates ) !== 2 ) {
-			return false;
-		}
-
-		$lat = (float) $coordinates[0];
-		$lng = (float) $coordinates[1];
-
-		// Validate the range
-		if ( $lat < -90 || $lat > 90 ) {
-			return false;
-		}
-
-		if ( $lng < -180 || $lng > 180 ) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
 	 * Check if an entry is a marker or a polygon
 	 *
 	 * An entry is a marker if it contains a single valid coordinate.
@@ -196,11 +154,11 @@ class GF_Field_CocoMap extends \GF_Field {
 		$entry_value = trim( $entry_value );
 		$coordinates = explode( ' ', $entry_value );
 		if ( count( $coordinates ) === 1 ) {
-			return self::validate_coordinates( $entry_value ) ? 'marker' : false;
+			return Validations::validate_coordinates( $entry_value ) ? 'marker' : false;
 		} else {
 			$return = true;
 			foreach ( $coordinates as $coordinate ) {
-				$return = $return && self::validate_coordinates( $coordinate );
+				$return = $return && Validations::validate_coordinates( $coordinate );
 			}
 			return $return ? 'polygon' : false;
 		}

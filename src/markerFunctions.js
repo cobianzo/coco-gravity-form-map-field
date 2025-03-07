@@ -14,6 +14,7 @@ window.addMarker = (inputName, position, markerIcon = 'marker_yellow') => {
 	}
 	mapSetup.marker = window.paintAMarker(mapSetup.map, position, markerIcon, {
 		scaledSize: new window.google.maps.Size(25, 30),
+		anchor: new window.google.maps.Point(15, 15),
 	});
 	return mapSetup.marker;
 };
@@ -26,9 +27,10 @@ window.removeMarker = (inputName) => {
 };
 
 window.paintAMarker = function (map, position, markerIcon, extraOptions = {}) {
-	const icon = markerIcon.includes('http')
-		? markerIcon
-		: `https://maps.google.com/mapfiles/ms/icons/${markerIcon}.png`;
+	const icon =
+		markerIcon.includes('http') || markerIcon.includes('wp-content')
+			? markerIcon
+			: `https://maps.google.com/mapfiles/ms/icons/${markerIcon}.png`;
 
 	const marker = new window.google.maps.Marker({
 		position, // {lat, lng}

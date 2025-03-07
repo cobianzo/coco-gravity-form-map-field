@@ -112,7 +112,7 @@ class Test_Map_Field extends WP_UnitTestCase {
 
 		foreach ($valid_coordinates as $coordinates) {
 			$this->assertTrue(
-				$field->validate_coordinates($coordinates),
+				\Coco_Gravity_Form_Map_Field\Validations::validate_coordinates($coordinates),
 				"Las coordenadas $coordinates deberían ser válidas"
 			);
 		}
@@ -130,7 +130,7 @@ class Test_Map_Field extends WP_UnitTestCase {
 
 		foreach ($invalid_coordinates as $coordinates) {
 			$this->assertFalse(
-				$field->validate_coordinates($coordinates),
+				\Coco_Gravity_Form_Map_Field\Validations::validate_coordinates($coordinates),
 				"Las coordenadas $coordinates deberían ser inválidas"
 			);
 		}

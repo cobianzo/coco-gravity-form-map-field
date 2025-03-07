@@ -172,4 +172,6 @@ window.paintAPoygonInMap = function (gMap, coordinatesAsString, extraparams = {}
 	const buildingPolygon = new window.google.maps.Polygon(params);
 
 	buildingPolygon.setMap(gMap);
+
+	return buildingPolygon;
 };
