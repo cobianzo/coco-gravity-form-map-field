@@ -75,6 +75,7 @@ class GF_Field_CocoMap extends \GF_Field {
 			'prepopulate_field_setting',
 			'label_setting',
 			'default_value_setting',
+			'admin_label_setting',
 			'rules_setting',
 			'map_type_setting',
 			'autocomplete_types_setting',
