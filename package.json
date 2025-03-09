@@ -1,15 +1,15 @@
 {
-	"name": "asim-gravity-form-map-field",
-	"version": "3.1.1",
+	"name": "coco-gravity-form-map-field",
+	"version": "4.0.1",
 	"author": "@cobianzo",
 	"license": "GPL-2.0-or-later",
-	"homepage": "https://github.com/cobianzo/asim-gravity-form-map-field",
+	"homepage": "https://github.com/cobianzo/coco-gravity-form-map-field",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/cobianzo/asim-gravity-form-map-field.git"
+		"url": "git+https://github.com/cobianzo/coco-gravity-form-map-field.git"
 	},
 	"bugs": {
-		"url": "https://github.com/cobianzo/asim-gravity-form-map-field/issues"
+		"url": "https://github.com/cobianzo/coco-gravity-form-map-field/issues"
 	},
 	"scripts": {
 		"up": "wp-env start",
@@ -20,14 +20,14 @@
 		"dev": "npm start",
 		"lint:css": "stylelint '**/*.css'",
 		"format": "wp-scripts format && stylelint \"**/*.css\" --fix",
-		"format:php": "wp-env run --env-cwd='wp-content/plugins/asim-gravity-form-map-field' cli composer run format",
-		"lint:php": "wp-env run --env-cwd='wp-content/plugins/asim-gravity-form-map-field' cli composer run lint",
+		"format:php": "wp-env run --env-cwd='wp-content/plugins/coco-gravity-form-map-field' cli composer run format",
+		"lint:php": "wp-env run --env-cwd='wp-content/plugins/coco-gravity-form-map-field' cli composer run lint",
 		"lint:js": "wp-scripts lint-js",
 		"lint:js:fix": "wp-scripts format",
 		"wp-env": "wp-env",
 		"wpcli": "wp-env run cli -- wp ",
-		"test:php": "npm run test:php:setup && wp-env run tests-wordpress --env-cwd='wp-content/plugins/asim-gravity-form-map-field' composer run test",
-		"test:php:watch": "wp-env run tests-wordpress --env-cwd='wp-content/plugins/asim-gravity-form-map-field' composer run test:watch",
+		"test:php": "npm run test:php:setup && wp-env run tests-wordpress --env-cwd='wp-content/plugins/coco-gravity-form-map-field' composer run test",
+		"test:php:watch": "wp-env run tests-wordpress --env-cwd='wp-content/plugins/coco-gravity-form-map-field' composer run test:watch",
 		"test:php:setup": "wp-env start",
 		"test:js": "playwright test",
 		"prepare": "husky",

@@ -57,7 +57,7 @@ window.initPlacesAutocomplete = function (map, placeholder = 'Search place', aut
 			map.fitBounds(place.geometry.viewport);
 		} else {
 			map.setCenter(place.geometry.location);
-			map.setZoom(15);
+			map.setZoom(16);
 		}
 
 		// Use the existing addMarker function (so far we don't show the marker)

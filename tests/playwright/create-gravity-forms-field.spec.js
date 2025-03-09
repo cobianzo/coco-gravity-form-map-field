@@ -2,7 +2,7 @@ const { test, expect } = require('@wordpress/e2e-test-utils-playwright');
 const { createRelatedArticleWithTerms, openCategoriesPanelIfClosed } = require('./utils');
 import path from 'path';
 
-test.describe('Asim Gravity Forms Map Field - E2E Tests', () => {
+test.describe('Coco Gravity Forms Map Field - E2E Tests', () => {
 	test.beforeEach(async ({ page, requestUtils }) => {
 		console.log('>>>>>>> START TEST - beforeEach');
 		// http://localhost:8890
@@ -16,7 +16,7 @@ test.describe('Asim Gravity Forms Map Field - E2E Tests', () => {
 
 		// activate plugin if not activated yet:
 		await page.goto('/wp-admin/plugins.php');
-		const activateSidebarRelated = page.locator('#activate-asim-gravity-form-map-field');
+		const activateSidebarRelated = page.locator('#activate-coco-gravity-form-map-field');
 		if (await activateSidebarRelated.isVisible()) {
 			console.log('>>>>>>> Plugin Activation (it was deactivated)');
 			await activateSidebarRelated.click();

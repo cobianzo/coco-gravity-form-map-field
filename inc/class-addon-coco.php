@@ -2,7 +2,7 @@
 
 // phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 
-namespace Asim_Gravity_Form_Map_Field;
+namespace Coco_Gravity_Form_Map_Field;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -12,9 +12,9 @@ if ( ! class_exists( 'GFAddOn' ) ) {
 	return;
 }
 
-class Addon_Asim extends \GFAddOn {
+class Addon_Coco extends \GFAddOn {
 
-	protected $_version                  = '3.1.1';
+	protected $_version                  = '4.0.1';
 	protected $_min_gravityforms_version = '2.5';
 
 	/**
@@ -22,14 +22,14 @@ class Addon_Asim extends \GFAddOn {
 	 *
 	 * @var string
 	 */
-	protected $_slug = 'asim-gravity-forms-map-addon';
+	protected $_slug = 'coco-gravity-forms-map-addon';
 
 	/**
 	 * The path to the plugin file.
 	 *
 	 * @var string
 	 */
-	protected $_path = 'asim-gravity-form-map-field/asim-gravity-form-map-field.php';
+	protected $_path = 'coco-gravity-form-map-field/coco-gravity-form-map-field.php';
 
 	/**
 	 * The full path to the plugin file.
@@ -43,19 +43,19 @@ class Addon_Asim extends \GFAddOn {
 	 *
 	 * @var string
 	 */
-	protected $_title = 'Asim Gravity Forms Map Addon';
+	protected $_title = 'Coco Gravity Forms Map Addon';
 
 	/**
 	 * The short title of the plugin.
 	 *
 	 * @var string
 	 */
-	protected $_short_title = 'Asim Map Field';
+	protected $_short_title = 'Coco Map Field';
 
 	/**
 	 * The instance of the plugin.
 	 *
-	 * @var Addon_Asim|null
+	 * @var Addon_Coco|null
 	 */
 	private static $_instance = null;
 
@@ -67,11 +67,11 @@ class Addon_Asim extends \GFAddOn {
 	const SETTING_GOOGLE_MAPS_API_KEY = 'google_maps_api_key';
 
 	/**
-	 * Returns an instance of the Addon_Asim class.
+	 * Returns an instance of the Addon_Coco class.
 	 *
-	 * @return Addon_Asim
+	 * @return Addon_Coco
 	 */
-	public static function get_instance(): Addon_Asim {
+	public static function get_instance(): Addon_Coco {
 		if ( null === self::$_instance ) {
 			self::$_instance = new self();
 		}
@@ -85,7 +85,7 @@ class Addon_Asim extends \GFAddOn {
 		parent::init();
 
 		// Register the new field type.
-		add_filter( 'gform_field_types', [ $this, 'register_custom_field' ] );
+		add_filter( 'gform_field_types', array( $this, 'register_custom_field' ) );
 	}
 
 	/**
@@ -96,7 +96,7 @@ class Addon_Asim extends \GFAddOn {
 	 * @return array
 	 */
 	public function register_custom_field( array $field_types ): array {
-		$field_types['asim-map'] = __( 'Asim Google Maps', 'asim-gravity-forms-map-addon' );
+		$field_types['coco-map'] = __( 'Coco Google Maps', 'coco-gravity-forms-map-addon' );
 		return $field_types;
 	}
 
@@ -122,18 +122,18 @@ class Addon_Asim extends \GFAddOn {
 	 * @return array
 	 */
 	public function form_settings_fields( $form ): array {
-		return [
-			[
-				'title'  => __( 'Form Submission Geolocation Settings', 'asim-gravity-forms-map-addon' ),
-				'fields' => [
-					[
-						'label' => __( 'Disable Location Collection for This Form', 'asim-gravity-forms-map-addon' ),
+		return array(
+			array(
+				'title'  => __( 'Form Submission Geolocation Settings', 'coco-gravity-forms-map-addon' ),
+				'fields' => array(
+					array(
+						'label' => __( 'Disable Location Collection for This Form', 'coco-gravity-forms-map-addon' ),
 						'type'  => 'toggle',
 						'name'  => self::SETTING_GOOGLE_MAPS_API_KEY,
-					],
-				],
-			],
-		];
+					),
+				),
+			),
+		);
 	}
 
 	/**
@@ -144,26 +144,26 @@ class Addon_Asim extends \GFAddOn {
 	 * @return array
 	 */
 	public function plugin_settings_fields(): array {
-		return [
-			[
-				'title'       => __( 'Asim Map Field Settings', 'asim-gravity-forms-map-addon' ),
+		return array(
+			array(
+				'title'       => __( 'Coco Map Field Settings', 'coco-gravity-forms-map-addon' ),
 				'description' => sprintf(
 					// translators: %1$s is the opening link tag, %2$s is the closing link tag.
 					__( 'Provide an improved user experience for your address fields by using geolocation to suggest address options as you type.  If you don\'t have a Google Places API key, you can %1$screate one here.%2$s', 'gravityformsgeolocation' ),
 					'<a href="https://developers.google.com/maps/documentation/places/web-service" target="_blank">',
 					'</a>',
 				),
-				'fields'      => [
-					[
-						'label'   => __( 'Google Places API Key', 'asim-gravity-forms-map-addon' ),
+				'fields'      => array(
+					array(
+						'label'   => __( 'Google Places API Key', 'coco-gravity-forms-map-addon' ),
 						'type'    => 'text',
 						'name'    => self::SETTING_GOOGLE_MAPS_API_KEY,
 						'tooltip' => __( 'Enter your Google Places API key.', 'gravityformsgeolocation' ),
 						'class'   => 'small',
-					],
-				],
-			],
-		];
+					),
+				),
+			),
+		);
 	}
 
 	/**
@@ -175,7 +175,7 @@ class Addon_Asim extends \GFAddOn {
 	 */
 	public function validate_plugin_settings( array $settings ): array {
 		if ( empty( $settings[ self::SETTING_GOOGLE_MAPS_API_KEY ] ) ) {
-			$this->add_error( self::SETTING_GOOGLE_MAPS_API_KEY, __( 'The Google Maps API key is required.', 'asim-gravity-forms-map-addon' ) );
+			$this->add_error( self::SETTING_GOOGLE_MAPS_API_KEY, __( 'The Google Maps API key is required.', 'coco-gravity-forms-map-addon' ) );
 		}
 		return $settings;
 	}

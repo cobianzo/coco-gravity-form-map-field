@@ -10,19 +10,19 @@
 
 npx wp-env run tests-cli wp db reset --yes
 npx wp-env run tests-cli wp core install --url="http://localhost:8891" --title="Mi Test Site WP" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com"
-npx wp-env run tests-cli -- wp plugin activate asim-gravity-form-map-field
+npx wp-env run tests-cli -- wp plugin activate coco-gravity-form-map-field
 
 ```
 
 - If, when running your test, you see `Failed to load resource: ...` in the results, it means that - sometimes the enviroment of wp-env gets crazy and tries to find the assets of the block in :
-http://localhost:8890/wp-content/themes/default/var/www/html/wp-content/plugins/asim-gravity-form-map-field/build/blocks/aside-related-article/style-index.css?ver=1.0
+http://localhost:8890/wp-content/themes/default/var/www/html/wp-content/plugins/coco-gravity-form-map-field/build/blocks/aside-related-article/style-index.css?ver=1.0
 	- I still don't know why it happens and how to fix it. I restart docker and push the env up again to fix it.
 
 - In my computer, sometimes I run out of memory creating dummy data by hand
 	- So I created a page that, when visited, creates everything (only if it was not created before) -  tests/class-create-dummy-data.php.
 
 ## Tips
-- asim-gravity-form-map-field.spec.js is the only test made so far.
+- coco-gravity-form-map-field.spec.js is the only test made so far.
 - We use the @wordpress/e2e-test-utils-playwright and we try to use its functions
 - We check the repo of gutenberg to learn about the valid functions: https://github.com/WordPress/gutenberg/tree/trunk/test/e2e/specs
 	- I suggest you download the repo and ur Cmd + F to find stuff

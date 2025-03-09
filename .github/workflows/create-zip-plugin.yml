@@ -101,7 +101,7 @@ jobs:
               # Verificar que el archivo ZIP existe
             - name: Verify plugin main file is there
               run: |
-                  MAIN_PLUGIN_FILE="dist/asim-gravity-form-map-field.php"
+                  MAIN_PLUGIN_FILE="dist/coco-gravity-form-map-field.php"
                   if [ ! -f "$MAIN_PLUGIN_FILE" ]; then
                     echo "Error: plugin file not found at dist/"
                     echo "Contents of dist directory:"
@@ -115,7 +115,7 @@ jobs:
             - name: Upload Plugin Directory for Distribution as an ZIP Artifact
               uses: actions/upload-artifact@v3
               with:
-                  name: asim-gravity-form-map-field
+                  name: coco-gravity-form-map-field
                   path: dist/
                   retention-days: 30
 

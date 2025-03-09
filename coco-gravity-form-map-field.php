@@ -1,21 +1,21 @@
 <?php // phpcs:ignore WordPress.Files.FileName.InvalidClassFileName
 /**
- * Plugin Name: Asim Gravity Forms Map Field
- * Description: A new field for Gravity Forms with the coordinates of the Gravity Form
- * Version: 3.1.1
+ * Plugin Name: Coco Gravity Forms Map Field
+ * Description: A new field for Gravity Forms with an interactive map where you can save a marker position or a polygon drawn by the user.
+ * Version: 4.0.1
  * Author: @cobianzo
  * Author URI: https://cobianzo.com
  * License: GPLv2 or later
  * Requires at least: 6.3
  * Requires PHP: 8.0
- * Text Domain: asim-gravity-form-map-field
+ * Text Domain: coco-gravity-form-map-field
  * Requires at least: 6.2
  * Requires PHP: 8.2
  *
- * @package asim-gravity-form-map-field
+ * @package coco-gravity-form-map-field
  */
 
-namespace Asim_Gravity_Form_Map_Field;
+namespace Coco_Gravity_Form_Map_Field;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -30,9 +30,9 @@ add_action(
 	}
 );
 
-add_action( 'gform_loaded', array( 'Asim_Gravity_Form_Map_Field\Addon_Asim_Bootstrap', 'load' ), 5 );
+add_action( 'gform_loaded', array( 'Coco_Gravity_Form_Map_Field\Addon_Coco_Bootstrap', 'load' ), 5 );
 
-class Addon_Asim_Bootstrap {
+class Addon_Coco_Bootstrap {
 
 	/**
 	 * Includes the necessary files for the add-on and starts the add-on.
@@ -49,10 +49,10 @@ class Addon_Asim_Bootstrap {
 
 		\GFForms::include_addon_framework();
 
-		require_once plugin_dir_path( __FILE__ ) . 'inc/class-addon-asim.php';
+		require_once plugin_dir_path( __FILE__ ) . 'inc/class-addon-coco.php';
 		require_once plugin_dir_path( __FILE__ ) . 'inc/render.php';
-		require_once plugin_dir_path( __FILE__ ) . 'inc/class-gf-field-asimmap.php';
+		require_once plugin_dir_path( __FILE__ ) . 'inc/class-gf-field-cocomap.php';
 		require_once plugin_dir_path( __FILE__ ) . 'inc/class-hooks.php';
-		Addon_Asim::get_instance();
+		Addon_Coco::get_instance();
 	}
 }

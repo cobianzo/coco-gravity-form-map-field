@@ -59,7 +59,7 @@ echo PHP_EOL . '✔️ Found also ' . "{$_wp_unit_vendor}/includes/functions.php
  * Manually load the plugin being tested.
  */
 function _manually_load_plugin() {
-	$plugin_path = dirname( dirname( __FILE__ ) ) . '/asim-gravity-form-map-field.php';
+	$plugin_path = dirname( dirname( __FILE__ ) ) . '/coco-gravity-form-map-field.php';
 	if ( ! file_exists( $plugin_path ) ) {
 		echo '⚠️ >>>>>>>>>>> ERROR Plugin not found at ' . $plugin_path . PHP_EOL;
 		return;

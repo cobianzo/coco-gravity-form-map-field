@@ -1,14 +1,14 @@
 <?php
 
-namespace Asim_Gravity_Form_Map_Field;
+namespace Coco_Gravity_Form_Map_Field;
 
 if ( ! class_exists( 'GF_Field' ) ) {
 	return;
 }
 
-class GF_Field_AsimMap extends \GF_Field {
+class GF_Field_CocoMap extends \GF_Field {
 
-	public $type = 'asim-map';
+	public $type = 'coco-map';
 
 	/**
 	 * Google Maps API key
@@ -25,7 +25,7 @@ class GF_Field_AsimMap extends \GF_Field {
 	 * @return string
 	 */
 	public function get_form_editor_field_title(): string {
-		return esc_attr__( 'Asim Map', 'asim-gravity-forms-map-addon' );
+		return esc_attr__( 'Coco Map', 'coco-gravity-forms-map-addon' );
 	}
 
 	/**
@@ -36,7 +36,7 @@ class GF_Field_AsimMap extends \GF_Field {
 	 * @return string
 	 */
 	public function get_form_editor_field_description(): string {
-		return esc_attr__( 'Stores information that should not be visible to the user but can be processed and saved with the user submission.', 'asim-gravity-forms-map-addon' );
+		return esc_attr__( 'Stores information that should not be visible to the user but can be processed and saved with the user submission.', 'coco-gravity-forms-map-addon' );
 	}
 
 	/**
@@ -75,9 +75,11 @@ class GF_Field_AsimMap extends \GF_Field {
 			'prepopulate_field_setting',
 			'label_setting',
 			'default_value_setting',
+			'admin_label_setting',
 			'rules_setting',
 			'map_type_setting',
 			'autocomplete_types_setting',
+			'interaction_type_setting',
 		);
 	}
 
@@ -92,17 +94,17 @@ class GF_Field_AsimMap extends \GF_Field {
 	 */
 	public function get_field_input( $form, $value = '', $entry = null ): string {
 
-		if ( ! wp_script_is( 'asim-map-js', 'enqueued' ) ) {
-			$asset_file = include dirname( plugin_dir_path( __FILE__ ) ) . '/build/asim-gravity-form-map-field.asset.php';
-			wp_enqueue_script( 'asim-map-js', dirname( plugin_dir_url( __FILE__ ) ) . '/build/asim-gravity-form-map-field.js', $asset_file['dependencies'], $asset_file['version'], false );
+		if ( ! wp_script_is( 'coco-map-js', 'enqueued' ) ) {
+			$asset_file = include dirname( plugin_dir_path( __FILE__ ) ) . '/build/coco-gravity-form-map-field.asset.php';
+			wp_enqueue_script( 'coco-map-js', dirname( plugin_dir_url( __FILE__ ) ) . '/build/coco-gravity-form-map-field.js', $asset_file['dependencies'], $asset_file['version'], false );
 		}
 
-		$addon = Addon_Asim::get_instance();
-		if ( ! strlen( $this->google_maps_api_key ) ) {
-			$this->google_maps_api_key = $addon->get_plugin_setting( Addon_Asim::SETTING_GOOGLE_MAPS_API_KEY );
+		$addon = Addon_Coco::get_instance();
+		if ( empty( $this->google_maps_api_key ) ) {
+			$this->google_maps_api_key = $addon->get_plugin_setting( Addon_Coco::SETTING_GOOGLE_MAPS_API_KEY );
 		}
 
-		$input = asim_render_map_field( $this, $form, $value );
+		$input = coco_render_map_field( $this, $form, $value );
 
 		return sprintf( "<div class='ginput_container ginput_container_text'>%s</div>", $input );
 	}
@@ -140,47 +142,30 @@ class GF_Field_AsimMap extends \GF_Field {
 	}
 
 	/**
-	 * Validates that a string represents valid geographic coordinates.
+	 * Check if an entry is a marker or a polygon
 	 *
-	 * The expected format is "latitude,longitude" where:
-	 * - latitude must be between -90 and 90
-	 * - longitude must be between -180 and 180
+	 * An entry is a marker if it contains a single valid coordinate.
+	 * An entry is a polygon if it contains multiple valid coordinates separated by spaces.
 	 *
-	 * @param string $value The value to validate
-	 * @return bool True if the value is valid coordinates, false otherwise
+	 * @param string $entry_value The value of the entry
+	 * @return string|bool One of 'marker' or 'polygon' if the entry is valid, false otherwise
 	 */
-	public function validate_coordinates( string $value ): bool {
-		// If the value is empty, it is valid (the field might be optional)
-		if ( empty( $value ) ) {
-			return true;
-		}
+	public static function entry_is_marker_or_polygon( string $entry_value ): string|bool {
 
-		// Verify the basic format (two numbers separated by a comma)
-		if ( ! preg_match( '/^-?\d+\.?\d*,-?\d+\.?\d*$/', $value ) ) {
-			return false;
-		}
-
-		// Split the coordinates
-		$coordinates = explode( ',', $value );
-
-		if ( count( $coordinates ) !== 2 ) {
-			return false;
-		}
-
-		$lat = (float) $coordinates[0];
-		$lng = (float) $coordinates[1];
-
-		// Validate the range
-		if ( $lat < -90 || $lat > 90 ) {
-			return false;
-		}
-
-		if ( $lng < -180 || $lng > 180 ) {
-			return false;
+		$entry_value = trim( $entry_value );
+		$coordinates = explode( ' ', $entry_value );
+		if ( count( $coordinates ) === 1 ) {
+			return Validations::validate_coordinates( $entry_value ) ? 'marker' : false;
+		} else {
+			$return = true;
+			foreach ( $coordinates as $coordinate ) {
+				$return = $return && Validations::validate_coordinates( $coordinate );
+			}
+			return $return ? 'polygon' : false;
 		}
 
 		return true;
 	}
 }
 
-\GF_Fields::register( new GF_Field_AsimMap() );
+\GF_Fields::register( new GF_Field_CocoMap() );
