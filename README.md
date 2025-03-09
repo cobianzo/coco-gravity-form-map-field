@@ -100,7 +100,7 @@ phpcs, phpcbf, eslint, stylelint, prettier
 
 # PHPUNIT
 
-- read `tests/readme-how-to-text.md`
+- read `tests/readme-how-to-test.md`
 
 it works, I copied it from the create-block-theme plugin, with some adaptations because this is a theme not a plugin. The file `bin/install-wp-tests.sh` is not used.
 

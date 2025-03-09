@@ -85,7 +85,7 @@ class Addon_Coco extends \GFAddOn {
 		parent::init();
 
 		// Register the new field type.
-		add_filter( 'gform_field_types', [ $this, 'register_custom_field' ] );
+		add_filter( 'gform_field_types', array( $this, 'register_custom_field' ) );
 	}
 
 	/**
@@ -122,18 +122,18 @@ class Addon_Coco extends \GFAddOn {
 	 * @return array
 	 */
 	public function form_settings_fields( $form ): array {
-		return [
-			[
+		return array(
+			array(
 				'title'  => __( 'Form Submission Geolocation Settings', 'coco-gravity-forms-map-addon' ),
-				'fields' => [
-					[
+				'fields' => array(
+					array(
 						'label' => __( 'Disable Location Collection for This Form', 'coco-gravity-forms-map-addon' ),
 						'type'  => 'toggle',
 						'name'  => self::SETTING_GOOGLE_MAPS_API_KEY,
-					],
-				],
-			],
-		];
+					),
+				),
+			),
+		);
 	}
 
 	/**
@@ -144,8 +144,8 @@ class Addon_Coco extends \GFAddOn {
 	 * @return array
 	 */
 	public function plugin_settings_fields(): array {
-		return [
-			[
+		return array(
+			array(
 				'title'       => __( 'Coco Map Field Settings', 'coco-gravity-forms-map-addon' ),
 				'description' => sprintf(
 					// translators: %1$s is the opening link tag, %2$s is the closing link tag.
@@ -153,17 +153,17 @@ class Addon_Coco extends \GFAddOn {
 					'<a href="https://developers.google.com/maps/documentation/places/web-service" target="_blank">',
 					'</a>',
 				),
-				'fields'      => [
-					[
+				'fields'      => array(
+					array(
 						'label'   => __( 'Google Places API Key', 'coco-gravity-forms-map-addon' ),
 						'type'    => 'text',
 						'name'    => self::SETTING_GOOGLE_MAPS_API_KEY,
 						'tooltip' => __( 'Enter your Google Places API key.', 'gravityformsgeolocation' ),
 						'class'   => 'small',
-					],
-				],
-			],
-		];
+					),
+				),
+			),
+		);
 	}
 
 	/**

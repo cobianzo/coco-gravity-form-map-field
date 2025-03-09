@@ -1,43 +1,36 @@
 <?xml version="1.0"?>
 
-<ruleset name="Theme Standard- My WordPress VIP Rules">
-	<description>Custom WordPress VIP coding standards configuration</description>
+<ruleset name="Theme Standard - My WordPress VIP Rules">
+    <description>Custom WordPress VIP coding standards configuration</description>
 
-	<!-- Optional: Include additional standards -->
-	<rule ref="WordPress-Extra"/>
-	<!-- Include the main WordPress VIP coding standard -->
-	<rule ref="WordPress-VIP-Go"/>
+    <!-- Include additional standards -->
+    <rule ref="WordPress-Extra"/>
+    <rule ref="WordPress-VIP-Go"/>
 
-	<!-- Exclude certain rules if needed -->
-	<exclude name="WordPress.WhiteSpace.PrecisionAlignment" />
-	<exclude name="Generic.Commenting.Todo" />
-	<exclude name="Generic.Arrays.DisallowLongArraySyntax"/>
+    <!-- Exclude unnecessary rules -->
+    <exclude name="WordPress.WhiteSpace.PrecisionAlignment"/>
+    <exclude name="Generic.Commenting.Todo"/>
+    <exclude name="Generic.Arrays.DisallowLongArraySyntax"/>
 
-	<rule ref="Squiz.PHP.EmbeddedPhp">
-  	<exclude name="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen"/>
-  	<exclude name="Squiz.PHP.EmbeddedPhp.ContentAfterEnd"/>
-	</rule>
-  <!-- Excluir reglas específicas -->
+    <!-- Adjust embedded PHP rules -->
+    <rule ref="Squiz.PHP.EmbeddedPhp">
+        <exclude name="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen"/>
+        <exclude name="Squiz.PHP.EmbeddedPhp.ContentAfterEnd"/>
+    </rule>
 
+    <!-- Adjust function signature rules -->
+    <rule ref="PEAR.Functions.FunctionCallSignature">
+        <exclude name="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket"/>
+        <exclude name="PEAR.Functions.FunctionCallSignature.MultipleArguments"/>
+        <exclude name="PEAR.Functions.FunctionCallSignature.CloseBracketLine"/>
+    </rule>
 
-	<!-- Excluir la regla específica -->
-	<rule ref="PEAR.Functions.FunctionCallSignature">
-		<exclude name="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket"/>
-		<exclude name="PEAR.Functions.FunctionCallSignature.MultipleArguments"/>
-		<exclude name="PEAR.Functions.FunctionCallSignature.CloseBracketLine"/>
-	</rule>
+    <!-- Other specific exclusions -->
+    <exclude name="PSR12.Functions.ReturnTypeDeclaration.SpaceBeforeColon"/>
 
-	<exclude name="PSR12.Functions.ReturnTypeDeclaration.SpaceBeforeColon"/>
-
-	<!-- Allow arrays with [] -->
-	<!-- <rule ref="Universal.Arrays.DisallowShortArraySyntax">
-		<exclude name="Universal.Arrays.DisallowShortArraySyntax.Found"/>
-	</rule> -->
-
-	<!-- Ignore specific files or folders -->
-	<exclude-pattern>*/build/*</exclude-pattern>
-	<exclude-pattern>*/node_modules/*</exclude-pattern>
-	<exclude-pattern>*/vendor/*</exclude-pattern>
-	<exclude-pattern>*/tests/*</exclude-pattern>
-	<exclude-pattern>*/plugins/*</exclude-pattern>
+    <!-- Ignore specific files or folders -->
+    <exclude-pattern>*/build/*</exclude-pattern>
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/tests/*</exclude-pattern>
 </ruleset>

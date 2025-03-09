@@ -1,5 +1,4 @@
-<?php
-
+<?php // phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase, WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase, WordPress.NamingConventions.ValidVariableName.InterpolatedVariableNotSnakeCase
 namespace Coco_Gravity_Form_Map_Field;
 
 /**
@@ -18,7 +17,7 @@ class Hooks {
 	public static function init() {
 		add_action( 'gform_field_standard_settings', array( __CLASS__, 'field_sidebar_options' ), 10, 2 );
 		add_filter( 'gform_tooltips', array( __CLASS__, 'tooltips' ), 10, 1 );
-		add_filter( 'gform_entry_field_value',   array( __CLASS__, 'show_link_map_field_admin' ), 10, 2 );
+		add_filter( 'gform_entry_field_value', array( __CLASS__, 'show_link_map_field_admin' ), 10, 2 );
 	}
 
 	/**
@@ -117,8 +116,8 @@ class Hooks {
 	 *
 	 * @return string The HTML to show the link to the map image.
 	 */
-	public static function show_link_map_field_admin( $value, $field ) : string {
-		if ( $field->inputType === 'coco-map' ) {
+	public static function show_link_map_field_admin( $value, $field ): string {
+		if ( 'coco-map' === $field->inputType ) {
 
 			$addon  = Addon_Coco::get_instance();
 			$apiKey = $addon->get_plugin_setting( Addon_Coco::SETTING_GOOGLE_MAPS_API_KEY );
@@ -136,9 +135,9 @@ class Hooks {
 				$polygonColor = 'ff0000ff'; // Rojo con opacidad FF
 
 				// Construir la URL de la imagen
-				$map_img_url = "https://maps.googleapis.com/maps/api/staticmap?" .
-									"size=600x400&" . // Tamaño de la imagen
-									"maptype=roadmap&" . // Tipo de mapa (roadmap, satellite, hybrid, terrain)
+				$map_img_url = 'https://maps.googleapis.com/maps/api/staticmap?' .
+									'size=600x400&' . // Tamaño de la imagen
+									'maptype=roadmap&' . // Tipo de mapa (roadmap, satellite, hybrid, terrain)
 									"path=color:0x$polygonColor|weight:3|$polygonPath&" . // Polígono con color y grosor
 									"key=$apiKey";
 
@@ -146,13 +145,13 @@ class Hooks {
 				return "<img src='$map_img_url' />";
 			} elseif ( 'marker' === GF_Field_CocoMap::entry_is_marker_or_polygon( $value ) ) {
 
-				$map_img_url = "https://maps.googleapis.com/maps/api/staticmap?" .
-          "center={$value}&" . // Centrar el mapa en el marcador
-          "zoom=14&" . // Nivel de zoom (ajústalo según necesites)
-          "size=600x400&" . // Tamaño del mapa en píxeles
-          "maptype=roadmap&" . // Tipo de mapa (roadmap, satellite, hybrid, terrain)
-          "markers=color:red|label:A|{$value}&" . // Marcador rojo con la etiqueta 'A'
-          "key={$apiKey}";
+				$map_img_url = 'https://maps.googleapis.com/maps/api/staticmap?' .
+				"center={$value}&" . // Centrar el mapa en el marcador
+				'zoom=14&' . // Nivel de zoom (ajústalo según necesites)
+				'size=600x400&' . // Tamaño del mapa en píxeles
+				'maptype=roadmap&' . // Tipo de mapa (roadmap, satellite, hybrid, terrain)
+				"markers=color:red|label:A|{$value}&" . // Marcador rojo con la etiqueta 'A'
+				"key={$apiKey}";
 
 				$gmaps_link = "https://www.google.com/maps?q={$value}";
 
@@ -169,3 +168,5 @@ class Hooks {
 }
 
 Hooks::init();
+
+// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase, WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase, WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase, WordPress.NamingConventions.ValidVariableName.InterpolatedVariableNotSnakeCase

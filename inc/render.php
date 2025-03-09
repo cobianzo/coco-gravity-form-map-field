@@ -43,9 +43,9 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 
 
 	// We can, with hooks, setup the default value of the map (coords and zoom) if we want to:
-	$default_zoom    = apply_filters( 'coco_gravity_form_map_field_default_zoom', null, $form );
-	$default_lat     = apply_filters( 'coco_gravity_form_map_field_default_lat', null, $form );
-	$default_lng     = apply_filters( 'coco_gravity_form_map_field_default_lng', null, $form );
+	$default_zoom = apply_filters( 'coco_gravity_form_map_field_default_zoom', null, $form );
+	$default_lat  = apply_filters( 'coco_gravity_form_map_field_default_lat', null, $form );
+	$default_lng  = apply_filters( 'coco_gravity_form_map_field_default_lng', null, $form );
 
 	// there are two types of values, dingle coordinates or set of coordinates to defina a polygon
 
@@ -91,7 +91,7 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 
 	<?php
 	// We don't continue if we are in a paginated form and this field is not shown in the current page
-	$current_page = GFFormDisplay::get_current_page($form['id']);
+	$current_page = GFFormDisplay::get_current_page( $form['id'] );
 	if ( $instance->pageNumber !== $current_page ) {
 		return ob_get_clean();
 	}
@@ -168,7 +168,7 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 
 				<?php
 				if ( 'marker' === $interaction_type ) :
-				?>
+					?>
 					// Add initial marker if the coordinates are valid.
 					if (coordinatesInput) {
 						window.addMarker('<?php echo esc_js( $input_id ); ?>', coordinatesInput, cocoVars.cocoMarkerIcon);
@@ -185,7 +185,7 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 
 				<?php
 				if ( 'polygon' === $interaction_type ) :
-				?>
+					?>
 
 					<?php
 					// @TODO: validate input value to polygon or remove the input value

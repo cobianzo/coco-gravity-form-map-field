@@ -100,7 +100,7 @@ class GF_Field_CocoMap extends \GF_Field {
 		}
 
 		$addon = Addon_Coco::get_instance();
-		if ( ! strlen( $this->google_maps_api_key ) ) {
+		if ( empty( $this->google_maps_api_key ) ) {
 			$this->google_maps_api_key = $addon->get_plugin_setting( Addon_Coco::SETTING_GOOGLE_MAPS_API_KEY );
 		}
 
@@ -150,7 +150,7 @@ class GF_Field_CocoMap extends \GF_Field {
 	 * @param string $entry_value The value of the entry
 	 * @return string|bool One of 'marker' or 'polygon' if the entry is valid, false otherwise
 	 */
-	static public function entry_is_marker_or_polygon( string $entry_value ) : string | bool {
+	public static function entry_is_marker_or_polygon( string $entry_value ): string|bool {
 
 		$entry_value = trim( $entry_value );
 		$coordinates = explode( ' ', $entry_value );
@@ -166,7 +166,6 @@ class GF_Field_CocoMap extends \GF_Field {
 
 		return true;
 	}
-
 }
 
 \GF_Fields::register( new GF_Field_CocoMap() );

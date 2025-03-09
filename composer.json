@@ -46,7 +46,8 @@
 		"yoast/phpunit-polyfills": "^1.1",
 		"brain/monkey": "^2.6",
 		"spatie/phpunit-watcher": "^1.23",
-		"sempro/phpunit-pretty-print": "^1.4"
+		"sempro/phpunit-pretty-print": "^1.4",
+		"phpcsstandards/phpcsutils": "^1.0"
 	},
 	"scripts": {
 		"lint": "./vendor/bin/phpcs -s --standard=phpcs.xml.dist --extensions=php",
