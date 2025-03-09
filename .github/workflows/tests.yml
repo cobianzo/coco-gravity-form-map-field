@@ -45,7 +45,7 @@ jobs:
                   wp core install --url="http://localhost" --title="CI Test" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com" --allow-root
 
             - name: Check out repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   path: wp-content/plugins/coco-gravity-form-map-field
 
