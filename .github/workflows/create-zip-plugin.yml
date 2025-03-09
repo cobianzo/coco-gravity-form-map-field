@@ -39,7 +39,7 @@ jobs:
         steps:
             # 1. Chequear el código del repositorio
             - name: Checkout code
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             # 2. Configurar Node.js
             - name: Setup Node.js
@@ -113,7 +113,7 @@ jobs:
 
             # 7. Subir el ZIP generado como artefacto
             - name: Upload Plugin Directory for Distribution as an ZIP Artifact
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: coco-gravity-form-map-field
                   path: dist/
