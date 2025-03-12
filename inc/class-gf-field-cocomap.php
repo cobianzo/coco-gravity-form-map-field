@@ -18,6 +18,12 @@ class GF_Field_CocoMap extends \GF_Field {
 	public $google_maps_api_key = '';
 
 	/**
+	 * The id of the map created in the google console for the project
+	 *
+	 * @var string
+	 */
+	public $google_map_id = '';
+	/**
 	 * Returns the field's form editor title.
 	 *
 	 * @since 2.5
@@ -99,9 +105,13 @@ class GF_Field_CocoMap extends \GF_Field {
 			wp_enqueue_script( 'coco-map-js', dirname( plugin_dir_url( __FILE__ ) ) . '/build/coco-gravity-form-map-field.js', $asset_file['dependencies'], $asset_file['version'], false );
 		}
 
+		// we will pass the API key to the map field in the render.php
 		$addon = Addon_Coco::get_instance();
 		if ( empty( $this->google_maps_api_key ) ) {
 			$this->google_maps_api_key = $addon->get_plugin_setting( Addon_Coco::SETTING_GOOGLE_MAPS_API_KEY );
+		}
+		if ( empty( $this->google_map_id ) ) {
+			$this->google_map_id = $addon->get_plugin_setting( Addon_Coco::SETTING_GOOGLE_MAP_ID_KEY );
 		}
 
 		$input = coco_render_map_field( $this, $form, $value );

@@ -14,7 +14,7 @@ if ( ! class_exists( 'GFAddOn' ) ) {
 
 class Addon_Coco extends \GFAddOn {
 
-	protected $_version                  = '4.0.2';
+	protected $_version                  = '5.0.0';
 	protected $_min_gravityforms_version = '2.5';
 
 	/**
@@ -65,6 +65,13 @@ class Addon_Coco extends \GFAddOn {
 	 * @var string
 	 */
 	const SETTING_GOOGLE_MAPS_API_KEY = 'google_maps_api_key';
+
+	/**
+	 * The google map Id is needed as well, since we use the Advanced Marker API
+	 *
+	 * @var string
+	 */
+	const SETTING_GOOGLE_MAP_ID_KEY = 'google_map_id_key';
 
 	/**
 	 * Returns an instance of the Addon_Coco class.
@@ -152,6 +159,11 @@ class Addon_Coco extends \GFAddOn {
 					__( 'Provide an improved user experience for your address fields by using geolocation to suggest address options as you type.  If you don\'t have a Google Places API key, you can %1$screate one here.%2$s', 'gravityformsgeolocation' ),
 					'<a href="https://developers.google.com/maps/documentation/places/web-service" target="_blank">',
 					'</a>',
+				) . '<br/> ' . sprintf(
+					// translators: %1$s is the opening link tag, %2$s is the closing link tag.
+					__( 'Provide the Map ID created in the Google Maps Console. If you don\'t have a Google Map ID, you can %1$screate one here.%2$s', 'gravityformsgeolocation' ),
+					'<a href="https://console.cloud.google.com/" target="_blank">',
+					'</a>'
 				),
 				'fields'      => array(
 					array(
@@ -159,6 +171,13 @@ class Addon_Coco extends \GFAddOn {
 						'type'    => 'text',
 						'name'    => self::SETTING_GOOGLE_MAPS_API_KEY,
 						'tooltip' => __( 'Enter your Google Places API key.', 'gravityformsgeolocation' ),
+						'class'   => 'small',
+					),
+					array(
+						'label'   => __( 'Google Map ID', 'coco-gravity-forms-map-addon' ),
+						'type'    => 'text',
+						'name'    => self::SETTING_GOOGLE_MAP_ID_KEY,
+						'tooltip' => __( 'Enter your Google Map ID - https://console.cloud.google.com/.', 'gravityformsgeolocation' ),
 						'class'   => 'small',
 					),
 				),

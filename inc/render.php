@@ -143,6 +143,7 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 					zoom: <?php
 						echo $default_zoom ?? ' coordinatesInput ? 6 : 1 ';
 					?>,
+					mapId: '<?php echo esc_js( $instance->google_map_id ); ?>',
 				});
 				map.setTilt(0); // deactivate the view at 45º when zoom is big and view is satellite.
 				cocoMaps['<?php echo esc_js( $input_id ); ?>'].map = map;
@@ -213,7 +214,7 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 				echo esc_js( $instance->google_maps_api_key );
 			?>&loading=async&callback=initAllMaps';
 			if (cocoVars.placesAPILoaded) {
-				script.src += '&libraries=places,drawing'; // TODO:?
+				script.src += '&libraries=places,drawing,marker'; // TODO:?
 			}
 			script.async = true;
 			script.loading = 'async';

@@ -1,6 +1,6 @@
 {
 	"name": "coco/coco-gravity-form-map-field",
-	"version": "4.0.2",
+	"version": "5.0.0",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
 	"description": "I have developed an addon in WordPress for the plugin Gravity Forms. It adds a new field for Google Maps",
