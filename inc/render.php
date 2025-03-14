@@ -151,7 +151,7 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 
 				// Hook in JS to exectute code after the map is ready
 				let tries = 0;
-				const maxTries = 10;
+				const maxTries = 20; // in small connections we might need 20 tries
 				function checkIfMapIsReady(callback) {
 					if (map.getBounds()) callback();
 					else if (tries++ < maxTries) setTimeout(() => checkIfMapIsReady(callback), 500);

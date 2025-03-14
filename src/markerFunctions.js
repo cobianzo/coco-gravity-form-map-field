@@ -42,7 +42,7 @@ async function loadMarkerLibrary() {
 }
 
 // Función para pintar un marker usando AdvancedMarkerElement
-window.paintAMarker = async function (map, position, markerIcon, extraOptions = {}) {
+window.paintAMarker = async function (map, position, markerIcon = 'marker_yellow', extraOptions = {}) {
 	try {
 		// Cargar la librería (solo se cargará una vez)
 		const { AdvancedMarkerElement } = await loadMarkerLibrary();
