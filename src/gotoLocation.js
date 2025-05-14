@@ -19,7 +19,7 @@ window.gotoLocationButton = function (inputName) {
 	centerControlButton.innerHTML =
 		'<img style="filter:invert(1);width:24px;" width="24" height="24" src="' +
 		cocoVars.cocoLocationIcon +
-		'}" />';
+		'" />';
 	centerControlButton.classList.add('custom-map-control-button');
 	centerControlDiv.appendChild(centerControlButton);
 

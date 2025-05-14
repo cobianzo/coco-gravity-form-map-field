@@ -4,7 +4,7 @@ wp-env / wp-scripts (experimental) / phpunit / playwright / linting (phpcs, phps
 
 ## Dependencies
 
-- Gravit Forms
+- Gravit Forms - it must be installed already under the folder /plugins
 
 # Start to work:
 
