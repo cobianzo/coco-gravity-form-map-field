@@ -1,6 +1,6 @@
 # Coco Gravity Forms Map Field
 
-Stable tag: 5.0.0
+Stable tag: 5.0.1
 Tags: Gravity Forms, Form, Field, Google Maps
 Tested up to: 6.7
 License: GPLv2 or later
