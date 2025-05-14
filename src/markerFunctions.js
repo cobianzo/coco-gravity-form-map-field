@@ -42,7 +42,16 @@ async function loadMarkerLibrary() {
 }
 
 // Función para pintar un marker usando AdvancedMarkerElement
-window.paintAMarker = async function (map, position, markerIcon, extraOptions = {}) {
+// Usage: window.paintAMarker(null, {lat: 45.46713736120178, lng: 8.611146808319198} ) );
+window.paintAMarker = async function (map = null, position, markerIcon = 'location.svg', extraOptions = {}) {
+	// validation and sanitation
+	if (!map) {
+		map = window.getFirstGoogleMapInPage();
+	}
+	// Convert position to {lat, lng} if it's an array
+	if (Array.isArray(position) && position.length === 2) {
+		position = { lat: position[0], lng: position[1] };
+	}
 	try {
 		// Cargar la librería (solo se cargará una vez)
 		const { AdvancedMarkerElement } = await loadMarkerLibrary();
@@ -51,8 +60,7 @@ window.paintAMarker = async function (map, position, markerIcon, extraOptions = 
 		const icon =
 			markerIcon.includes('http') || markerIcon.includes('wp-content')
 				? markerIcon
-				: `https://maps.google.com/mapfiles/ms/icons/${markerIcon}.png`;
-
+				: `${window.cocoVars.cocoAddOnAssetsDir}${markerIcon}`;
 		// Crear el marker con AdvancedMarkerElement
 		const marker = new AdvancedMarkerElement({
 			map, // El mapa donde se colocará el marker

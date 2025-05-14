@@ -47,7 +47,9 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 	$default_lat  = apply_filters( 'coco_gravity_form_map_field_default_lat', null, $form );
 	$default_lng  = apply_filters( 'coco_gravity_form_map_field_default_lng', null, $form );
 
-	// there are two types of values, dingle coordinates or set of coordinates to defina a polygon
+	$value = apply_filters( 'coco_gravity_form_map_field_value', $value, $instance, $form );
+
+	// there are two types of values, single coordinates or set of coordinates to define a polygon
 
 	ob_start();
 
@@ -101,6 +103,7 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 		window.cocoVars = window.cocoVars || null;
 		if ( null === window.cocoVars ) {
 			window.cocoVars = {};
+			cocoVars.cocoAddOnAssetsDir = <?php echo wp_json_encode( dirname( plugin_dir_url( __FILE__ ) ) . '/assets/' ); ?>;
 			cocoVars.cocoLocationIcon = <?php echo wp_json_encode( dirname( plugin_dir_url( __FILE__ ) ) . '/assets/location.svg' ); ?>;
 			cocoVars.cocoClearPolygonIcon = <?php echo wp_json_encode( dirname( plugin_dir_url( __FILE__ ) ) . '/assets/clear-polygon.webp' ); ?>;
 			cocoVars.cocoMarkerIcon = <?php echo wp_json_encode( dirname( plugin_dir_url( __FILE__ ) ) . '/assets/coco-marker.png' ); ?>;
@@ -121,7 +124,10 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 			initMap: () => {
 				const input = document.getElementById('<?php echo esc_js( $input_id ); ?>');
 				cocoMaps['<?php echo esc_js( $input_id ); ?>'].inputElement = input;
-				const coordinatesInput = window.coordinatesFromInput(input); // {lat, lng} or null
+				let coordinatesInput = null;
+				<?php if ( ! $default_lat && ! $default_lng ) : ?>
+					coordinatesInput = window.coordinatesFromInput(input); // {lat, lng} or null
+				<?php endif; ?>
 				const coordinatesInitMap = coordinatesInput || {
 					lat: <?php echo $default_lat ?? 41.77444381030458; ?>,
 					lng: <?php echo $default_lng ?? 9.697649902343759; ?>
@@ -151,7 +157,7 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 
 				// Hook in JS to exectute code after the map is ready
 				let tries = 0;
-				const maxTries = 10;
+				const maxTries = 20; // in small connections we might need 20 tries
 				function checkIfMapIsReady(callback) {
 					if (map.getBounds()) callback();
 					else if (tries++ < maxTries) setTimeout(() => checkIfMapIsReady(callback), 500);
@@ -181,6 +187,10 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 						const inputElement = document.getElementById('<?php echo esc_js( $input_id ); ?>');
 						inputElement.value = `${clickedCoordinates.lat()},${clickedCoordinates.lng()}`;
 						window.addMarker('<?php echo esc_js( $input_id ); ?>', clickedCoordinates, cocoVars.cocoMarkerIcon);
+
+						// allows an external script to know that the input has changed and apply events in addEventListener("input"
+						inputElement.dispatchEvent(new Event("input", { bubbles: true }));
+
 					});
 				<?php endif; ?>
 

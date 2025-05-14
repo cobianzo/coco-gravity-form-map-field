@@ -1,3 +1,5 @@
+/* eslint-disable jsdoc/require-returns-type */
+
 // The loading of the maps happens after this script.
 // Here we add the helpers functions used and binded to the map
 // created in render.php
@@ -45,3 +47,19 @@ window.centerMapAtInputCoordinates = (input, map) => {
 		alert('Please use format "lat,lng".');
 	}
 };
+
+
+/**
+ * eslint-disable jsdoc/require-returns-type
+ * Returns the first Google Map found in the page or null if none is found.
+ *
+ * @return {window.google.maps.Map|null} The first map found in page.
+ */
+window.getFirstGoogleMapInPage = () => {
+	for (const key in window) {
+		if (window[key] instanceof window.google.maps.Map) {
+			return window[key];
+		}
+	}
+	return null;
+}
