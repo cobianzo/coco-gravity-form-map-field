@@ -17,7 +17,7 @@ window.initPlacesAutocomplete = function (map, placeholder = 'Search place', aut
 	searchContainer.style.paddingTop = '10px';
 	searchContainer.style.zIndex = '1000';
 	searchContainer.style.width = 'calc( 100% - 250px )';
-	searchContainer.style.maxWidth = '200px';
+	searchContainer.style.maxWidth = '300px';
 
 	const input = document.createElement('input');
 	input.setAttribute('type', 'text');
