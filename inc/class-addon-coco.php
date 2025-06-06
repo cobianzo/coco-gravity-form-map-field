@@ -24,7 +24,7 @@ if ( ! class_exists( 'GFAddOn' ) ) {
  */
 class Addon_Coco extends \GFAddOn {
 
-	protected $_version                  = '5.0.2';
+	protected $_version                  = '5.0.3';
 	protected $_min_gravityforms_version = '2.5';
 
 	/**
