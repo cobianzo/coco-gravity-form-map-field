@@ -1,6 +1,12 @@
 {
 	"core": null,
-	"plugins": ["./plugins/gravityforms", "./plugins/gravityformsgeolocation", "."],
+	"plugins": [
+		"./plugins/gravityforms",
+		"./plugins/gravityformsgeolocation",
+		"https://downloads.wordpress.org/plugin/loco-translate.latest-stable.zip",
+    "https://downloads.wordpress.org/plugin/wordpress-importer.latest-stable.zip",
+		"."
+	],
 	"config": {
 		"ALTERNATE_WP_CRON": true,
 		"PERMALINK_STRUCTURE": "/%postname%/",

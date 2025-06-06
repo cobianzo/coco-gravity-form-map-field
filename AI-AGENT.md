@@ -11,7 +11,21 @@ The addon creates a
 		- select a point in the map, marking it up with a marker. When selecting the point,
 	the input will be filled up with latitude,logitude (comma separated).
 		- create a polygon in the map. As the polygon is being drawn, the corrdinates of the vertex are saved in the readonly input.
-		
+
+Overview of folders:
+1. Root project files:
+	 Main plugin file: coco-gravity-form-map-field.php
+	 Configuration files: composer.json, package.json, webpack.config.js, etc.
+	 Documentation: README.md, TODO.md, AI-AGENT.md
+2. Key directories:
+	 /inc/: Contains PHP classes and core functionality
+	 /src/: JavaScript source files
+	 /dist/: zip file for the exported plugin
+	 /assets/: Media files
+	 /tests/: Testing suite including PHPUnit and Playwright tests
+	 /bin/: Build and utility scripts
+	 /.github/workflows/: CI/CD configuration
+
 This is the structure of the plugin.
 
 ├── coco-gravity-form-map-field.php

@@ -15,6 +15,8 @@ npm run start
 ```
 
 Start environment with
+`wp-env start` or `wp-env start --xdebug`
+with wp-eng installed globally. Once the containers are created, the next times you can use
 ```sh
 npm run up (or > npx wp-env start)
 ```

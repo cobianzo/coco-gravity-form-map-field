@@ -12,6 +12,16 @@ if ( ! class_exists( 'GFAddOn' ) ) {
 	return;
 }
 
+/**
+ * Main addon class for the Coco Gravity Forms Map Field plugin.
+ *
+ * This class extends the GFAddOn base class to add Google Maps functionality
+ * to Gravity Forms. It handles:
+ * - Registration of the custom map field type
+ * - Plugin and form settings for Google Maps API configuration
+ * - Google Maps API key and Map ID management
+ * - Form-specific geolocation settings
+ */
 class Addon_Coco extends \GFAddOn {
 
 	protected $_version                  = '5.0.2';

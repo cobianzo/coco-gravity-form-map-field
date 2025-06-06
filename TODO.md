@@ -1,6 +1,10 @@
 
 - ✅ Mostrar una preview del poligono/marker en la lista de entries
 - Anadir UNDO al crear el poligono
+- Check, in render.php, where I load the google maps API, ig that API has not been already loaded before.
+If it's loaded twise we receive an error. If it has been alreayd loaded, we still need to ensure that the 
+libraries places,drawing,marker are loaded too.
+- Translate texts.
 
 # TESTS
 

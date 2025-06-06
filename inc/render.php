@@ -66,7 +66,7 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 
 	// start the html elements:
 
-	// a fil
+	// a hook before in case we want to add a notice or something.
 	do_action( 'coco_gravity_form_map_field_previous_to_field', $instance, $form, $value );
 
 	?>
@@ -219,6 +219,8 @@ function coco_render_map_field( object $instance, array $form, string $value ): 
 		// ---------------------------------------------------------------
 		// Call to GoogleMapsAPI
 		window.loadGoogleMapsAPI = function() {
+			// @TODO: I might happen that the google maps API js has been already loaded.
+			// In that case, we'd see an error message in the console, but I'm not sure if the adddon breaks.
 			const script = document.createElement('script');
 			script.src = 'https://maps.googleapis.com/maps/api/js?key=<?php
 				echo esc_js( $instance->google_maps_api_key );

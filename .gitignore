@@ -38,6 +38,4 @@ logs
 /test-results
 .phpunit.result.cache
 .phpunit.result.cache
-/plugins
-/plugins/gravityforms
 /dist
