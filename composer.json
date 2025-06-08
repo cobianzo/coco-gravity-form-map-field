@@ -1,6 +1,6 @@
 {
 	"name": "coco/coco-gravity-form-map-field",
-	"version": "5.0.3",
+	"version": "5.0.4",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
 	"description": "I have developed an addon in WordPress for the plugin Gravity Forms. It adds a new field for Google Maps",
@@ -35,7 +35,7 @@
 		"php-tmdb/api": "^4",
 		"cocur/slugify": "^4.3",
 		"vlucas/phpdotenv": "^5.5",
-		"squizlabs/php_codesniffer": "^3.11",
+		"squizlabs/php_codesniffer": "^3.9",
 		"wp-coding-standards/wpcs": "^3.1",
 		"automattic/vipwpcs": "^3.0",
 		"phpstan/phpstan": "^2.0",
@@ -50,7 +50,7 @@
 		"phpcsstandards/phpcsutils": "^1.0"
 	},
 	"scripts": {
-		"lint": "./vendor/bin/phpcs -s --standard=phpcs.xml.dist --extensions=php",
+		"lint": "php -d error_reporting=E_ALL\\&~E_DEPRECATED ./vendor/bin/phpcs -s --standard=phpcs.xml.dist --extensions=php",
 		"format": "./vendor/bin/phpcbf -p --standard=phpcs.xml.dist --extensions=php",
 		"analyze": "./vendor/bin/phpstan analyze --memory-limit=512M",
 		"phpcs-clear": [

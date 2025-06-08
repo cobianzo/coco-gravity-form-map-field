@@ -1,6 +1,6 @@
 {
 	"name": "coco-gravity-form-map-field",
-	"version": "5.0.3",
+	"version": "5.0.4",
 	"author": "@cobianzo",
 	"license": "GPL-2.0-or-later",
 	"homepage": "https://github.com/cobianzo/coco-gravity-form-map-field",
@@ -18,8 +18,8 @@
 		"start": "wp-scripts start --experimental-modules",
 		"browser-sync": "browser-sync start --proxy 'http://localhost:8890' --files '**/*.php, assets/css/**/*.css, parts/**/*, patterns/**/*.php, src/**/*.js, styles/**/*.json, templates/**/*.html, *.json, *.js, *.php, style.css' --notify false",
 		"dev": "npm start",
-		"lint:css": "stylelint '**/*.css'",
-		"format": "wp-scripts format && stylelint \"**/*.css\" --fix",
+		"lint:css": "stylelint './src/**/*.css'",
+		"format": "wp-scripts format \"src/**/*.{js,ts,jsx,tsx}\" && stylelint \"src/**/*.css\" --fix",
 		"format:php": "wp-env run --env-cwd='wp-content/plugins/coco-gravity-form-map-field' cli composer run format",
 		"lint:php": "wp-env run --env-cwd='wp-content/plugins/coco-gravity-form-map-field' cli composer run lint",
 		"lint:js": "wp-scripts lint-js",
@@ -32,6 +32,7 @@
 		"test:js": "playwright test",
 		"prepare": "husky",
 		"plugin-zip": "node bin/build-plugin.js",
+		"version": "node bin/version-increment.js",
 		"lint-staged": "lint-staged"
 	},
 	"stylelint": {

@@ -2,6 +2,8 @@
 
 wp-env / wp-scripts (experimental) / phpunit / playwright / linting (phpcs, phpstan, eslint, stylelint) / browser-sync
 
+> NOTE: we have stylelint installed but we don't actually have any .css file yet.
+
 ## Dependencies
 
 - Gravit Forms - it must be installed already under the folder /plugins

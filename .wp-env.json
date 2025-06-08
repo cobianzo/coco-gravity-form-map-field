@@ -4,7 +4,7 @@
 		"./plugins/gravityforms",
 		"./plugins/gravityformsgeolocation",
 		"https://downloads.wordpress.org/plugin/loco-translate.latest-stable.zip",
-    "https://downloads.wordpress.org/plugin/wordpress-importer.latest-stable.zip",
+		"https://downloads.wordpress.org/plugin/wordpress-importer.latest-stable.zip",
 		"."
 	],
 	"config": {
