@@ -54,7 +54,5 @@
 		"titleBar.inactiveForeground": "#e7e7e799"
 	},
 	"peacock.color": "#007fff",
-	"intelephense.environment.includePaths": [
-		"plugins/gravityforms"
-	]
+	"intelephense.environment.includePaths": ["plugins/gravityforms"]
 }

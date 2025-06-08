@@ -48,7 +48,6 @@ window.centerMapAtInputCoordinates = (input, map) => {
 	}
 };
 
-
 /**
  * eslint-disable jsdoc/require-returns-type
  * Returns the first Google Map found in the page or null if none is found.
@@ -62,4 +61,4 @@ window.getFirstGoogleMapInPage = () => {
 		}
 	}
 	return null;
-}
+};
